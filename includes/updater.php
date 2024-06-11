@@ -79,6 +79,6 @@ function fxb_prepare_request( $action, $args ) {
             'request' => serialize( $args ),
             'api-key' => md5( get_bloginfo( 'url' ) ),
         ],
-        'user-agent' => 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
+        'user-agent' => 'ClassicPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
     ];
 }
