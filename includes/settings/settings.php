@@ -9,35 +9,64 @@ Settings::get_instance();
  * @since 1.0.0
  */
 class Settings{
+    /**
+     * The instance of the class.
+     *
+     * @var Settings|null
+     */
+    private static $instance = null;
 
-	/**
-	 * Returns the instance.
-	 */
-	public static function get_instance(){
-		static $instance = null;
-		if ( is_null( $instance ) ) $instance = new self;
-		return $instance;
-	}
+    /**
+     * The slug for the settings.
+     *
+     * @var string
+     */
+    private $settings_slug;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
+    /**
+     * The suffix for the hook.
+     *
+     * @var string
+     */
+    private $hook_suffix;
 
-		/* Vars */
-		$this->settings_slug = 'fx-builder';
-		$this->hook_suffix   = '';
-		$this->options_group = 'fx-base';
+    /**
+     * The options group.
+     *
+     * @var string
+     */
+    private $options_group;
 
-		/* Create Settings Page */
-		add_action( 'admin_menu', array( $this, 'create_settings_page' ) );
+    /**
+     * Returns the instance.
+     *
+     * @return Settings
+     */
+    public static function get_instance() {
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
-		/* Register Settings and Fields */
-		add_action( 'admin_init', array( $this, 'register_settings' ), 1 );
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        /* Vars */
+        $this->settings_slug = 'fx-builder';
+        $this->hook_suffix   = '';
+        $this->options_group = 'fx-base';
 
-		/* Add Post Type Support */
-		add_action( 'init', array( $this, 'add_builder_support' ) );
-	}
+        /* Create Settings Page */
+        add_action('admin_menu', array($this, 'create_settings_page'));
+
+        /* Register Settings and Fields */
+        add_action('admin_init', array($this, 'register_settings'), 1);
+
+        /* Add Post Type Support */
+        add_action('init', array($this, 'add_builder_support'));
+    }
 
 
 	/**

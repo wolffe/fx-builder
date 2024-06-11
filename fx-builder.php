@@ -1,55 +1,47 @@
 <?php
 /**
- * Plugin Name: f(x) Builder
- * Plugin URI: http://genbumedia.com/plugins/fx-builder/
- * Description: A simple page builder plugin. The one you can actually use. (Alpha Version)
- * Version: 1.0.2
- * Author: David Chandra Purnama
- * Author URI: http://shellcreeper.com/
- * License: GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ * Plugin Name: FX Builder
+ * Plugin URI: https://getbutterfly.com/classicpress-plugins/fx-builder/
+ * Description: A simple page builder plugin. The one you can actually use.
+ * Version: 1.1.0
+ * Author: Ciprian Popescu
+ * Author URI: https://getbutterfly.com/classicpress-plugins/fx-builder/
+ * License: GNU General Public License v3 or later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: fx-builder
  * Domain Path: /languages/
+ *
+ * @author Ciprian Popescu <ciprian@getbutterfly.com>
+ * @copyright Copyright (c) 2024, getButterfly
  *
  * @author David Chandra Purnama <david@genbumedia.com>
  * @copyright Copyright (c) 2016, Genbu Media
 **/
-if ( ! defined( 'WPINC' ) ) { die; }
-
-
-/* Constants
------------------------------------------- */
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 
 define( 'FX_BUILDER_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 define( 'FX_BUILDER_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'FX_BUILDER_FILE', __FILE__ );
 define( 'FX_BUILDER_PLUGIN', plugin_basename( __FILE__ ) );
-define( 'FX_BUILDER_VERSION', '1.0.2' );
+define( 'FX_BUILDER_VERSION', '1.1.0' );
 
+include FX_BUILDER_PATH . '/includes/updater.php';
 
-/* Init
------------------------------------------- */
-
-/* Load plugin in "plugins_loaded" hook */
 add_action( 'plugins_loaded', 'fx_builder_init' );
 
-/**
- * Plugin Init
- * @since 0.1.0
- */
-function fx_builder_init(){
+function fx_builder_init() {
+    $uri     = FX_BUILDER_URI;
+    $path    = FX_BUILDER_PATH;
+    $file    = FX_BUILDER_FILE;
+    $plugin  = FX_BUILDER_PLUGIN;
+    $version = FX_BUILDER_VERSION;
 
-	/* Var */
-	$uri      = FX_BUILDER_URI;
-	$path     = FX_BUILDER_PATH;
-	$file     = FX_BUILDER_FILE;
-	$plugin   = FX_BUILDER_PLUGIN;
-	$version  = FX_BUILDER_VERSION;
+    require_once $path . 'includes/prepare.php';
+    if ( ! $sys_req->check() ) {
+        return;
+    }
 
-	/* Prepare */
-	require_once( $path . 'includes/prepare.php' );
-	if( ! $sys_req->check() ) return;
-
-	/* Setup */
-	require_once( $path . 'includes/setup.php' );
+    require_once $path . 'includes/setup.php';
 }
