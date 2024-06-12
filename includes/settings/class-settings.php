@@ -152,7 +152,7 @@ class Settings {
                         ?>
                         <p>
                             <label>
-                                <input type="checkbox" value="<?php echo esc_attr( $post_type->name ); ?>" name="fx-builder_post_types[]" <?php checked( post_type_supports( $post_type->name, 'fx_builder' ) ); ?>> <?php echo $post_type->label; ?>
+                                <input type="checkbox" value="<?php echo esc_attr( $post_type->name ); ?>" name="fx-builder_post_types[]" <?php checked( post_type_supports( esc_attr( $post_type->name ), 'fx_builder' ) ); ?>> <?php echo $post_type->label; ?>
                             </label>
                         </p>
                         <?php

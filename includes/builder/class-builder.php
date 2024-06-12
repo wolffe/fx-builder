@@ -153,7 +153,7 @@ class Builder {
                     var item_template = wp.template( 'fxb-item' );
                     <?php foreach ( $items_data as $item_id => $item ) { ?>
                         <?php if ( isset( $rows_data[ $item['row_id'] ] ) ) { ?>
-                            $( '.fxb-row[data-id="<?php echo $item['row_id']; ?>"] .fxb-col[data-col_index="<?php echo $item['col_index']; ?>"] .fxb-col-content' ).append( item_template( <?php echo wp_json_encode( $item ); ?> ) );
+                            $( '.fxb-row[data-id="<?php echo esc_attr( $item['row_id'] ); ?>"] .fxb-col[data-col_index="<?php echo esc_attr( $item['col_index'] ); ?>"] .fxb-col-content' ).append( item_template( <?php echo wp_json_encode( $item ); ?> ) );
                         <?php } ?>
                     <?php } // end foreach ?>
                 <?php } ?>

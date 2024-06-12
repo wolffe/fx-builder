@@ -174,7 +174,9 @@ class Functions {
         );
 
         $args = wp_parse_args( $args, $args_default );
-        extract( $args );
+
+        $title = $args['title'];
+        $index = $args['index'];
 
         /* Var */
         $field = "col_{$index}";

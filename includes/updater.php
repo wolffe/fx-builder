@@ -58,12 +58,12 @@ function fxb_plugin_api_call( $def, $action, $args ) {
     $request = wp_remote_post( $api_url, $request_string );
 
     if ( is_wp_error( $request ) ) {
-        $res = new WP_Error( 'plugins_api_failed', __( 'An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>' ), $request->get_error_message() );
+        $res = new WP_Error( 'plugins_api_failed', __( 'An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>', 'fx-builder' ), $request->get_error_message() );
     } else {
         $res = unserialize( $request['body'] );
 
         if ( $res === false ) {
-            $res = new WP_Error( 'plugins_api_failed', __( 'An unknown error occurred' ), $request['body'] );
+            $res = new WP_Error( 'plugins_api_failed', __( 'An unknown error occurred', 'fx-builder' ), $request['body'] );
         }
     }
 
