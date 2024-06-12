@@ -59,9 +59,9 @@ class Functions {
 
         $args = wp_parse_args( $args, $args_default );
         ?>
-        <div class="<?php echo sanitize_title( $args['id'] ); ?> fxb-modal" style="display:none;width:<?php echo esc_attr( $args['width'] ); ?>;height:<?php echo esc_attr( $args['height'] ); ?>;">
+        <div class="<?php echo esc_attr( sanitize_title( $args['id'] ) ); ?> fxb-modal" style="display:none;width:<?php echo esc_attr( $args['width'] ); ?>;height:<?php echo esc_attr( $args['height'] ); ?>;">
             <div class="fxb-modal-container">
-                <div class="fxb-modal-title"><?php echo $args['title']; ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Done', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
+                <div class="fxb-modal-title"><?php echo esc_attr( $args['title'] ); ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Done', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
 
                 <div class="fxb-modal-content">
                     <?php
@@ -185,7 +185,7 @@ class Functions {
             <input type="hidden" data-id="item_ids" data-row_field="<?php echo esc_attr( $field ); ?>" name="_fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]" value="{{data.<?php echo esc_attr( $field ); ?>}}" autocomplete="off"/>
 
             <?php /* Column Title */ ?>
-            <h3 class="fxb-col-title"><span><?php echo $title; ?></span></h3>
+            <h3 class="fxb-col-title"><span><?php echo esc_attr( $title ); ?></span></h3>
 
             <div class="fxb-col-content"></div><!-- .fxb-col-content -->
 
@@ -242,7 +242,7 @@ class Functions {
         }
         ob_start();
         ?>
-        <div id="fxb-<?php echo strip_tags( $post_id ); ?>" class="fxb-container">
+        <div id="fxb-<?php echo esc_attr( $post_id ); ?>" class="fxb-container">
 
             <?php foreach ( $rows as $row_id ) { ?>
                 <?php
@@ -270,9 +270,9 @@ class Functions {
                     $row_column_gap = $rows_data[ $row_id ]['row_column_gap'] ? $rows_data[ $row_id ]['row_column_gap'] . $rows_data[ $row_id ]['row_column_gap_unit'] : '2em';
                     ?>
 
-                    <div id="<?php echo $row_html_id; ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>">
+                    <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>">
 
-                        <div class="fxb-wrap" style="gap: <?php echo $row_column_gap; ?>">
+                        <div class="fxb-wrap" style="gap: <?php echo esc_attr( $row_column_gap ); ?>">
 
                             <?php
                             $cols = range( 1, $rows_data[ $row_id ]['col_num'] );
@@ -286,7 +286,7 @@ class Functions {
                                         <?php foreach ( $items as $item_id ) { ?>
                                             <?php if ( isset( $items_data[ $item_id ] ) ) { ?>
 
-                                                <div id="fxb-item-<?php echo strip_tags( $item_id ); ?>" class="fxb-item">
+                                                <div id="fxb-item-<?php echo esc_attr( $item_id ); ?>" class="fxb-item">
                                                     <div class="fxb-wrap">
                                                         <?php echo wpautop( $items_data[ $item_id ]['content'] ); ?>
                                                     </div><!-- .fxb-item > .fxb-wrap -->

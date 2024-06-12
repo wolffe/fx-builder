@@ -39,8 +39,8 @@ class Sanitize {
             ];
 
             $rows[ $row_id ]                   = wp_parse_args( $row_data, $default );
-            $rows[ $row_id ]['id']             = strip_tags( $rows[ $row_id ]['id'] );
-            $rows[ $row_id ]['index']          = strip_tags( $rows[ $row_id ]['index'] );
+            $rows[ $row_id ]['id']             = wp_strip_all_tags( $rows[ $row_id ]['id'] );
+            $rows[ $row_id ]['index']          = wp_strip_all_tags( $rows[ $row_id ]['index'] );
             $rows[ $row_id ]['state']          = self::state( $rows[ $row_id ]['state'] );
             $rows[ $row_id ]['col_num']        = Functions::get_col_num( $rows[ $row_id ]['layout'] );
             $rows[ $row_id ]['layout']         = self::layout( $rows[ $row_id ]['layout'] );
@@ -80,11 +80,11 @@ class Sanitize {
             );
 
             $items[ $item_id ]               = wp_parse_args( $item_data, $default );
-            $items[ $item_id ]['item_id']    = strip_tags( $items[ $item_id ]['item_id'] );
-            $items[ $item_id ]['item_index'] = strip_tags( $items[ $item_id ]['item_index'] );
+            $items[ $item_id ]['item_id']    = wp_strip_all_tags( $items[ $item_id ]['item_id'] );
+            $items[ $item_id ]['item_index'] = wp_strip_all_tags( $items[ $item_id ]['item_index'] );
             $items[ $item_id ]['item_state'] = self::state( $items[ $item_id ]['item_state'] );
             $items[ $item_id ]['item_type']  = self::item_type( $items[ $item_id ]['item_type'] );
-            $items[ $item_id ]['row_id']     = strip_tags( $items[ $item_id ]['row_id'] );
+            $items[ $item_id ]['row_id']     = wp_strip_all_tags( $items[ $item_id ]['row_id'] );
             $items[ $item_id ]['col_index']  = self::item_col_index( $items[ $item_id ]['col_index'] );
             $items[ $item_id ]['content']    = wp_kses_post( $items[ $item_id ]['content'] );
         }
@@ -124,7 +124,7 @@ class Sanitize {
      */
     public static function ids( $input ) {
         $output = explode( ',', $input );
-        $output = array_map( 'strip_tags', $output );
+        $output = array_map( 'wp_strip_all_tags', $output );
         $output = implode( ',', $output );
         return $output;
     }

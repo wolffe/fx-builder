@@ -125,7 +125,7 @@ class Tools {
             'items'   => isset( $request['items'] ) ? $request['items'] : array(),
         );
 
-        echo json_encode( $data );
+        echo wp_json_encode( $data );
         wp_die();
     }
 

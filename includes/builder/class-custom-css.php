@@ -155,7 +155,7 @@ class Custom_CSS {
         if ( $css && ! $disable ) {
             ?>
             <style id="fx-builder-custom-css">
-                <?php echo wp_strip_all_tags( $css ); ?>
+                <?php echo esc_html( wp_strip_all_tags( $css ) ); ?>
             </style>
             <?php
         }
