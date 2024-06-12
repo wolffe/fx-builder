@@ -4,7 +4,9 @@
  * @since 1.0.0
 **/
 namespace fx_builder\builder;
-if ( ! defined( 'WPINC' ) ) { die; }
+if ( ! defined( 'WPINC' ) ) {
+    die;
+}
 
 /* Constants
 ------------------------------------------ */
@@ -17,27 +19,11 @@ define( __NAMESPACE__ . '\VERSION', $version );
 /* Load Files
 ------------------------------------------ */
 
-/* Sanitize Functions */
-require_once( PATH . 'sanitize.php' );
-
-/* Functions */
-require_once( PATH . 'functions.php' );
-
-/* Switcher */
-require_once( PATH . 'switcher.php' );
-
-/* Custom CSS */
-require_once( PATH . 'custom-css.php' );
-
-/* Tools */
-require_once( PATH . 'tools.php' );
-
-/* The Page Builder */
-require_once( PATH . 'builder.php' );
-
-/* Revisions */
-require_once( PATH . 'revisions.php' );
-
-/* Front */
-require_once( PATH . 'front.php' );
-
+require_once PATH . 'class-sanitize.php';
+require_once PATH . 'class-functions.php';
+require_once PATH . 'class-switcher.php';
+require_once PATH . 'class-custom-css.php';
+require_once PATH . 'class-tools.php';
+require_once PATH . 'class-builder.php';
+require_once PATH . 'class-revisions.php';
+require_once PATH . 'class-front.php';
