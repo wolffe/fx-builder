@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, columns
 Requires at least: 2.0
 Tested up to: 2.1.0
 Requires PHP: 7.2
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,9 @@ A simple page builder plugin. The one you can actually use.
 5. Edit your content.
 
 == Changelog ==
+
+= 1.2.0 =
+* First public release for ClassicPress
 
 = 1.0.2 - 13 Ags 2017 =
 * Fix bug: WP 4.8 compat https://github.com/turtlepod/fx-builder/issues/48
