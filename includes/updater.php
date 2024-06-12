@@ -21,7 +21,7 @@ function fxb_check_for_plugin_update( $checked_data ) {
     $raw_response = wp_remote_post( $api_url, $request_string );
 
     if ( ! is_wp_error( $raw_response ) && ( (int) $raw_response['response']['code'] === 200 ) ) {
-        $response = unserialize( $raw_response['body'] );
+        $response = maybe_unserialize( $raw_response['body'] );
     }
 
     if ( is_object( $response ) && ! empty( $response ) ) { // Feed the update data into WP updater
@@ -60,7 +60,7 @@ function fxb_plugin_api_call( $def, $action, $args ) {
     if ( is_wp_error( $request ) ) {
         $res = new WP_Error( 'plugins_api_failed', __( 'An Unexpected HTTP Error occurred during the API request.</p> <p><a href="?" onclick="document.location.reload(); return false;">Try again</a>', 'fx-builder' ), $request->get_error_message() );
     } else {
-        $res = unserialize( $request['body'] );
+        $res = maybe_unserialize( $request['body'] );
 
         if ( $res === false ) {
             $res = new WP_Error( 'plugins_api_failed', __( 'An unknown error occurred', 'fx-builder' ), $request['body'] );
@@ -76,7 +76,7 @@ function fxb_prepare_request( $action, $args ) {
     return [
         'body'       => [
             'action'  => $action,
-            'request' => serialize( $args ),
+            'request' => maybe_serialize( $args ),
             'api-key' => md5( get_bloginfo( 'url' ) ),
         ],
         'user-agent' => 'ClassicPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
