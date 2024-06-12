@@ -9,11 +9,10 @@
  * - "id"           : unique row id (time stamp when row was created)
  * - "index"        : order of the row (1st row = "1", 2nd row = "2", etc)
  * - "state"        : "open" vs "closed" (toggle state of the row)
- * - "col_num"      :  number of column in the layout (based on selected "col_order")
+ * - "col_num"      :  number of column in the layout
  *
  * Settings Fields:
  * - "layout"       : column layout (1 col, 1/2 - 1/2, etc)
- * - "col_order"    : collapse order, "default" (no val), "l2r" (left first/on top) vs "r2l" (right first)
  *
  * Item IDs Order (Hidden):
  * - "col_1"        : item IDs for 1st column in comma separated value
@@ -26,7 +25,7 @@ global $fxb_admin_color;
 ?>
 <script id="tmpl-fxb-row" type="text/html">
 
-	<div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}" data-col_order="{{data.col_order}}">
+	<div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}">
 
 		<?php /* HIDDEN FIELD */ ?>
 		<input type="hidden" data-row_field="id" name="_fxb_rows[{{data.id}}][id]" value="{{data.id}}" autocomplete="off"/>

@@ -217,19 +217,7 @@
 .fxb-row[data-col_num="3"] .fxb-col:nth-child(4){
 	display: none;
 }
-/* Col Order */
-.fxb-row[data-col_order] .fxb-col{
-	float: left;
-}
-	.rtl .fxb-row[data-col_order] .fxb-col{
-		float: right;
-	}
-.fxb-row[data-col_order="l2r"] .fxb-col{
-	float: left;
-}
-.fxb-row[data-col_order="r2l"] .fxb-col{
-	float: right;
-}
+
 /* Col Width Based on Layout */
 .fxb-row[data-layout="1"] .fxb-col{
 	width: 100%;
@@ -249,20 +237,6 @@
 	.rtl .fxb-row[data-layout="13_23"] .fxb-col:nth-child(2){
 		width: 33.33%;
 	}
-	/* Col Order: L2R */
-	.fxb-row[data-layout="13_23"][data-col_order="l2r"] .fxb-col:nth-child(1){
-		width: 33.33%;
-	}
-	.fxb-row[data-layout="13_23"][data-col_order="l2r"] .fxb-col:nth-child(2){
-		width: 66.66%;
-	}
-	/* Col Order: R2L */
-	.fxb-row[data-layout="13_23"][data-col_order="r2l"] .fxb-col:nth-child(1){
-		width: 66.66%;
-	}
-	.fxb-row[data-layout="13_23"][data-col_order="r2l"] .fxb-col:nth-child(2){
-		width: 33.33%;
-	}
 .fxb-row[data-layout="23_13"] .fxb-col:nth-child(1){
 	width: 66.66%;
 }
@@ -273,20 +247,6 @@
 		width: 33.33%;
 	}
 	.rtl .fxb-row[data-layout="23_13"] .fxb-col:nth-child(2){
-		width: 66.66%;
-	}
-	/* Col Order: L2R */
-	.fxb-row[data-layout="23_13"][data-col_order="l2r"] .fxb-col:nth-child(1){
-		width: 66.66%;
-	}
-	.fxb-row[data-layout="23_13"][data-col_order="l2r"] .fxb-col:nth-child(2){
-		width: 33.33%;
-	}
-	/* Col Order: R2L */
-	.fxb-row[data-layout="23_13"][data-col_order="r2l"] .fxb-col:nth-child(1){
-		width: 33.33%;
-	}
-	.fxb-row[data-layout="23_13"][data-col_order="r2l"] .fxb-col:nth-child(2){
 		width: 66.66%;
 	}
 .fxb-row[data-layout="13_13_13"] .fxb-col{
@@ -492,68 +452,45 @@
 .fxb-modal-content{
 	position: relative;
 	display: block;
-	padding: 15px;
+	padding: 1em;
 	border: none;
 	margin: 0;
 	overflow: auto;
 }
 
+.fxb-row-settings .fxb-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+
 /* Modal Field
 ------------------------------------------ */
-.fxb-modal-field{
-	margin-bottom: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #dfdfdf;
+.fxb-modal-field {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
 }
-.fxb-modal-field:after{
-	content:".";display:block;height:0;clear:both;visibility:hidden;
+
+.fxb-modal-field-text label,
+.fxb-modal-field-select label {
+    font-weight: 600;
 }
-/* Text */
-.fxb-modal-field-text label{
-	float: left;
-	display: block;
-	font-weight: 600;
+.fxb-modal-field-text input,
+.fxb-modal-field-select select {
+	width: 100%;
 }
-	.rtl .fxb-modal-field-text label{
-		float: right;
-	}
-.fxb-modal-field-text input{
-	float: right;
-	width: 50%;
+
+
+
+
+.fxb-group-control--container > div {
+    display: flex;
 }
-	.rtl .fxb-modal-field-text input{
-		float: left;
-	}
-/* Select */
-.fxb-modal-field-select label{
-	float: left;
-	display: block;
-	font-weight: 600;
-}
-	.rtl .fxb-modal-field-select label{
-		float: right;
-	}
-.fxb-modal-field-select select{
-	float: right;
-	width: 50%;
-}
-	.rtl .fxb-modal-field-select select{
-		float: left;
-	}
-/* Media Queries */
-@media screen and (max-width: 500px) {
-	.fxb-modal-field-text label,
-	.fxb-modal-field-select label{
-		float: none;
-		width: 100%;
-		margin-bottom: 10px;
-	}
-	.fxb-modal-field-text input,
-	.fxb-modal-field-select select{
-		float: none;
-		width: 100%;
-	}
-}
+
+
+
 
 
 /* MCE FullScreen

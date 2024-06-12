@@ -7,48 +7,56 @@ if ( ! defined( 'WPINC' ) ) { die; }
  * Sanitize Functions.
  * @since 1.0.0
  */
-class Sanitize{
+class Sanitize {
+    /* ROWS DATAS
+    ------------------------------------------ */
+    public static function rows_data( $input ) {
+        if ( ! is_array( $input ) || empty( $input ) ) {
+            return [];
+        }
 
-	/* ROWS DATAS
-	------------------------------------------ */
-	public static function rows_data( $input ){
-		if( ! is_array( $input ) || empty( $input ) ){
-			return array();
-		}
-		$rows = array();
-		foreach( $input as $row_id => $row_data ){
-			$default = array(
-				'id'              => $row_id,
-				'index'           => '',
-				'state'           => 'open',
-				'col_num'         => '1',
-				'layout'          => '1',
-				'col_order'       => '',
-				'col_1'           => '',
-				'col_2'           => '',
-				'col_3'           => '',
-				'col_4'           => '',
-				'row_title'       => '',
-				'row_html_id'     => '',
-				'row_html_class'  => '',
-			);
-			$rows[$row_id]                     = wp_parse_args( $row_data, $default );
-			$rows[$row_id]['id']               = strip_tags( $rows[$row_id]['id'] );
-			$rows[$row_id]['index']            = strip_tags( $rows[$row_id]['index'] );
-			$rows[$row_id]['state']            = self::state( $rows[$row_id]['state'] );
-			$rows[$row_id]['col_num']          = Functions::get_col_num( $rows[$row_id]['layout'] );
-			$rows[$row_id]['layout']           = self::layout( $rows[$row_id]['layout'] );
-			$rows[$row_id]['col_order']        = self::col_order( $rows[$row_id]['col_order'] );
-			$rows[$row_id]['col_1']            = self::ids( $rows[$row_id]['col_1'] );
-			$rows[$row_id]['col_2']            = self::ids( $rows[$row_id]['col_2'] );
-			$rows[$row_id]['col_3']            = self::ids( $rows[$row_id]['col_3'] );
-			$rows[$row_id]['col_4']            = self::ids( $rows[$row_id]['col_4'] );
-			$rows[$row_id]['row_title']        = sanitize_text_field( $rows[$row_id]['row_title'] );
-			$rows[$row_id]['row_html_id']      = sanitize_html_class( $rows[$row_id]['row_html_id'] );
-			$rows[$row_id]['row_html_class']   = self::html_classes( $rows[$row_id]['row_html_class'] );
-		}
-		return $rows;
-	}
+        $rows = [];
+
+        foreach ( $input as $row_id => $row_data ) {
+            $default = [
+                'id'                  => $row_id,
+                'index'               => '',
+                'state'               => 'open',
+                'col_num'             => '1',
+                'layout'              => '1',
+                'col_1'               => '',
+                'col_2'               => '',
+                'col_3'               => '',
+                'col_4'               => '',
+                'row_title'           => '',
+                'row_width'           => 'default',
+                'row_html_id'         => '',
+                'row_html_class'      => '',
+                'row_column_gap'      => '',
+                'row_column_gap_unit' => '',
+            ];
+
+            $rows[ $row_id ]                   = wp_parse_args( $row_data, $default );
+            $rows[ $row_id ]['id']             = strip_tags( $rows[ $row_id ]['id'] );
+            $rows[ $row_id ]['index']          = strip_tags( $rows[ $row_id ]['index'] );
+            $rows[ $row_id ]['state']          = self::state( $rows[ $row_id ]['state'] );
+            $rows[ $row_id ]['col_num']        = Functions::get_col_num( $rows[ $row_id ]['layout'] );
+            $rows[ $row_id ]['layout']         = self::layout( $rows[ $row_id ]['layout'] );
+            $rows[ $row_id ]['col_1']          = self::ids( $rows[ $row_id ]['col_1'] );
+            $rows[ $row_id ]['col_2']          = self::ids( $rows[ $row_id ]['col_2'] );
+            $rows[ $row_id ]['col_3']          = self::ids( $rows[ $row_id ]['col_3'] );
+            $rows[ $row_id ]['col_4']          = self::ids( $rows[ $row_id ]['col_4'] );
+            $rows[ $row_id ]['row_title']      = sanitize_text_field( $rows[ $row_id ]['row_title'] );
+            $rows[ $row_id ]['row_width']      = sanitize_text_field( $rows[ $row_id ]['row_width'] );
+            $rows[ $row_id ]['row_html_id']    = sanitize_html_class( $rows[ $row_id ]['row_html_id'] );
+            $rows[ $row_id ]['row_html_class'] = self::html_classes( $rows[ $row_id ]['row_html_class'] );
+
+            $rows[ $row_id ]['row_column_gap']      = sanitize_text_field( $rows[ $row_id ]['row_column_gap'] );
+            $rows[ $row_id ]['row_column_gap_unit'] = sanitize_text_field( $rows[ $row_id ]['row_column_gap_unit'] );
+        }
+
+        return $rows;
+    }
 
 
 	/* ITEMS DATAS
@@ -92,18 +100,6 @@ class Sanitize{
 		$valid = array( 'open', 'close' );
 		if( in_array( $input, $valid ) ){
 			return $input;
-		}
-		return $default;
-	}
-
-	/**
-	 * Sanitize Collapse Order
-	 */
-	public static function col_order( $order ){
-		$default = is_rtl() ? 'r2l' : 'l2r';
-		$valid = array( 'r2l', 'l2r' );
-		if( in_array( $order, $valid ) ){
-			return $order;
 		}
 		return $default;
 	}

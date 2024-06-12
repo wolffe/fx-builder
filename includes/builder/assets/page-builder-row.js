@@ -104,7 +104,6 @@ jQuery(document).ready(function($){
 			state       : 'open',
 			layout      : $( this ).data( 'row-layout' ),
 			col_num     : $( this ).data( 'row-col_num' ),
-			col_order   : '',
 			col_1       : '',
 			col_2       : '',
 			col_3       : '',
@@ -260,24 +259,6 @@ jQuery(document).ready(function($){
 		row.find( 'input[data-row_field="col_num"]' ).val( row.data( 'col_num' ) ).trigger( 'change' );
 	} );
 
-
-	/**
-	 * ROW SETTINGS: CHANGE COLUMNS COLLAPSE ORDER
-	 * 
-	 ************************************
-	 */
-	$( document.body ).on( 'change', 'select[data-row_field="col_order"]', function(e){
-
-		/* Get selected value */
-		var selected = $( this ).val();
-
-		/* Get current row */
-		var row = $( this ).parents( '.fxb-row' );
-
-		/* Update Row Data */
-		row.data( 'col_order', selected );
-		row.attr( 'data-col_order', row.data( 'col_order' ) );
-	} );
 
 
 	/**

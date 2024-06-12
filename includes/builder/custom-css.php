@@ -19,23 +19,23 @@ class Custom_CSS{
 		return $instance;
 	}
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
+    /**
+     * Constructor.
+     */
+    public function __construct() {
 
-		/* Add CSS Button */
-		add_action( 'fxb_switcher_nav', array( $this, 'add_css_control' ) );
+        /* Add CSS Button */
+        add_action( 'fxb_switcher_nav', array( $this, 'add_css_control' ) );
 
-		/* Save CSS */
-		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+        /* Save CSS */
+        add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 
-		/* Scripts */
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+        /* Scripts */
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 
-		/* Add CSS */
-		add_action( 'wp_head', array( $this, 'print_css' ), 99 );
-	}
+        /* Add CSS */
+        add_action( 'wp_head', [ $this, 'print_css' ], 99 );
+    }
 
 	/**
 	 * CSS Control
@@ -113,27 +113,45 @@ class Custom_CSS{
 		}
 	}
 
-	/**
-	 * Print CSS to Front End
-	 * @since 1.0.0
-	 */
-	public function print_css(){
-		if( !is_singular() ) return;
-		$post_id = get_queried_object_id();
-		$post_type = get_post_type( $post_id );
-		if( ! post_type_supports( $post_type, 'fx_builder' ) ) return;
-		$active = get_post_meta( $post_id, '_fxb_active', true );
-		if( ! $active ) return;
-		$css = get_post_meta( $post_id, '_fxb_custom_css', true );
-		$disable = get_post_meta( $post_id, '_fxb_custom_css_disable', true );
-		if( $css && !$disable ){
-		?>
-		<style id="fx-builder-custom-css" type="text/css">
-			<?php echo wp_strip_all_tags( $css );?>
-		</style>
-		<?php
-		}
-	}
+    /**
+     * Print CSS to Front End
+     * @since 1.0.0
+     */
+    public function print_css() {
+        echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+            document.documentElement.style.setProperty("--scrollbarWidth", `${scrollbarWidth}px`);
+        });
+        </script>';
 
+        if ( ! is_singular() ) {
+            return;
+        }
+
+        $post_id   = get_queried_object_id();
+        $post_type = get_post_type( $post_id );
+
+        if ( ! post_type_supports( $post_type, 'fx_builder' ) ) {
+            return;
+        }
+
+        $active = get_post_meta( $post_id, '_fxb_active', true );
+
+        if ( ! $active ) {
+            return;
+        }
+
+        $css = get_post_meta( $post_id, '_fxb_custom_css', true );
+
+        $disable = get_post_meta( $post_id, '_fxb_custom_css_disable', true );
+
+        if ( $css && ! $disable ) {
+            ?>
+            <style id="fx-builder-custom-css">
+                <?php echo wp_strip_all_tags( $css );?>
+            </style>
+            <?php
+        }
+    }
 }
-

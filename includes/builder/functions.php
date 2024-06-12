@@ -72,68 +72,68 @@ class Functions{
 	}
 
 
-	/**
-	 * Row Settings (Modal Box)
-	 * This is loaded in underscore template in each row
-	**/
-	public static function row_settings(){
-		?>
-		<?php /* Row Title */ ?>
-		<div class="fxb-modal-field fxb-modal-field-text">
+    /**
+     * Row Settings (Modal Box)
+     * This is loaded in underscore template in each row
+     */
+    public static function row_settings() {
+        ?>
+        <?php /* Row Title */ ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
+            <label for="fxb_rows[{{data.id}}][row_title]">
+                <?php esc_html_e( 'Label', 'fx-builder' ); ?>
+            </label>
 
-			<label for="fxb_rows[{{data.id}}][row_title]">
-				<?php esc_html_e( 'Label', 'fx-builder' ); ?>
-			</label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_title]" data-row_field="row_title" name="_fxb_rows[{{data.id}}][row_title]" type="text" value="{{data.row_title}}">
+        </div><!-- .fxb-modal-field -->
 
-			<input autocomplete="off" id="fxb_rows[{{data.id}}][row_title]" data-row_field="row_title" name="_fxb_rows[{{data.id}}][row_title]" type="text" value="{{data.row_title}}">
+        <?php /* Row Layout */ ?>
+        <div class="fxb-modal-field fxb-modal-field-select">
+            <label for="fxb_rows[{{data.id}}][layout]">
+                <?php esc_html_e( 'Layout', 'fx-builder' ); ?>
+            </label>
 
-		</div><!-- .fxb-modal-field -->
+            <select id="fxb_rows[{{data.id}}][layout]" data-row_field="layout" name="_fxb_rows[{{data.id}}][layout]" autocomplete="off">
+                <option data-col_num="1" value="1" <# if( data.layout == '1' ){ print('selected="selected"') } #>><?php _e( '1 Column', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="12_12" <# if( data.layout == '12_12' ){ print('selected="selected"') } #>><?php _e( '1/2 - 1/2', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="13_23" <# if( data.layout == '13_23' ){ print('selected="selected"') } #>><?php _e( '1/3 - 2/3', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="23_13" <# if( data.layout == '23_13' ){ print('selected="selected"') } #>><?php _e( '2/3 - 1/3', 'fx-builder' ); ?></option>
+                <option data-col_num="3" value="13_13_13" <# if( data.layout == '13_13_13' ){ print('selected="selected"') } #>><?php _e( '1/3 - 1/3 - 1/3', 'fx-builder' ); ?></option>
+                <option data-col_num="4" value="14_14_14_14" <# if( data.layout == '14_14_14_14' ){ print('selected="selected"') } #>><?php _e( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ); ?></option>
+            </select>
+        </div><!-- .fxb-modal-field -->
 
-		<?php /* Row Layout */ ?>
-		<div class="fxb-modal-field fxb-modal-field-select">
+        <?php /* Row Layout */ ?>
+        <div class="fxb-modal-field fxb-modal-field-select">
+            <label for="fxb_rows[{{data.id}}][row_html_width]">
+                <?php esc_html_e( 'Width', 'fx-builder' ); ?>
+            </label>
 
-			<label for="fxb_rows[{{data.id}}][layout]">
-				<?php esc_html_e( 'Layout', 'fx-builder' ); ?>
-			</label>
+            <select id="fxb_rows[{{data.id}}][row_html_width]" data-row_field="row_html_width" name="_fxb_rows[{{data.id}}][row_html_width]" autocomplete="off">
+                <option value="default" <# if( data.row_html_width == 'default' ){ print('selected="selected"') } #>><?php _e( 'Default', 'fx-builder' ); ?></option>
+                <option value="wide" <# if( data.row_html_width == 'wide' ){ print('selected="selected"') } #>><?php _e( 'Wide', 'fx-builder' ); ?></option>
+                <option value="fullwidth" <# if( data.row_html_width == 'fullwidth' ){ print('selected="selected"') } #>><?php _e( 'Fullwidth', 'fx-builder' ); ?></option>
+            </select>
+        </div><!-- .fxb-modal-field -->
 
-			<select id="fxb_rows[{{data.id}}][layout]" data-row_field="layout" name="_fxb_rows[{{data.id}}][layout]" autocomplete="off">
+        <div class="fxb-modal-field fxb-modal-field-select fxb-group-control--container">
+            <label for="fxb_rows[{{data.id}}][row_column_gap]">
+                <?php esc_html_e( 'Column Gap', 'fx-builder' ); ?>
+            </label>
 
-				<option data-col_num="1" value="1" <# if( data.layout == '1' ){ print('selected="selected"') } #>><?php _e( '1 Column', 'fx-builder' ); ?></option>
+            <div>
+                <input autocomplete="off" inputmode="numeric" max="Infinity" min="-Infinity" step="1" type="number" id="fxb_rows[{{data.id}}][row_column_gap]" data-row_field="row_column_gap" name="_fxb_rows[{{data.id}}][row_column_gap]" value="{{data.row_column_gap}}">
+                <select id="fxb_rows[{{data.id}}][row_column_gap_unit]" data-row_field="row_column_gap_unit" name="_fxb_rows[{{data.id}}][row_column_gap_unit]" autocomplete="off" aria-label="Select unit">
+                    <option value="px" <# if( data.row_column_gap_unit == 'px' ){ print('selected="selected"') } #>>px</option>
+                    <option value="%" <# if( data.row_column_gap_unit == '%' ){ print('selected="selected"') } #>>%</option>
+                    <option value="em" <# if( data.row_column_gap_unit == 'em' ){ print('selected="selected"') } #>>em</option>
+                    <option value="rem" <# if( data.row_column_gap_unit == 'rem' ){ print('selected="selected"') } #>>rem</option>
+                    <option value="vw" <# if( data.row_column_gap_unit == 'vw' ){ print('selected="selected"') } #>>vw</option>
+                </select>
+            </div>
+        </div>
 
-				<option data-col_num="2" value="12_12" <# if( data.layout == '12_12' ){ print('selected="selected"') } #>><?php _e( '1/2 - 1/2', 'fx-builder' ); ?></option>
-
-				<option data-col_num="2" value="13_23" <# if( data.layout == '13_23' ){ print('selected="selected"') } #>><?php _e( '1/3 - 2/3', 'fx-builder' ); ?></option>
-
-				<option data-col_num="2" value="23_13" <# if( data.layout == '23_13' ){ print('selected="selected"') } #>><?php _e( '2/3 - 1/3', 'fx-builder' ); ?></option>
-
-				<option data-col_num="3" value="13_13_13" <# if( data.layout == '13_13_13' ){ print('selected="selected"') } #>><?php _e( '1/3 - 1/3 - 1/3', 'fx-builder' ); ?></option>
-
-				<option data-col_num="4" value="14_14_14_14" <# if( data.layout == '14_14_14_14' ){ print('selected="selected"') } #>><?php _e( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ); ?></option>
-
-			</select>
-
-		</div><!-- .fxb-modal-field -->
-
-		<?php /* Stack */ ?>
-		<div class="fxb-modal-field fxb-modal-field-select">
-
-			<label for="fxb_rows[{{data.id}}][col_order]">
-				<?php esc_html_e( 'Collapse Order', 'fx-builder' ); ?>
-			</label>
-
-			<select id="fxb_rows[{{data.id}}][col_order]" data-row_field="col_order" name="_fxb_rows[{{data.id}}][col_order]" autocomplete="off">
-
-				<option value="" <# if( data.col_order == '' ){ print('selected="selected"') } #>><?php _e( 'Default', 'fx-builder' ); ?></option>
-
-				<option value="l2r" <# if( data.col_order == 'l2r' ){ print('selected="selected"') } #>><?php _e( 'Left on Top', 'fx-builder' ); ?></option>
-
-				<option value="r2l" <# if( data.col_order == 'r2l' ){ print('selected="selected"') } #>><?php _e( 'Right on Top', 'fx-builder' ); ?></option>
-
-			</select>
-
-		</div><!-- .fxb-modal-field -->
-
-		<?php /* HTML ID */ ?>
+        <?php /* HTML ID */ ?>
 		<div class="fxb-modal-field fxb-modal-field-text">
 
 			<label for="fxb_rows[{{data.id}}][row_html_id]">
@@ -245,22 +245,24 @@ class Functions{
 					$row_html_class = $rows_data[$row_id]['row_html_class'] ? "fxb-row {$rows_data[$row_id]['row_html_class']}" : "fxb-row";
 					$row_html_class = explode( " ", $row_html_class ); // array
 
-					/* ID */
+                    /* = HTML Width = */
+                    $row_html_class[] = $rows_data[ $row_id ]['row_html_width'] ? 'fxb-' . $rows_data[ $row_id ]['row_html_width'] : "";
+
+                    /* ID */
 					$row_html_class[] = "fxb-row-{$row_id}";
 
 					/* Layout */
 					$row_html_class[] = "fxb-row-layout-{$rows_data[$row_id]['layout']}";
 
-					/* Collapse Order */
-					$row_html_class[] = "fxb-row-col-order-{$rows_data[$row_id]['col_order']}";
-
 					$row_html_class = array_map( "sanitize_html_class", $row_html_class );
 					$row_html_class = implode( " ", $row_html_class );
+
+                    $row_column_gap = $rows_data[ $row_id ]['row_column_gap'] ? $rows_data[ $row_id ]['row_column_gap'] . $rows_data[ $row_id ]['row_column_gap_unit'] : '2em';
 					?>
 
-					<div id="<?php echo $row_html_id; ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[$row_id]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[$row_id]['layout'] ); ?>" data-col_order=<?php echo esc_attr( $rows_data[$row_id]['col_order'] ); ?>>
+					<div id="<?php echo $row_html_id; ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[$row_id]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[$row_id]['layout'] ); ?>">
 
-						<div class="fxb-wrap">
+						<div class="fxb-wrap" style="gap: <?php echo $row_column_gap; ?>">
 
 							<?php
 							$cols = range( 1, $rows_data[$row_id]['col_num'] );

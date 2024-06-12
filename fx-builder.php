@@ -40,10 +40,7 @@ function fx_builder_init() {
     $plugin  = FX_BUILDER_PLUGIN;
     $version = FX_BUILDER_VERSION;
 
-    require_once $path . 'includes/prepare.php';
-    if ( ! $sys_req->check() ) {
-        return;
-    }
+    load_plugin_textdomain( dirname( $plugin ), false, dirname( $plugin ) . '/languages/' );
 
     require_once $path . 'includes/setup.php';
 }
