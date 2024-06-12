@@ -61,7 +61,7 @@ class Functions {
         ?>
         <div class="<?php echo sanitize_title( $args['id'] ); ?> fxb-modal" style="display:none;width:<?php echo esc_attr( $args['width'] ); ?>;height:<?php echo esc_attr( $args['height'] ); ?>;">
             <div class="fxb-modal-container">
-                <div class="fxb-modal-title"><?php echo $args['title']; ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php _e( 'Done', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
+                <div class="fxb-modal-title"><?php echo $args['title']; ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Done', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
 
                 <div class="fxb-modal-content">
                     <?php
@@ -99,12 +99,12 @@ class Functions {
             </label>
 
             <select id="fxb_rows[{{data.id}}][layout]" data-row_field="layout" name="_fxb_rows[{{data.id}}][layout]" autocomplete="off">
-                <option data-col_num="1" value="1" <# if( data.layout == '1' ){ print('selected="selected"') } #>><?php _e( '1 Column', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="12_12" <# if( data.layout == '12_12' ){ print('selected="selected"') } #>><?php _e( '1/2 - 1/2', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="13_23" <# if( data.layout == '13_23' ){ print('selected="selected"') } #>><?php _e( '1/3 - 2/3', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="23_13" <# if( data.layout == '23_13' ){ print('selected="selected"') } #>><?php _e( '2/3 - 1/3', 'fx-builder' ); ?></option>
-                <option data-col_num="3" value="13_13_13" <# if( data.layout == '13_13_13' ){ print('selected="selected"') } #>><?php _e( '1/3 - 1/3 - 1/3', 'fx-builder' ); ?></option>
-                <option data-col_num="4" value="14_14_14_14" <# if( data.layout == '14_14_14_14' ){ print('selected="selected"') } #>><?php _e( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ); ?></option>
+                <option data-col_num="1" value="1" <# if( data.layout == '1' ){ print('selected="selected"') } #>><?php esc_attr_e( '1 Column', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="12_12" <# if( data.layout == '12_12' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/2 - 1/2', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="13_23" <# if( data.layout == '13_23' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/3 - 2/3', 'fx-builder' ); ?></option>
+                <option data-col_num="2" value="23_13" <# if( data.layout == '23_13' ){ print('selected="selected"') } #>><?php esc_attr_e( '2/3 - 1/3', 'fx-builder' ); ?></option>
+                <option data-col_num="3" value="13_13_13" <# if( data.layout == '13_13_13' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/3 - 1/3 - 1/3', 'fx-builder' ); ?></option>
+                <option data-col_num="4" value="14_14_14_14" <# if( data.layout == '14_14_14_14' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ); ?></option>
             </select>
         </div><!-- .fxb-modal-field -->
 
@@ -115,9 +115,9 @@ class Functions {
             </label>
 
             <select id="fxb_rows[{{data.id}}][row_html_width]" data-row_field="row_html_width" name="_fxb_rows[{{data.id}}][row_html_width]" autocomplete="off">
-                <option value="default" <# if( data.row_html_width == 'default' ){ print('selected="selected"') } #>><?php _e( 'Default', 'fx-builder' ); ?></option>
-                <option value="wide" <# if( data.row_html_width == 'wide' ){ print('selected="selected"') } #>><?php _e( 'Wide', 'fx-builder' ); ?></option>
-                <option value="fullwidth" <# if( data.row_html_width == 'fullwidth' ){ print('selected="selected"') } #>><?php _e( 'Fullwidth', 'fx-builder' ); ?></option>
+                <option value="default" <# if( data.row_html_width == 'default' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Default', 'fx-builder' ); ?></option>
+                <option value="wide" <# if( data.row_html_width == 'wide' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Wide', 'fx-builder' ); ?></option>
+                <option value="fullwidth" <# if( data.row_html_width == 'fullwidth' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Fullwidth', 'fx-builder' ); ?></option>
             </select>
         </div><!-- .fxb-modal-field -->
 
@@ -190,7 +190,7 @@ class Functions {
             <div class="fxb-col-content"></div><!-- .fxb-col-content -->
 
             <div class="fxb-add-item fxb-link" style="color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>">
-                <span><?php _e( 'Add Item', 'fx-builder' ); ?></span>
+                <span><?php esc_attr_e( 'Add Item', 'fx-builder' ); ?></span>
             </div><!-- .fxb-add-item -->
 
         </div><!-- .fxb-col -->

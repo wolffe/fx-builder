@@ -45,7 +45,7 @@ global $fxb_admin_color;
             </div><!-- .fxb-left -->
             <div class="fxb-right">
                 <span data-target=".fxb-row-settings" class="fxb-icon fxb-link fxb-settings dashicons dashicons-admin-generic"></span>
-                <span data-confirm="<?php _e( 'Delete row?', 'fx-builder' ); ?>" class="fxb-icon fxb-link fxb-remove-row dashicons dashicons-trash"></span>
+                <span data-confirm="<?php esc_attr_e( 'Delete row?', 'fx-builder' ); ?>" class="fxb-icon fxb-link fxb-remove-row dashicons dashicons-trash"></span>
                 <span class="fxb-icon fxb-link fxb-toggle-row dashicons dashicons-arrow-up"></span>
                 <?php /* SETTINGS */ ?>
                 <?php

@@ -45,7 +45,7 @@ class Tools {
     public function add_tools_control( $post ) {
         $post_id = $post->ID;
         ?>
-        <a href="#" id="fxb-nav-tools" class="fxb-nav-tools"><span><?php _e( 'Tools', 'fx-builder' ); ?></span></a>
+        <a href="#" id="fxb-nav-tools" class="fxb-nav-tools"><span><?php esc_attr_e( 'Tools', 'fx-builder' ); ?></span></a>
         <?php
         Functions::render_settings(
             array(
@@ -57,21 +57,21 @@ class Tools {
                     ?>
                     <ul class="wp-tab-bar">
                         <li id="fxb-export-tab" class="tabs wp-tab-active">
-                            <a class="fxb-tools-nav-bar" href="#fxb-export-panel"><?php _e( 'Export', 'fx-builder' ); ?></a>
+                            <a class="fxb-tools-nav-bar" href="#fxb-export-panel"><?php esc_attr_e( 'Export', 'fx-builder' ); ?></a>
                         </li><!-- .tabs -->
                         <li id="fxb-import-tab" class="tabs">
-                            <a class="fxb-tools-nav-bar" href="#fxb-import-panel"><?php _e( 'Import', 'fx-builder' ); ?></a>
+                            <a class="fxb-tools-nav-bar" href="#fxb-import-panel"><?php esc_attr_e( 'Import', 'fx-builder' ); ?></a>
                         </li><!-- .tabs -->
                     </ul><!-- .wp-tab-bar -->
 
                     <div id="fxb-export-panel" class="fxb-tools-panel wp-tab-panel" style="display:block;">
                         <textarea autocomplete="off" id="fxb-tools-export-textarea" readonly="readonly" style="display:none;" placeholder="<?php esc_attr_e( 'No Data', 'fx-builder' ); ?>"></textarea>
-                        <p><a id="fxb-tools-export-action" href="#" class="button button-primary"><?php _e( 'Generate Export Code', 'fx-builder' ); ?></a></p>
+                        <p><a id="fxb-tools-export-action" href="#" class="button button-primary"><?php esc_attr_e( 'Generate Export Code', 'fx-builder' ); ?></a></p>
                     </div><!-- .wp-tab-panel -->
 
                     <div id="fxb-import-panel" class="fxb-tools-panel wp-tab-panel" style="display:none;">
                         <textarea autocomplete="off" id="fxb-tools-import-textarea" placeholder="<?php esc_attr_e( 'Paste your page builder data here...', 'fx-builder' ); ?>"></textarea>
-                        <p><a id="fxb-tools-import-action" href="#" data-confirm="<?php esc_attr_e( 'Are you sure you want to import this new data?', 'fx-builder' ); ?>" data-alert="<?php esc_attr_e( 'Your data is not valid.', 'fx-builder' ); ?>" class="button button-primary disabled"><?php _e( 'Import Page Builder Data', 'fx-builder' ); ?></a></p>
+                        <p><a id="fxb-tools-import-action" href="#" data-confirm="<?php esc_attr_e( 'Are you sure you want to import this new data?', 'fx-builder' ); ?>" data-alert="<?php esc_attr_e( 'Your data is not valid.', 'fx-builder' ); ?>" class="button button-primary disabled"><?php esc_attr_e( 'Import Page Builder Data', 'fx-builder' ); ?></a></p>
                     </div><!-- .wp-tab-panel -->
                     <?php
                 },

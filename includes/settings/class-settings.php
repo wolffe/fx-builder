@@ -100,7 +100,7 @@ class Settings {
     public function settings_page() {
         ?>
         <div class="wrap">
-            <h1><?php _e( 'Page Builder Settings', 'fx-builder' ); ?></h1>
+            <h1><?php esc_attr_e( 'Page Builder Settings', 'fx-builder' ); ?></h1>
             <form method="post" action="options.php">
                 <?php do_settings_sections( $this->settings_slug ); ?>
                 <?php settings_fields( $this->options_group ); ?>
