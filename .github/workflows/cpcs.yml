@@ -19,7 +19,7 @@ jobs:
               <file>.</file>
               ' phpcs.xml
             sed -i '/MY_DOMAIN/ s//fx-builder/' phpcs.xml
-            mv phpcs.xml phpcs.xml.dist
+            cp phpcs.xml phpcs.xml.dist
         - name: CPCS checks
           uses: 10up/wpcs-action@stable
           with:
