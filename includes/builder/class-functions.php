@@ -290,7 +290,7 @@ class Functions {
 
                                                 <div id="fxb-item-<?php echo esc_attr( $item_id ); ?>" class="fxb-item">
                                                     <div class="fxb-wrap">
-                                                        <?php echo wpautop( $items_data[ $item_id ]['content'] ); ?>
+                                                        <?php echo wp_kses_post( wpautop( wp_kses_post( $items_data[ $item_id ]['content'] ) ) ); ?>
                                                     </div><!-- .fxb-item > .fxb-wrap -->
                                                 </div><!-- .fxb-item -->
 
