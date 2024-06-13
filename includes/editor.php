@@ -157,7 +157,7 @@ add_filter(
         ];
 
         $settings['style_formats_merge'] = false;
-        $settings['style_formats']       = json_encode( $new_styles );
+        $settings['style_formats']       = wp_json_encode( $new_styles );
 
         return $settings;
     }
