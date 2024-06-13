@@ -4,14 +4,10 @@
 	gap: 2em;
 }
 
-/* Rows
------------------------------------------- */
 .fxb-row {
 	width: 100%;
 }
 
-/* Columns
------------------------------------------- */
 .fxb-row-layout-1 .fxb-col {
     width: 100%;
 }
@@ -53,8 +49,6 @@
 	width: 25%;
 }
 
-/* Items
------------------------------------------- */
 .fxb-item {
 	width: 100%;
 }
@@ -69,11 +63,6 @@
 	margin-right: calc(-50vw + var(--scrollbarWidth, 0) / 2);
 }
 
-
-/* Media Queries
------------------------------------------- */
-
-/* === MEDIA QUERIES === */
 @media screen and (max-width: 768px) {
 	.fxb-container .fxb-row .fxb-col {
 		width: 100%;
