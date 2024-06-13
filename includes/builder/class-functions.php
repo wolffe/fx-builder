@@ -116,7 +116,6 @@ class Functions {
 
             <select id="fxb_rows[{{data.id}}][row_html_width]" data-row_field="row_html_width" name="_fxb_rows[{{data.id}}][row_html_width]" autocomplete="off">
                 <option value="default" <# if( data.row_html_width == 'default' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Default', 'fx-builder' ); ?></option>
-                <option value="wide" <# if( data.row_html_width == 'wide' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Wide', 'fx-builder' ); ?></option>
                 <option value="fullwidth" <# if( data.row_html_width == 'fullwidth' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Fullwidth', 'fx-builder' ); ?></option>
             </select>
         </div><!-- .fxb-modal-field -->
@@ -258,7 +257,12 @@ class Functions {
                     $row_html_class = explode( ' ', $row_html_class ); // array
 
                     /* = HTML Width = */
-                    $row_html_class[] = $rows_data[ $row_id ]['row_html_width'] ? 'fxb-' . $rows_data[ $row_id ]['row_html_width'] : '';
+                    $row_html_width = '';
+                    if ( isset( $rows_data[ $row_id ]['row_html_width'] ) ) {
+                        $row_html_width = 'fxb-' . $rows_data[ $row_id ]['row_html_width'];
+                    }
+
+                    $row_html_class[] = $row_html_width;
 
                     /* ID */
                     $row_html_class[] = "fxb-row-{$row_id}";
