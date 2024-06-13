@@ -12,16 +12,16 @@ A simple page builder plugin. The one you can actually use.
 
 == Description ==
 
-**FX Builder** is a new page builder plugin that provides visual columns in the post editor without using shortcodes. From the setting page, you can enable it for posts, pages, and custom post types. There is no vendor lock-in.
+**FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types. There is no vendor lock-in.
 
 **Features:**
 
 1. Super simple to use.
-1. Visual columns in the post editor.
-1. If you disable the plugin, you content is not lost.
-1. Settings to enable/disable for each post type.
-1. 1-4 columns supported.
-1. Free, Open Source, GPL v3.0 or later license. :) Use it to make something cool.
+2. Visual columns in the post editor.
+3. If you disable the plugin, you content is not lost.
+4. Settings to enable/disable for each post type.
+5. 1-4 columns supported.
+6. Free, Open Source, GPL v3.0 or later license. Use it to make something cool :)
 
 == Installation ==
 
@@ -33,54 +33,51 @@ A simple page builder plugin. The one you can actually use.
 
 == Changelog ==
 
+= 1.2.1 =
+* Clean up readme.txt
+
 = 1.2.0 =
 * First public release for ClassicPress
 
 = 1.0.2 - 13 Ags 2017 =
-* Fix bug: WP 4.8 compat https://github.com/turtlepod/fx-builder/issues/48
-* Credit for reporting WP 4.8 bug: nick6352683 https://wordpress.org/support/users/nick6352683/
+* Fix bug: WP 4.8 compat (thanks to nick6352683)
 
 = 1.0.1 - 06 Jan 2017 =
-* Fix bug: wp preview remove page builder data https://github.com/turtlepod/fx-builder/issues/45
-* Fix CSS Bug: Tools & CSS button position.
-* Store _fxb_active in revisions.
-* Hide "Preview Changes" button in  "Publish" meta box when page builder active.
-* Fix "save_post" hook to fix fatal error bug. 
+* Fix bug: wp preview remove page builder data
+* Fix CSS Bug: Tools & CSS button position
+* Store _fxb_active in revisions
+* Hide "Preview Changes" button in "Publish" meta box when page builder active
+* Fix "save_post" hook to fix fatal error bug
 
 = 1.0.0 - 09 Dec 2016 =
-* First Stable Release.
+* First stable Release
 
 = 1.0.0.beta - 12 Oct 2016 =
 * Browser compatibility (Tested with: Firefox, Chrome, IE11, Edge, Android Phone, Tablet)
 * Use Admin Color
-* UI and UX Improvement.
+* UI and UX Improvement
 * RTL Support
-* Use HTML Class for Front End Output + Update Front CSS.
+* Use HTML Class for Front End Output + Update Front CSS
 
 = 1.0.0.alpha3 - 29 Sep 2016 =
-* Revision: Revert to Revision now also revert to page builder data.
-* Remove disable editor feature. Simpler Settings.
-* Change settings option name. You need to re-configure settings.
-* Page is enabled by default.
-* Introduce Tools: Export / Import page builder data.
-* Auto focus to editor when open editor modal.
-* Fix Custom CSS textarea line break.
-* Fix several small-screen accessibility issue in modal box.
+* Revision: Revert to Revision now also revert to page builder data
+* Remove disable editor feature. Simpler Settings
+* Change settings option name. You need to re-configure settings
+* Page is enabled by default
+* Introduce Tools: Export / Import page builder data
+* Auto focus to editor when open editor modal
+* Fix Custom CSS textarea line break
+* Fix several small-screen accessibility issue in modal box
 
 = 1.0.0.alpha2 - 23 Sep 2016 =
-* Add row with thumbnail for each layoout.
-* Welcome notice with link to admin page/
-* Improve overall builder design.
-* Fix overflow in editor modal.
-* add post class "fx-builder-entry" when active.
-* Reset undo in editor modal.
-* Custom CSS for each posts.
-* Other small fixes and improvements.
+* Add row with thumbnail for each layoout
+* Welcome notice with link to admin page
+* Improve overall builder design
+* Fix overflow in editor modal
+* Add post class "fx-builder-entry" when active
+* Reset undo in editor modal
+* Custom CSS for each posts
+* Other small fixes and improvements
 
 = 1.0.0.alpha - 21 Sep 2016 =
-* Initial alpha release.
-
-== Upgrade Notice ==
-
-= 1.0.0.alpha =
-Might explode.
+* Initial alpha release
