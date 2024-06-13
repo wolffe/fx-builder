@@ -1,40 +1,35 @@
 <?php
 /**
- * Row Underscore.js Template
- *
  * Row data saved as "fxb_rows" meta key
  * Row order saved as "fxb_row_ids" meta key
  *
  * Hidden Fields:
- * - "id"           : unique row id (time stamp when row was created)
- * - "index"        : order of the row (1st row = "1", 2nd row = "2", etc)
- * - "state"        : "open" vs "closed" (toggle state of the row)
- * - "col_num"      :  number of column in the layout
+ * - "id": unique row id (time stamp when row was created)
+ * - "index": order of the row (1st row = "1", 2nd row = "2", etc)
+ * - "state": "open" vs "closed" (toggle state of the row)
+ * - "col_num":  number of column in the layout
  *
  * Settings Fields:
- * - "layout"       : column layout (1 col, 1/2 - 1/2, etc)
+ * - "layout": column layout (1 col, 1/2 - 1/2, etc)
  *
  * Item IDs Order (Hidden):
- * - "col_1"        : item IDs for 1st column in comma separated value
+ * - "col_1": item IDs for 1st column in comma separated value
  * - "col_2"
  * - "col_3"
  * - "col_4"
-**/
+ **/
 namespace fx_builder\builder;
+
 global $fxb_admin_color;
 ?>
 <script id="tmpl-fxb-row" type="text/html">
-
     <div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}">
 
         <?php /* HIDDEN FIELD */ ?>
-        <input type="hidden" data-row_field="id" name="_fxb_rows[{{data.id}}][id]" value="{{data.id}}" autocomplete="off"/>
-
-        <input type="hidden" data-row_field="index" name="_fxb_rows[{{data.id}}][index]" value="{{data.index}}" autocomplete="off"/>
-
-        <input type="hidden" data-row_field="state" name="_fxb_rows[{{data.id}}][state]" value="{{data.state}}" autocomplete="off"/>
-
-        <input type="hidden" data-row_field="col_num" name="_fxb_rows[{{data.id}}][col_num]" value="{{data.col_num}}" autocomplete="off"/>
+        <input type="hidden" data-row_field="id" name="_fxb_rows[{{data.id}}][id]" value="{{data.id}}" autocomplete="off">
+        <input type="hidden" data-row_field="index" name="_fxb_rows[{{data.id}}][index]" value="{{data.index}}" autocomplete="off">
+        <input type="hidden" data-row_field="state" name="_fxb_rows[{{data.id}}][state]" value="{{data.state}}" autocomplete="off">
+        <input type="hidden" data-row_field="col_num" name="_fxb_rows[{{data.id}}][col_num]" value="{{data.col_num}}" autocomplete="off">
 
         <?php /* ROW MENU */ ?>
         <div class="fxb-row-menu fxb-clear" style="background-color:<?php echo esc_attr( $fxb_admin_color['1'] ); ?>">
@@ -94,7 +89,5 @@ global $fxb_admin_color;
             ?>
 
         </div><!-- .fxb-row-content -->
-
     </div><!-- .fxb-row -->
-
 </script>

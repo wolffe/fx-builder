@@ -1,39 +1,32 @@
 <?php
 /**
- * Item Underscore.js Template
- *
  * Item datas saved as "fxb_items" meta key
  *
- * Datas (all item data need to be prefixed with "item_*" ):
+ * Datas (all item data need to be prefixed with "item_*"):
  *
  * Hidden field:
- * "item_id"    : unique item id (time stamp when row was created)
- * "item_state" : toggle state
- * "item_type"  : currently only one "text"
+ * "item_id": unique item id (time stamp when row was created)
+ * "item_state": toggle state
+ * "item_type": currently only one "text"
  *
  * Content:
- * "content"    : hidden textarea (?)
+ * "content": hidden textarea (?)
  *
-**/
+ **/
 namespace fx_builder\builder;
 ?>
 <script id="tmpl-fxb-item" type="text/html">
-
     <div class="fxb-item fxb-clear" data-item_id="{{data.item_id}}" data-item_state="{{data.item_state}}" data-item_type="{{data.item_type}}" data-item_index="{{data.item_index}}">
 
         <?php /* HIDDEN FIELD */ ?>
-        <input type="hidden" data-item_field="item_id" name="_fxb_items[{{data.item_id}}][item_id]" value="{{data.item_id}}" autocomplete="off"/>
-
-        <input type="hidden" data-item_field="item_index" name="_fxb_items[{{data.item_id}}][item_index]" value="{{data.item_index}}" autocomplete="off"/>
-
-        <input type="hidden" data-item_field="item_state" name="_fxb_items[{{data.item_id}}][item_state]" value="{{data.item_state}}" autocomplete="off"/>
-
-        <input type="hidden" data-item_field="item_type" name="_fxb_items[{{data.item_id}}][item_type]" value="text" autocomplete="off"/>
+        <input type="hidden" data-item_field="item_id" name="_fxb_items[{{data.item_id}}][item_id]" value="{{data.item_id}}" autocomplete="off">
+        <input type="hidden" data-item_field="item_index" name="_fxb_items[{{data.item_id}}][item_index]" value="{{data.item_index}}" autocomplete="off">
+        <input type="hidden" data-item_field="item_state" name="_fxb_items[{{data.item_id}}][item_state]" value="{{data.item_state}}" autocomplete="off">
+        <input type="hidden" data-item_field="item_type" name="_fxb_items[{{data.item_id}}][item_type]" value="text" autocomplete="off">
 
         <?php /* CONTEXT FIELD */ ?>
-        <input type="hidden" data-item_field="row_id" name="_fxb_items[{{data.item_id}}][row_id]" value="{{data.row_id}}" autocomplete="off"/>
-
-        <input type="hidden" data-item_field="col_index" name="_fxb_items[{{data.item_id}}][col_index]" value="{{data.col_index}}" autocomplete="off"/>
+        <input type="hidden" data-item_field="row_id" name="_fxb_items[{{data.item_id}}][row_id]" value="{{data.row_id}}" autocomplete="off">
+        <input type="hidden" data-item_field="col_index" name="_fxb_items[{{data.item_id}}][col_index]" value="{{data.col_index}}" autocomplete="off">
 
         <?php /* ITEM MENU */ ?>
         <div class="fxb-item-menu fxb-clear">
