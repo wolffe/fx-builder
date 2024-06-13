@@ -63,6 +63,11 @@
 	margin-right: calc(-50vw + var(--scrollbarWidth, 0) / 2);
 }
 
+.fxb-wrap img {
+    max-width: 100%;
+    height: auto;
+}
+
 @media screen and (max-width: 768px) {
 	.fxb-container .fxb-row .fxb-col {
 		width: 100%;
