@@ -14,7 +14,7 @@ add_filter(
 add_filter(
     'mce_buttons_2',
     function( $buttons ) {
-        // array_unshift( $buttons, 'fontselect' ); // Font family dropdown
+        array_unshift( $buttons, 'fontselect' ); // Font family dropdown
         array_unshift( $buttons, 'fontsizeselect' );
 
         // Used for different versions of TinyMCE
@@ -160,5 +160,15 @@ add_filter(
         $settings['style_formats']       = wp_json_encode( $new_styles );
 
         return $settings;
+    }
+);
+
+// Add custom Fonts to the Fonts list.
+add_filter(
+    'tiny_mce_before_init',
+    function( $init_array ) {
+        $init_array['font_formats'] = 'System UI=-apple-system, BlinkMacSystemFont, Segoe UI Variable Text, Segoe UI, Roboto, Helvetica, Helvetica Neue, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Arial, sans-serif, Apple Color Emoji, Twemoji Mozilla, Segoe UI Emoji, Android Emoji;Segoe UI=Segoe UI;Segoe UI Variable Text=Segoe UI Variable Text;Segoe UI Variable Heading=Segoe UI Variable Heading;Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino;Helvetica=helvetica;Times New Roman=times new roman,times;Monospace=ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace';
+
+        return $init_array;
     }
 );
