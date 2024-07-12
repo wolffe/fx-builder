@@ -7,7 +7,7 @@
  * Requires PHP: 7.2
  * Requires CP: 2.0
  * Author: Ciprian Popescu
- * Author URI: https://getbutterfly.com/classicpress-plugins/fx-builder/
+ * Author URI: https://getbutterfly.com/
  * License: GNU General Public License v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: fx-builder
