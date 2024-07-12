@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, columns
 Requires at least: 2.0
 Tested up to: 2.1.0
 Requires PHP: 7.2
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
