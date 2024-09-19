@@ -38,6 +38,10 @@ A simple page builder plugin. The one you can actually use.
 * Remove old, unused files
 * Update plugin branding to be consistent with "FX Builder"
 
+= 1.2.3 =
+* Fix author link
+* Add system fonts to TinyMCE
+
 = 1.2.2 =
 * Fix undefined variable
 * Add image styling to wraps to make sure images are not wider than content
