@@ -85,8 +85,8 @@ class Settings {
 
         /* Create Settings Sub-Menu */
         $this->hook_suffix = add_options_page(
-            __( 'Page Builder Settings', 'fx-builder' ),
-            __( 'Page Builder', 'fx-builder' ),
+            __( 'FX Builder Settings', 'fx-builder' ),
+            __( 'FX Builder', 'fx-builder' ),
             'manage_options',
             $this->settings_slug,
             array( $this, 'settings_page' ),
@@ -100,7 +100,7 @@ class Settings {
     public function settings_page() {
         ?>
         <div class="wrap">
-            <h1><?php esc_attr_e( 'Page Builder Settings', 'fx-builder' ); ?></h1>
+            <h1><?php esc_attr_e( 'FX Builder Settings', 'fx-builder' ); ?></h1>
             <form method="post" action="options.php">
                 <?php do_settings_sections( $this->settings_slug ); ?>
                 <?php settings_fields( $this->options_group ); ?>
@@ -120,7 +120,7 @@ class Settings {
             return false;
         }
 
-        /* Disable Page Builder */
+        /* Disable FX Builder */
         register_setting(
             $this->options_group,
             'fx-builder_post_types',
@@ -140,7 +140,7 @@ class Settings {
         /* Create Setting Field */
         add_settings_field(
             'fxb_post_types_field',
-            __( 'Enable Page Builder in', 'fx-builder' ),
+            __( 'Enable FX Builder in', 'fx-builder' ),
             function() {
                 /* Get All Public Post Types */
                 $post_types = get_post_types( array( 'public' => true ), 'objects' );
@@ -166,7 +166,7 @@ class Settings {
     }
 
     /**
-     * Enable Page Builder to Post Type
+     * Enable FX Builder to Post Type
      */
     public function add_builder_support() {
         /* Hook to disable settings */

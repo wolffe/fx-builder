@@ -22,7 +22,7 @@ add_filter( 'fx_builder_settings', '__return_false' );
 
 ## Add support for "fx_builder" to post type manually:
 
-If you disable settings, you need to enable page builder for each post type by yourself, by adding support for it. Here's how to add FX Builder to a "property" post type:
+If you disable settings, you need to enable FX Builder for each post type by yourself, by adding support for it. Here's how to add FX Builder to a "property" post type:
 
 ```
 add_action(
@@ -35,7 +35,7 @@ add_action(
 
 ## Meta Keys
 
-### List of Post Meta Keys in Page Builder
+### List of Post Meta Keys in FX Builder
 
 `_fxb_db_version`
 

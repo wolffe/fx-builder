@@ -1,8 +1,8 @@
 === FX Builder ===
 Contributors: butterflymedia
-Tags: page builder, drag, drop, columns
+Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
-Tested up to: 2.1.0
+Tested up to: 2.2.0
 Requires PHP: 7.2
 Stable tag: 1.2.3
 License: GNU General Public License v3 or later
@@ -28,10 +28,13 @@ A simple page builder plugin. The one you can actually use.
 1. Navigate to "Plugins > Add New" Page from your Admin.
 2. To install from plugin .zip file, click "Upload Plugin" button in "Plugins > Add New" Screen. Browse the plugin .zip file, and click "Install Now" button.
 3. Activate the plugin.
-4. Navigate to "Settings > Page Builder" to configure.
+4. Navigate to "Settings > FX Builder" to configure.
 5. Edit your content.
 
 == Changelog ==
+
+= 1.3.0 =
+* Remove jQuery UI Sortable dependency and replace with SortableJS
 
 = 1.2.2 =
 * Fix undefined variable
@@ -51,10 +54,10 @@ A simple page builder plugin. The one you can actually use.
 * Fix bug: WP 4.8 compat (thanks to nick6352683)
 
 = 1.0.1 - 06 Jan 2017 =
-* Fix bug: wp preview remove page builder data
+* Fix bug: wp preview remove FX Builder data
 * Fix CSS Bug: Tools & CSS button position
 * Store _fxb_active in revisions
-* Hide "Preview Changes" button in "Publish" meta box when page builder active
+* Hide "Preview Changes" button in "Publish" meta box when FX Builder is active
 * Fix "save_post" hook to fix fatal error bug
 
 = 1.0.0 - 09 Dec 2016 =
@@ -68,11 +71,11 @@ A simple page builder plugin. The one you can actually use.
 * Use HTML Class for Front End Output + Update Front CSS
 
 = 1.0.0.alpha3 - 29 Sep 2016 =
-* Revision: Revert to Revision now also revert to page builder data
+* Revision: Revert to Revision now also revert to FX Builder data
 * Remove disable editor feature. Simpler Settings
 * Change settings option name. You need to re-configure settings
 * Page is enabled by default
-* Introduce Tools: Export / Import page builder data
+* Introduce Tools: Export / Import FX Builder data
 * Auto focus to editor when open editor modal
 * Fix Custom CSS textarea line break
 * Fix several small-screen accessibility issue in modal box

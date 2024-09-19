@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 Switcher::get_instance();
 
 /**
- * Switcher: Toggle between page builder / wp editor.
+ * Switcher: Toggle between FX Builder / wp editor.
  * Since v.1.0.1 Switcher save method is added in builder.php
  * @since 1.0.0
  */
@@ -32,7 +32,7 @@ class Switcher {
         /* Add HTML Class */
         add_action( 'admin_head', array( $this, 'html_class_script' ) );
 
-        /* Add Editor/Page Builder Tab */
+        /* Add Editor/FX Builder Tab */
         add_action( 'edit_form_after_title', array( $this, 'editor_toggle' ) );
 
         /* Scripts */
@@ -77,8 +77,8 @@ class Switcher {
             $builder_class = $active ? 'nav-tab nav-tab-active' : 'nav-tab';
             ?>
             <h1 id="fxb-switcher" class="nav-tab-wrapper wp-clearfix">
-                <a data-fxb-switcher="editor" data-confirm="<?php esc_attr_e( 'Would you like to clear your Page Builder content the next time you update this post and revert to using the standard editor?', 'fx-builder' ); ?>" class="<?php echo esc_attr( $editor_class ); ?>" href="#"><?php esc_attr_e( 'Editor', 'fx-builder' ); ?></a>
-                <a data-fxb-switcher="builder" data-confirm="<?php esc_attr_e( 'Would you like to clear your editor existing content the next time you update this post and use Page Builder?', 'fx-builder' ); ?>" class="<?php echo esc_attr( $builder_class ); ?>" href="#"><?php esc_attr_e( 'Page Builder', 'fx-builder' ); ?></a>
+                <a data-fxb-switcher="editor" data-confirm="<?php esc_attr_e( 'Would you like to clear your FX Builder content the next time you update this post and revert to using the standard editor?', 'fx-builder' ); ?>" class="<?php echo esc_attr( $editor_class ); ?>" href="#"><?php esc_attr_e( 'Editor', 'fx-builder' ); ?></a>
+                <a data-fxb-switcher="builder" data-confirm="<?php esc_attr_e( 'Would you like to clear your editor existing content the next time you update this post and use FX Builder?', 'fx-builder' ); ?>" class="<?php echo esc_attr( $builder_class ); ?>" href="#"><?php esc_attr_e( 'FX Builder', 'fx-builder' ); ?></a>
                 <input type="hidden" name="_fxb_active" value="<?php echo esc_attr( $active ); ?>">
                 <?php wp_nonce_field( __FILE__, 'fxb_switcher_nonce' ); ?>
                 <?php do_action( 'fxb_switcher_nav', $post ); ?>

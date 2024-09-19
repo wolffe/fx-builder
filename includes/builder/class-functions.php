@@ -231,7 +231,7 @@ class Functions {
 
     /**
      * Format Post Builder Data To Single String
-     * This will format page builder data to content (single string)
+     * This will format FX Builder data to content (single string)
      */
     public static function content( $post_id ) {
         $row_ids    = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );

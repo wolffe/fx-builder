@@ -70,8 +70,8 @@ class Tools {
                     </div><!-- .wp-tab-panel -->
 
                     <div id="fxb-import-panel" class="fxb-tools-panel wp-tab-panel" style="display:none;">
-                        <textarea autocomplete="off" id="fxb-tools-import-textarea" placeholder="<?php esc_attr_e( 'Paste your page builder data here...', 'fx-builder' ); ?>"></textarea>
-                        <p><a id="fxb-tools-import-action" href="#" data-confirm="<?php esc_attr_e( 'Are you sure you want to import this new data?', 'fx-builder' ); ?>" data-alert="<?php esc_attr_e( 'Your data is not valid.', 'fx-builder' ); ?>" class="button button-primary disabled"><?php esc_attr_e( 'Import Page Builder Data', 'fx-builder' ); ?></a></p>
+                        <textarea autocomplete="off" id="fxb-tools-import-textarea" placeholder="<?php esc_attr_e( 'Paste your FX Builder data here...', 'fx-builder' ); ?>"></textarea>
+                        <p><a id="fxb-tools-import-action" href="#" data-confirm="<?php esc_attr_e( 'Are you sure you want to import this new data?', 'fx-builder' ); ?>" data-alert="<?php esc_attr_e( 'Your data is not valid.', 'fx-builder' ); ?>" class="button button-primary disabled"><?php esc_attr_e( 'Import FX Builder Data', 'fx-builder' ); ?></a></p>
                     </div><!-- .wp-tab-panel -->
                     <?php
                 },

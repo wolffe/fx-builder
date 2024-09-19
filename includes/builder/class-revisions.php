@@ -27,7 +27,7 @@ class Revisions {
      */
     public function __construct() {
 
-        /* Save Page Builder Revision */
+        /* Save FX Builder Revision */
         add_action( 'save_post', array( $this, 'save_revision' ), 11, 2 );
 
         /* Restore Post Revisions */
@@ -36,7 +36,7 @@ class Revisions {
 
     /**
      * Save Revision
-     * Simply Clone To Revision If Page Builder Data Exists In Post
+     * Simply Clone To Revision If FX Builder Data Exists In Post
      * @link https://johnblackbourn.com/post-meta-revisions-wordpress
      */
     public function save_revision( $post_id, $post ) {

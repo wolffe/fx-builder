@@ -27,7 +27,7 @@ class Front {
      */
     public function __construct() {
 
-        /* Filter content with page builder content. */
+        /* Filter content with FX Builder content. */
         add_filter( 'the_content', array( $this, 'content_filter' ), 1 );
 
         /* Enqueue Scripts */
@@ -39,7 +39,7 @@ class Front {
 
     /**
      * Content Filter
-     * This will format content with page builder data.
+     * This will format content with FX Builder data.
      */
     public function content_filter( $content ) {
 
