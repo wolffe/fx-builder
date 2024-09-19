@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.2.0
 Requires PHP: 7.2
-Stable tag: 1.2.3
+Stable tag: 1.3.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,6 +35,8 @@ A simple page builder plugin. The one you can actually use.
 
 = 1.3.0 =
 * Remove jQuery UI Sortable dependency and replace with SortableJS
+* Remove old, unused files
+* Update plugin branding to be consistent with "FX Builder"
 
 = 1.2.2 =
 * Fix undefined variable
