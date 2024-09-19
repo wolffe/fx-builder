@@ -164,7 +164,7 @@ class Builder {
 
 
     /**
-     * Save Page Builder Data
+     * Save FX Builder Data
      * @since 1.0.0
      */
     public function save( $post_id, $post ) {
@@ -191,11 +191,11 @@ class Builder {
         ------------------------------------------ */
         $active = isset( $request['_fxb_active'] ) ? $request['_fxb_active'] : false;
 
-        /* Page Builder Active */
+        /* FX Builder Active */
         if ( $active ) {
             update_post_meta( $post_id, '_fxb_active', 1 );
         } else {
-            /* Page Builder Not Selected: Delete Data and Bail. */
+            /* FX Builder Not Selected: Delete Data and Bail. */
             delete_post_meta( $post_id, '_fxb_active' );
             delete_post_meta( $post_id, '_fxb_db_version' );
             delete_post_meta( $post_id, '_fxb_row_ids' );
@@ -204,7 +204,7 @@ class Builder {
             return false;
         }
 
-        /* Page Builder Datas
+        /* FX Builder Data
         ------------------------------------------ */
 
         /* DB Version */
@@ -289,14 +289,14 @@ class Builder {
             wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', array(), VERSION );
 
             /* Enqueue JS: ROW */
-            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', array( 'jquery', 'jquery-ui-sortable', 'wp-util' ), VERSION, true );
+            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', array( 'jquery', 'sortable-js', 'wp-util' ), VERSION, true );
             $data = array(
                 'unload' => __( 'The changes you made will be lost if you navigate away from this page', 'fx-builder' ),
             );
             wp_localize_script( 'fx-builder-row', 'fxb_i18n', $data );
 
             /* Enqueue JS: ITEM */
-            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', array( 'jquery', 'jquery-ui-sortable', 'wp-util' ), VERSION, true );
+            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', array( 'jquery', 'sortable-js', 'wp-util' ), VERSION, true );
             $ajax_data = array(
                 'ajax_url'   => admin_url( 'admin-ajax.php' ),
                 'ajax_nonce' => wp_create_nonce( 'fxb_ajax_nonce' ),

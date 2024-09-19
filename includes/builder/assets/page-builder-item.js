@@ -1,10 +1,3 @@
-/**
- * F(X) BUILDER JS: ITEMS
-*************************************/
-
- 
-/* Functions
------------------------------------------- */
 ;(function($){
 
 	/**
@@ -55,22 +48,20 @@
 	 ************************************
 	 */
 	$.fn.fxB_sortItems = function() {
-
-		$( '.fxb-col-content' ).sortable({
-			handle      : '.fxb-item-handle',
-			cursor      : 'grabbing',
-			connectWith : ".fxb-col-content",
-			update      : function( e, ui ) {
-
-				/* Var */
-				var col = $( this ).parents( '.fxb-col' );
-
-				/* Update Index */
-				$.fn.fxB_updateItemsIndex( col );
-			},
+		// SortableJS for Items
+		document.querySelectorAll('.fxb-col-content').forEach(function (colContent) {
+			new Sortable(colContent, {
+				handle: '.fxb-item-handle',
+				animation: 150,
+				group: 'shared',  // Allow dragging between columns
+				onEnd: function (evt) {
+					// Get the column and update item indexes
+					var col = $(evt.from).parents('.fxb-col');
+					$.fn.fxB_updateItemsIndex(col);
+				}
+			});
 		});
 	};
-
 
 	/**
 	 * Get Iframe CSS
@@ -388,20 +379,17 @@ jQuery(document).ready(function($){
 	 * 
 	 ************************************
 	 */
-	$( '.fxb-col-content' ).sortable({
-		handle      : '.fxb-item-handle',
-		cursor      : 'grabbing',
-		connectWith : ".fxb-col-content",
-		update      : function( e, ui ) {
-
-			/* Var */
-			var col = $( this ).parents( '.fxb-col' );
-
-			/* Update Index */
-			$.fn.fxB_updateItemsIndex( col );
-		},
+	document.querySelectorAll('.fxb-col-content').forEach(function (colContent) {
+		new Sortable(colContent, {
+			handle: '.fxb-item-handle',
+			animation: 150,
+			group: 'shared',
+			onSort: function (evt) {
+				var col = $(evt.target).parents('.fxb-col');
+				$.fn.fxB_updateItemsIndex(col);
+			}
+		});
 	});
-
 
 	/**
 	 * OPEN EDITOR
@@ -494,7 +482,4 @@ jQuery(document).ready(function($){
 		$( this ).parents( '.fxb-modal' ).hide();
 		$( '.fxb-modal-overlay' ).hide();
 	} );
-
-
 });
-

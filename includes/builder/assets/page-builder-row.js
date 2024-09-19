@@ -1,10 +1,3 @@
-/**
- * F(X) BUILDER JS: ROWS
-*************************************/
-
- 
-/* Functions
------------------------------------------- */
 ;(function($){
 
 	/**
@@ -268,16 +261,17 @@ jQuery(document).ready(function($){
 	 * 
 	 ************************************
 	 */
-	$( '#fxb' ).sortable({
-		handle  : '.fxb-row-handle',
-		cursor  : 'grabbing',
-		axis    : 'y',
-		stop    : function( e, ui ) {
+	// SortableJS for Rows
+	var sortableRows = new Sortable(document.getElementById('fxb'), {
+		handle: '.fxb-row-handle',
+		animation: 150,
+		onEnd: function (evt) {
+			// Call the function to update row indexes
 			$.fn.fxB_updateRowsIndex();
-		},
+		}
 	});
+
 	$( document.body ).on('mousedown mouseup', '.fxb-grab', function(event) {
 		$(this).toggleClass( 'fxb-grabbing' );
 	});
-
 });
