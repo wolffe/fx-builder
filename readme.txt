@@ -3,8 +3,8 @@ Contributors: butterflymedia
 Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.2.0
-Requires PHP: 7.2
-Stable tag: 1.3.0
+Requires PHP: 7.0
+Stable tag: 1.3.1
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ A simple page builder plugin. The one you can actually use.
 2. Visual columns in the post editor.
 3. If you disable the plugin, you content is not lost.
 4. Settings to enable/disable for each post type.
-5. 1-4 columns supported.
+5. 1-5 columns supported.
 6. Free, Open Source, GPL v3.0 or later license. Use it to make something cool :)
 
 == Installation ==
@@ -32,6 +32,13 @@ A simple page builder plugin. The one you can actually use.
 5. Edit your content.
 
 == Changelog ==
+
+= 1.3.1 =
+* Add line height controls
+* Add column vertical alignment
+* Add 5-column layout
+* Add section height controls to create spacers
+* Various UI improvements
 
 = 1.3.0 =
 * Remove jQuery UI Sortable dependency and replace with SortableJS

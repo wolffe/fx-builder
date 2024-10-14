@@ -17,6 +17,7 @@
  * - "col_2"
  * - "col_3"
  * - "col_4"
+ * - "col_5"
  **/
 namespace fx_builder\builder;
 
@@ -45,11 +46,11 @@ global $fxb_admin_color;
                 <?php /* SETTINGS */ ?>
                 <?php
                 Functions::render_settings(
-                    array(
+                    [
                         'id'       => 'fxb-row-settings', // data-target
                         'title'    => __( 'Row Settings', 'fx-builder' ),
                         'callback' => __NAMESPACE__ . '\Functions::row_settings',
-                    )
+                    ]
                 );
                 ?>
             </div><!-- .fxb-right -->
@@ -60,31 +61,38 @@ global $fxb_admin_color;
 
             <?php
             Functions::render_column(
-                array(
+                [
                     'title' => __( '1st Column', 'fx-builder' ),
                     'index' => 1,
-                )
+                ]
             );
 
             Functions::render_column(
-                array(
+                [
                     'title' => __( '2nd Column', 'fx-builder' ),
                     'index' => 2,
-                )
+                ]
             );
 
             Functions::render_column(
-                array(
+                [
                     'title' => __( '3rd Column', 'fx-builder' ),
                     'index' => 3,
-                )
+                ]
             );
 
             Functions::render_column(
-                array(
+                [
                     'title' => __( '4th Column', 'fx-builder' ),
                     'index' => 4,
-                )
+                ]
+            );
+
+            Functions::render_column(
+                [
+                    'title' => __( '5th Column', 'fx-builder' ),
+                    'index' => 5,
+                ]
             );
             ?>
 
