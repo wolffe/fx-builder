@@ -18,7 +18,7 @@ A simple page builder plugin. The one you can actually use.
 
 1. Super simple to use.
 2. Visual columns in the post editor.
-3. If you disable the plugin, you content is not lost.
+3. If you disable the plugin, your content is not lost.
 4. Settings to enable/disable for each post type.
 5. 1-5 columns supported.
 6. Free, Open Source, GPL v3.0 or later license. Use it to make something cool :)
