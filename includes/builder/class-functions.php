@@ -331,7 +331,7 @@ class Functions {
 
                     <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>">
 
-                        <div class="fxb-wrap" style="gap: <?php echo esc_attr( $row_column_gap ); ?>; align-items: <?php echo esc_attr( $row_column_align ); ?>; <?php echo $row_html_height; ?>">
+                        <div class="fxb-wrap" style="gap: <?php echo esc_attr( $row_column_gap ); ?>; align-items: <?php echo esc_attr( $row_column_align ); ?>; <?php echo esc_attr( $row_html_height ); ?>">
 
                             <?php
                             $cols = range( 1, $rows_data[ $row_id ]['col_num'] );
