@@ -45,15 +45,3 @@ function fx_builder_init() {
     require_once $path . 'includes/setup.php';
     require_once $path . 'includes/editor.php';
 }
-
-
-/*
-function fxb_wp_editor_to_textarea( $settings ) {
-    $settings['tinymce']       = false;
-    $settings['quicktags']     = false;
-    $settings['media_buttons'] = false;
-
-    return $settings;
-}
-add_filter( 'wp_editor_settings', 'fxb_wp_editor_to_textarea' );
-/**/

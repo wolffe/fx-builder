@@ -2,7 +2,7 @@
 /**
  * Setup Settings NameSpace
  * @since 1.0.0
-**/
+ **/
 namespace fx_builder\settings;
 
 if ( ! defined( 'WPINC' ) ) {

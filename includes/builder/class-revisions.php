@@ -17,7 +17,7 @@ class Revisions {
     public static function get_instance() {
         static $instance = null;
         if ( is_null( $instance ) ) {
-            $instance = new self;
+            $instance = new self();
         }
         return $instance;
     }
@@ -28,10 +28,10 @@ class Revisions {
     public function __construct() {
 
         /* Save FX Builder Revision */
-        add_action( 'save_post', array( $this, 'save_revision' ), 11, 2 );
+        add_action( 'save_post', [ $this, 'save_revision' ], 11, 2 );
 
         /* Restore Post Revisions */
-        add_action( 'wp_restore_post_revision', array( $this, 'restore_revision' ), 10, 2 );
+        add_action( 'wp_restore_post_revision', [ $this, 'restore_revision' ], 10, 2 );
     }
 
     /**
@@ -124,6 +124,5 @@ class Revisions {
         } else {
             delete_post_meta( $post_id, '_fxb_custom_css' );
         }
-
     }
 }

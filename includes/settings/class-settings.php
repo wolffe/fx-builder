@@ -63,13 +63,13 @@ class Settings {
         $this->options_group = 'fx-base';
 
         /* Create Settings Page */
-        add_action( 'admin_menu', array( $this, 'create_settings_page' ) );
+        add_action( 'admin_menu', [ $this, 'create_settings_page' ] );
 
         /* Register Settings and Fields */
-        add_action( 'admin_init', array( $this, 'register_settings' ), 1 );
+        add_action( 'admin_init', [ $this, 'register_settings' ], 1 );
 
         /* Add Post Type Support */
-        add_action( 'init', array( $this, 'add_builder_support' ) );
+        add_action( 'init', [ $this, 'add_builder_support' ] );
     }
 
     /**
@@ -89,7 +89,7 @@ class Settings {
             __( 'FX Builder', 'fx-builder' ),
             'manage_options',
             $this->settings_slug,
-            array( $this, 'settings_page' ),
+            [ $this, 'settings_page' ],
         );
     }
 
@@ -124,7 +124,7 @@ class Settings {
         register_setting(
             $this->options_group,
             'fx-builder_post_types',
-            function( $data ) {
+            function ( $data ) {
                 return $this->check_post_types_exists( $data );
             }
         );
@@ -141,9 +141,9 @@ class Settings {
         add_settings_field(
             'fxb_post_types_field',
             __( 'Enable FX Builder in', 'fx-builder' ),
-            function() {
+            function () {
                 /* Get All Public Post Types */
-                $post_types = get_post_types( array( 'public' => true ), 'objects' );
+                $post_types = get_post_types( [ 'public' => true ], 'objects' );
 
                 /* Create Options For Each Post Types */
                 foreach ( $post_types as $post_type ) {
@@ -162,7 +162,6 @@ class Settings {
             $this->settings_slug,
             'fxb_settings'
         );
-
     }
 
     /**
@@ -177,7 +176,7 @@ class Settings {
         /* If not set, default to page. */
         $post_types = get_option( 'fx-builder_post_types' );
         if ( ! $post_types && ! is_array( $post_types ) ) {
-            $post_types = array( 'page' );
+            $post_types = [ 'page' ];
         } else {
             $post_types = $this->check_post_types_exists( $post_types );
         }
@@ -193,8 +192,8 @@ class Settings {
      * @since 1.0.0
      */
     public function check_post_types_exists( $input ) {
-        $input      = is_array( $input ) ? $input : array();
-        $post_types = array();
+        $input      = is_array( $input ) ? $input : [];
+        $post_types = [];
 
         foreach ( $input as $post_type ) {
             if ( post_type_exists( $post_type ) ) {

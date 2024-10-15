@@ -12,7 +12,7 @@ A simple page builder plugin. The one you can actually use.
 
 == Description ==
 
-**FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types. There is no vendor lock-in.
+**FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types.
 
 **Features:**
 

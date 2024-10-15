@@ -17,7 +17,7 @@ class Front {
     public static function get_instance() {
         static $instance = null;
         if ( is_null( $instance ) ) {
-            $instance = new self;
+            $instance = new self();
         }
         return $instance;
     }
@@ -28,13 +28,13 @@ class Front {
     public function __construct() {
 
         /* Filter content with FX Builder content. */
-        add_filter( 'the_content', array( $this, 'content_filter' ), 1 );
+        add_filter( 'the_content', [ $this, 'content_filter' ], 1 );
 
         /* Enqueue Scripts */
-        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 1 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 1 );
 
         /* Post Class */
-        add_filter( 'post_class', array( $this, 'post_class' ), 10, 3 );
+        add_filter( 'post_class', [ $this, 'post_class' ], 10, 3 );
     }
 
     /**
@@ -66,7 +66,7 @@ class Front {
      */
     public function scripts() {
         if ( apply_filters( 'fx_builder_css', true ) ) {
-            wp_enqueue_style( 'fx-builder', URI . 'assets/front.css', array(), VERSION );
+            wp_enqueue_style( 'fx-builder', URI . 'assets/front.css', [], VERSION );
         }
     }
 
@@ -84,5 +84,4 @@ class Front {
         }
         return $classes;
     }
-
 }

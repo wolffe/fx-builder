@@ -1,11 +1,9 @@
 ; (function ($) {
-
     /**
      * TOOLS OPEN
      ************************************
      */
     $.fn.fxB_Tools_Open = function () {
-
         /* Show Editor Modal & Modal Overlay */
         $('.fxb-tools').show();
         $('.fxb-modal-overlay').show();
@@ -22,7 +20,6 @@
      ************************************
      */
     $.fn.fxB_Tools_Close = function () {
-
         /* Show Editor Modal & Modal Overlay */
         $('.fxb-tools').hide();
         $('.fxb-modal-overlay').hide();
@@ -36,12 +33,9 @@
         $('#fxb-tools-import-textarea').val('');
         $('#fxb-tools-import-action').addClass('disabled');
     };
-
 })(jQuery);
 
-
 jQuery(document).ready(function ($) {
-
     /**
      * OPEN TOOLS MODAL
      */
@@ -130,7 +124,6 @@ jQuery(document).ready(function ($) {
                 return;
             },
         });
-
     });
 
     /**
@@ -140,8 +133,7 @@ jQuery(document).ready(function ($) {
         var pb_data = $(this).val();
         if (pb_data) {
             $('#fxb-tools-import-action').removeClass('disabled');
-        }
-        else {
+        } else {
             $('#fxb-tools-import-action').addClass('disabled');
         }
     });
@@ -149,9 +141,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         if ($(this).hasClass('disabled')) {
             return false;
-        }
-        else {
-
+        } else {
             /* Confirm */
             if (true !== confirm($(this).data('confirm'))) {
                 return false;

@@ -19,7 +19,7 @@ class Switcher {
     public static function get_instance() {
         static $instance = null;
         if ( is_null( $instance ) ) {
-            $instance = new self;
+            $instance = new self();
         }
         return $instance;
     }
@@ -30,13 +30,13 @@ class Switcher {
     public function __construct() {
 
         /* Add HTML Class */
-        add_action( 'admin_head', array( $this, 'html_class_script' ) );
+        add_action( 'admin_head', [ $this, 'html_class_script' ] );
 
         /* Add Editor/FX Builder Tab */
-        add_action( 'edit_form_after_title', array( $this, 'editor_toggle' ) );
+        add_action( 'edit_form_after_title', [ $this, 'editor_toggle' ] );
 
         /* Scripts */
-        add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 99 );
+        add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ], 99 );
     }
 
 
@@ -46,7 +46,7 @@ class Switcher {
      */
     function html_class_script() {
         global $pagenow, $post_type;
-        if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+        if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
             return false;
         }
 
@@ -94,16 +94,16 @@ class Switcher {
      */
     public function scripts( $hook_suffix ) {
         global $post_type;
-        if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
+        if ( ! in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
             return false;
         }
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 
             /* CSS */
-            wp_enqueue_style( 'fx-builder-switcher', URI . 'assets/switcher.css', array(), VERSION );
+            wp_enqueue_style( 'fx-builder-switcher', URI . 'assets/switcher.css', [], VERSION );
 
             /* JS */
-            wp_enqueue_script( 'fx-builder-switcher', URI . 'assets/switcher.js', array( 'jquery', 'fx-builder-item' ), VERSION, true );
+            wp_enqueue_script( 'fx-builder-switcher', URI . 'assets/switcher.js', [ 'jquery', 'fx-builder-item' ], VERSION, true );
         }
     }
 }

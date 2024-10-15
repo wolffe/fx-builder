@@ -18,7 +18,7 @@ class Custom_CSS {
     public static function get_instance() {
         static $instance = null;
         if ( is_null( $instance ) ) {
-            $instance = new self;
+            $instance = new self();
         }
         return $instance;
     }
@@ -29,13 +29,13 @@ class Custom_CSS {
     public function __construct() {
 
         /* Add CSS Button */
-        add_action( 'fxb_switcher_nav', array( $this, 'add_css_control' ) );
+        add_action( 'fxb_switcher_nav', [ $this, 'add_css_control' ] );
 
         /* Save CSS */
-        add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+        add_action( 'save_post', [ $this, 'save' ], 10, 2 );
 
         /* Scripts */
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+        add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 
         /* Add CSS */
         add_action( 'wp_head', [ $this, 'print_css' ], 99 );
@@ -51,18 +51,18 @@ class Custom_CSS {
         <?php wp_nonce_field( __FILE__, 'fx_builder_custom_css_nonce' ); ?>
         <?php
         Functions::render_settings(
-            array(
+            [
                 'id'       => 'fxb-custom-css', // data-target
                 'title'    => __( 'Custom CSS', 'fx-builder' ),
                 'width'    => '800px',
                 'height'   => '400px',
-                'callback' => function() use ( $post_id ) {
+                'callback' => function () use ( $post_id ) {
                     ?>
                     <textarea class="fxb-custom-css-textarea" name="_fxb_custom_css" autocomplete="off" placeholder="<?php esc_attr_e( 'Custom CSS Here...', 'fx-builder' ); ?>"><?php echo esc_textarea( Sanitize::css( get_post_meta( $post_id, '_fxb_custom_css', true ) ) ); ?></textarea>
                     <p><label><input autocomplete="off" type="checkbox" name="_fxb_custom_css_disable" value="1" <?php checked( '1', get_post_meta( $post_id, '_fxb_custom_css_disable', true ) ); ?>><?php esc_attr_e( 'Disable Custom CSS', 'fx-builder' ); ?></label></p>
                     <?php
                 },
-            )
+            ]
         );
         ?>
         <?php
@@ -106,16 +106,16 @@ class Custom_CSS {
      */
     public function admin_scripts( $hook_suffix ) {
         global $post_type;
-        if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
+        if ( ! in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
             return false;
         }
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 
             /* CSS */
-            wp_enqueue_style( 'fx-builder-custom_css', URI . 'assets/custom-css.css', array( 'fx-builder' ), VERSION );
+            wp_enqueue_style( 'fx-builder-custom_css', URI . 'assets/custom-css.css', [ 'fx-builder' ], VERSION );
 
             /* JS */
-            wp_enqueue_script( 'fx-builder-custom_css', URI . 'assets/custom-css.js', array( 'jquery' ), VERSION, true );
+            wp_enqueue_script( 'fx-builder-custom_css', URI . 'assets/custom-css.js', [ 'jquery' ], VERSION, true );
         }
     }
 

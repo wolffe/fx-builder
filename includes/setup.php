@@ -2,7 +2,7 @@
 /**
  * Setup Plugin
  * @since 1.0.0
-**/
+ **/
 namespace fx_builder;
 
 if ( ! defined( 'WPINC' ) ) {

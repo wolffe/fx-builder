@@ -20,7 +20,7 @@ class Builder {
     public static function get_instance() {
         static $instance = null;
         if ( is_null( $instance ) ) {
-            $instance = new self;
+            $instance = new self();
         }
         return $instance;
     }
@@ -31,16 +31,16 @@ class Builder {
     public function __construct() {
 
         /* Get Admin Color */
-        add_action( 'admin_head', array( $this, 'global_admin_color' ), 1 );
+        add_action( 'admin_head', [ $this, 'global_admin_color' ], 1 );
 
         /* Add it after editor in edit screen */
-        add_action( 'edit_form_after_editor', array( $this, 'form' ) );
+        add_action( 'edit_form_after_editor', [ $this, 'form' ] );
 
         /* Save Builder Data */
-        add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+        add_action( 'save_post', [ $this, 'save' ], 10, 2 );
 
         /* Scripts */
-        add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 99 );
+        add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ], 99 );
     }
 
 
@@ -49,8 +49,8 @@ class Builder {
      */
     public function global_admin_color() {
         global $pagenow, $_wp_admin_css_colors, $fxb_admin_color;
-        $fxb_admin_color = array( '#222', '#333', '#0073aa', '#00a0d2' ); // default (fresh)
-        if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+        $fxb_admin_color = [ '#222', '#333', '#0073aa', '#00a0d2' ]; // default (fresh)
+        if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
             return false;
         }
         $user_admin_color_scheme = get_user_option( 'admin_color' );
@@ -88,25 +88,25 @@ class Builder {
 
             <?php
             Functions::render_settings(
-                array(
+                [
                     'id'       => 'fxb-editor', // data-target
                     'title'    => __( 'Edit Content', 'fx-builder' ),
                     'width'    => '800px',
-                    'callback' => function() {
+                    'callback' => function () {
 
                         wp_editor(
                             '',
                             'fxb_editor',
-                            array(
-                                'tinymce'       => array(
+                            [
+                                'tinymce'       => [
                                     'wp_autoresize_on' => false,
                                     'resize'           => false,
-                                ),
+                                ],
                                 'editor_height' => 300,
-                            )
+                            ]
                         );
                     },
-                )
+                ]
             );
             ?>
 
@@ -258,17 +258,17 @@ class Builder {
         /* Content Data
         ------------------------------------------ */
         $pb_content = Functions::content_raw( $post_id );
-        $this_post  = array(
+        $this_post  = [
             'ID'           => $post_id,
             'post_content' => sanitize_post_field( 'post_content', $pb_content, $post_id, 'db' ),
-        );
+        ];
         /**
          * Prevent infinite loop.
          * @link https://developer.wordpress.org/reference/functions/wp_update_post/
          */
-        remove_action( 'save_post', array( $this, __FUNCTION__ ) );
+        remove_action( 'save_post', [ $this, __FUNCTION__ ] );
         wp_update_post( $this_post );
-        add_action( 'save_post', array( $this, __FUNCTION__ ), 10, 2 );
+        add_action( 'save_post', [ $this, __FUNCTION__ ], 10, 2 );
     }
 
 
@@ -283,24 +283,24 @@ class Builder {
         }
 
         /* In Page Edit Screen */
-        if ( in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
+        if ( in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
 
             /* Enqueue CSS */
-            wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', array(), VERSION );
+            wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', [], VERSION );
 
             /* Enqueue JS: ROW */
-            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', array( 'jquery', 'sortable-js', 'wp-util' ), VERSION, true );
-            $data = array(
+            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', [ 'jquery', 'sortable-js', 'wp-util' ], VERSION, true );
+            $data = [
                 'unload' => __( 'The changes you made will be lost if you navigate away from this page', 'fx-builder' ),
-            );
+            ];
             wp_localize_script( 'fx-builder-row', 'fxb_i18n', $data );
 
             /* Enqueue JS: ITEM */
-            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', array( 'jquery', 'sortable-js', 'wp-util' ), VERSION, true );
-            $ajax_data = array(
+            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', [ 'jquery', 'sortable-js', 'wp-util' ], VERSION, true );
+            $ajax_data = [
                 'ajax_url'   => admin_url( 'admin-ajax.php' ),
                 'ajax_nonce' => wp_create_nonce( 'fxb_ajax_nonce' ),
-            );
+            ];
             wp_localize_script( 'fx-builder-item', 'fxb_ajax', $ajax_data );
         }
     }
