@@ -1,9 +1,6 @@
 <?php
 function fxb_menu_links() {
     add_menu_page( 'FX Builder Settings', 'FX Builder', 'manage_options', 'fx_builder', 'fxb_build_admin_page', 'dashicons-admin-home', 3 );
-
-    //add_submenu_page( 'property_drive', 'Alerts', 'Alerts', 'manage_options', 'wppd_alerts', 'wppd_build_alerts_page' );
-    //add_submenu_page( 'property_drive', 'Contacts', 'Contacts', 'manage_options', 'edit.php?post_type=contact' );
 }
 
 add_action( 'admin_menu', 'fxb_menu_links', 10 );
@@ -19,15 +16,15 @@ function fxb_build_admin_page() {
         <h1>FX Builder</h1>
 
         <h2 class="nav-tab-wrapper nav-tab-wrapper-wppd">
-            <a href="<?php echo $section; ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
+            <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
 
-            <a href="<?php echo $section; ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+            <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
 
-            <a href="<?php echo $section; ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+            <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
-            <h3 class="identityblock">FX Builder <code class="codeblock"><?php echo FX_BUILDER_VERSION; ?></code></h3>
+            <h3 class="identityblock">FX Builder <code class="codeblock"><?php echo esc_attr( FX_BUILDER_VERSION ); ?></code></h3>
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>
@@ -35,6 +32,10 @@ function fxb_build_admin_page() {
 
             <?php
             if ( isset( $_POST['save_settings'] ) ) {
+                if ( ! isset( $_POST['fxb_settings_nonce'] ) || ! check_admin_referer( 'save_fxb_settings_action', 'fxb_settings_nonce' ) ) {
+                    wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'fx-builder' ) );
+                }
+
                 // Get previously saved post types
                 $previous_post_types = get_option( 'fx-builder_post_types', [] );
 
@@ -65,15 +66,17 @@ function fxb_build_admin_page() {
 
                 delete_option( 'fxb_font_provider' );
 
-                echo '<div class="updated notice is-dismissible"><p>' . __( 'Settings updated successfully!', 'fx-builder' ) . '</p></div>';
+                echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Settings updated successfully!', 'fx-builder' ) . '</p></div>';
             }
             ?>
 
             <form method="post">
+                <?php wp_nonce_field( 'save_fxb_settings_action', 'fxb_settings_nonce' ); ?>
+
                 <table class="form-table">
                     <tbody>
                         <tr>
-                            <th scope="row"><label><?php echo __( 'Enable FX Builder in', 'fx-builder' ); ?></label></th>
+                            <th scope="row"><label><?php echo esc_html__( 'Enable FX Builder in', 'fx-builder' ); ?></label></th>
                             <td>
                                 <?php
                                 $post_types = get_post_types(
@@ -121,7 +124,7 @@ function fxb_build_admin_page() {
 
                                 <?php if ( (string) get_option( 'fxb_google_fonts_api' ) !== '' ) { ?>
                                     <script>
-                                    let currentFXBFontOption = <?php echo json_encode( (array) get_option( 'fxb_google_fonts' ) ); ?>;
+                                    let currentFXBFontOption = <?php echo wp_json_encode( (array) get_option( 'fxb_google_fonts' ) ); ?>;
 
                                     fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=<?php echo (string) get_option( 'fxb_google_fonts_api' ); ?>')
                                         .then(response => {
@@ -169,7 +172,7 @@ function fxb_build_admin_page() {
                                 </p>
 
                                 <script>
-                                let currentFXBBunnyFontOption = <?php echo json_encode( (array) get_option( 'fxb_bunny_fonts' ) ); ?>;
+                                let currentFXBBunnyFontOption = <?php echo wp_json_encode( (array) get_option( 'fxb_bunny_fonts' ) ); ?>;
 
                                 // Fetch the font data from the Bunny Fonts API
                                 fetch('https://fonts.bunny.net/list')

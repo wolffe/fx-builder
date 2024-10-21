@@ -16,7 +16,7 @@ function fxb_google_fonts() {
     $font_array = array_unique( $font_array );
     $font_array = str_replace( ' ', '+', $font_array );
 
-    $fxb_fonts = 'https://fonts.googleapis.com/css2?' . urlencode( implode( '&', $font_array ) ) . '&display=swap';
+    $fxb_fonts = 'https://fonts.googleapis.com/css2?' . rawurlencode( implode( '&', $font_array ) ) . '&display=swap';
 
     return $fxb_fonts;
 }
@@ -38,7 +38,7 @@ function fxb_bunny_fonts() {
     $font_array = array_unique( $font_array );
     $font_array = str_replace( ' ', '+', $font_array );
 
-    $fxb_fonts = 'https://fonts.bunny.net/css?family=' . urlencode( implode( '|', $font_array ) ) . '&display=swap';
+    $fxb_fonts = 'https://fonts.bunny.net/css?family=' . rawurlencode( implode( '|', $font_array ) ) . '&display=swap';
 
     return $fxb_fonts;
 }
