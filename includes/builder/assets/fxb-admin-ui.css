@@ -1,0 +1,57 @@
+.identityblock {
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 1;
+    color: #000000;
+}
+.identityblock small {
+    display: block;
+    font-size: 24px;
+}
+.codeblock {
+    font-family: "Cascadia Code Web", "SFMono-Regular", Consolas,
+        "Liberation Mono", Menlo, Courier, monospace;
+    color: #0366d6;
+    background: none;
+    font-size: 16px;
+    font-weight: 400;
+}
+.titleblock {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.nav-tab-wrapper.nav-tab-wrapper-fxb,
+.wrap h2.nav-tab-wrapper.nav-tab-wrapper-fxb,
+.wrap h3.nav-tab-wrapper.nav-tab-wrapper-fxb,
+h1.nav-tab-wrapper.nav-tab-wrapper-fxb {
+    border-bottom: 0 none;
+}
+
+/* https://flatuicolors.com/palette/se */
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab {
+    border: 0 none;
+    border-radius: 0;
+    margin: 2px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.71428571;
+    font-weight: 500;
+    background: #d2dae2;
+    color: #485460;
+}
+h3.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab {
+    font-size: 13px;
+}
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab-active,
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab-active:focus,
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab-active:focus:active,
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab-active:hover {
+    border-left: 3px solid #1e272e;
+    background: #ffffff;
+    color: #1e272e;
+}
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab:focus,
+.nav-tab-wrapper.nav-tab-wrapper-fxb .nav-tab:hover {
+    color: #1e272e;
+}

@@ -15,7 +15,7 @@ function fxb_build_admin_page() {
     <div class="wrap">
         <h1>FX Builder</h1>
 
-        <h2 class="nav-tab-wrapper nav-tab-wrapper-wppd">
+        <h2 class="nav-tab-wrapper nav-tab-wrapper-fxb">
             <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Help', 'fx-builder' ); ?></a>
@@ -23,6 +23,7 @@ function fxb_build_admin_page() {
 
         <?php if ( $tab === 'dashboard' ) { ?>
             <h3 class="identityblock">FX Builder <code class="codeblock"><?php echo esc_attr( FX_BUILDER_VERSION ); ?></code></h3>
+            <h2 class="titleblock">Reduce your technology overhead, improve site performance, and empower your digital teams with FX Builder.</h2>
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>

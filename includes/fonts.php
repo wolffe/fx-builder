@@ -44,6 +44,8 @@ function fxb_bunny_fonts() {
 }
 
 function fxb_enqueue() {
+    wp_enqueue_style( 'fxb-admin-ui', plugins_url( 'includes/builder/assets/fxb-admin-ui.css', FX_BUILDER_FILE ), [], FX_BUILDER_VERSION );
+
     if ( count( (array) get_option( 'fxb_google_fonts' ) ) > 0 ) {
         wp_enqueue_style( 'fxb-google-fonts', fxb_google_fonts(), [], FX_BUILDER_VERSION );
     }
