@@ -25,21 +25,21 @@ class Settings {
      *
      * @var string
      */
-    private $settings_slug;
+    //private $settings_slug;
 
     /**
      * The suffix for the hook.
      *
      * @var string
      */
-    private $hook_suffix;
+    //private $hook_suffix;
 
     /**
      * The options group.
      *
      * @var string
      */
-    private $options_group;
+    //private $options_group;
 
     /**
      * Returns the instance.
@@ -58,15 +58,15 @@ class Settings {
      */
     public function __construct() {
         /* Vars */
-        $this->settings_slug = 'fx-builder';
-        $this->hook_suffix   = '';
-        $this->options_group = 'fx-base';
+        //$this->settings_slug = 'fx-builder';
+        //$this->hook_suffix   = '';
+        //$this->options_group = 'fx-base';
 
         /* Create Settings Page */
-        add_action( 'admin_menu', [ $this, 'create_settings_page' ] );
+        //add_action( 'admin_menu', [ $this, 'create_settings_page' ] );
 
         /* Register Settings and Fields */
-        add_action( 'admin_init', [ $this, 'register_settings' ], 1 );
+        //add_action( 'admin_init', [ $this, 'register_settings' ], 1 );
 
         /* Add Post Type Support */
         add_action( 'init', [ $this, 'add_builder_support' ] );
@@ -76,14 +76,12 @@ class Settings {
      * Create Settings Page
      * @since 1.0.0
      */
+    /*
     public function create_settings_page() {
-
-        /* Hook to disable settings */
         if ( false === apply_filters( 'fx_builder_settings', true ) ) {
             return false;
         }
 
-        /* Create Settings Sub-Menu */
         $this->hook_suffix = add_options_page(
             __( 'FX Builder Settings', 'fx-builder' ),
             __( 'FX Builder', 'fx-builder' ),
@@ -92,11 +90,13 @@ class Settings {
             [ $this, 'settings_page' ],
         );
     }
+    /**/
 
     /**
      * Settings Page Output
      * @since 1.0.0
      */
+    /*
     public function settings_page() {
         ?>
         <div class="wrap">
@@ -109,18 +109,18 @@ class Settings {
         </div>
         <?php
     }
+    /**/
 
     /**
      * Register Settings
      * @since 0.1.0
      */
+    /*
     public function register_settings() {
-        /* Hook to disable settings */
         if ( false === apply_filters( 'fx_builder_settings', true ) ) {
             return false;
         }
 
-        /* Disable FX Builder */
         register_setting(
             $this->options_group,
             'fx-builder_post_types',
@@ -129,7 +129,6 @@ class Settings {
             }
         );
 
-        /* Create settings section */
         add_settings_section(
             'fxb_settings',
             '',
@@ -137,17 +136,13 @@ class Settings {
             $this->settings_slug
         );
 
-        /* Create Setting Field */
         add_settings_field(
             'fxb_post_types_field',
             __( 'Enable FX Builder in', 'fx-builder' ),
             function () {
-                /* Get All Public Post Types */
                 $post_types = get_post_types( [ 'public' => true ], 'objects' );
 
-                /* Create Options For Each Post Types */
                 foreach ( $post_types as $post_type ) {
-                    /* Only if post type supports "editor" (content) */
                     if ( post_type_supports( $post_type->name, 'editor' ) ) {
                         ?>
                         <p>
@@ -163,6 +158,7 @@ class Settings {
             'fxb_settings'
         );
     }
+    /**/
 
     /**
      * Enable FX Builder to Post Type
