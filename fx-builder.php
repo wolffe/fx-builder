@@ -42,6 +42,8 @@ function fx_builder_init() {
 
     load_plugin_textdomain( dirname( $plugin ), false, dirname( $plugin ) . '/languages/' );
 
+    require_once $path . 'includes/fonts.php';
     require_once $path . 'includes/setup.php';
     require_once $path . 'includes/editor.php';
+    require_once $path . 'includes/settings/settings.php';
 }
