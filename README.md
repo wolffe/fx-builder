@@ -14,18 +14,6 @@ To disable front-end CSS, you can use this code:
 add_filter( 'fx_builder_css', '__return_false' );
 ```
 
-## How to Disable Settings
-
-This option will be removed in a future version.
-
-### Disable Settings
-
-To disable settings you can use this code:
-
-```
-add_filter( 'fx_builder_settings', '__return_false' );
-```
-
 ## Add support for "fx_builder" to post type manually:
 
 If you disable settings, you need to enable FX Builder for each post type by yourself, by adding support for it. Here's how to add FX Builder to a "property" post type:
