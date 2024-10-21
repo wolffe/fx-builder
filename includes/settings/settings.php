@@ -16,11 +16,9 @@ function fxb_build_admin_page() {
         <h1>FX Builder</h1>
 
         <h2 class="nav-tab-wrapper nav-tab-wrapper-wppd">
-            <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
-
-            <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
-
-            <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+            <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
+            <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
+            <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Help', 'fx-builder' ); ?></a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
@@ -28,7 +26,7 @@ function fxb_build_admin_page() {
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>
-            <h2>Settings</h2>
+            <h2><?php esc_html_e( 'Settings', 'fx-builder' ); ?></h2>
 
             <?php
             if ( isset( $_POST['save_settings'] ) ) {
@@ -41,7 +39,7 @@ function fxb_build_admin_page() {
 
                 // Sanitize the input, or set an empty array if no post types were checked
                 $selected_post_types = isset( $_POST['fx-builder_post_types'] )
-                ? array_map( 'sanitize_text_field', $_POST['fx-builder_post_types'] )
+                ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fx-builder_post_types'] ) )
                 : [];
 
                 // Save the new selection
@@ -59,10 +57,10 @@ function fxb_build_admin_page() {
                     }
                 }
 
-                update_option( 'fxb_google_fonts_api', sanitize_text_field( $_POST['fxb_google_fonts_api'] ) );
+                update_option( 'fxb_google_fonts_api', sanitize_text_field( wp_unslash( $_POST['fxb_google_fonts_api'] ?? '' ) ) );
 
-                update_option( 'fxb_google_fonts', isset( $_POST['fxb_google_fonts'] ) ? array_map( 'sanitize_text_field', $_POST['fxb_google_fonts'] ) : [] );
-                update_option( 'fxb_bunny_fonts', isset( $_POST['fxb_bunny_fonts'] ) ? array_map( 'sanitize_text_field', $_POST['fxb_bunny_fonts'] ) : [] );
+                update_option( 'fxb_google_fonts', isset( $_POST['fxb_google_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_google_fonts'] ) ) : [] );
+                update_option( 'fxb_bunny_fonts', isset( $_POST['fxb_bunny_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_bunny_fonts'] ) ) : [] );
 
                 delete_option( 'fxb_font_provider' );
 
@@ -103,30 +101,30 @@ function fxb_build_admin_page() {
                         </tr>
                         <tr>
                             <th scope="row" colspan="2">
-                                <h3>Typography</h3>
+                                <h3><?php esc_html_e( 'Typography', 'fx-builder' ); ?></h3>
                             </th>
                         </tr>
                         <tr>
-                            <th scope="row"><label>Google Fonts API</label></th>
+                            <th scope="row"><label><?php esc_html_e( 'Google Fonts API', 'fx-builder' ); ?></label></th>
                             <td>
                                 <p>
-                                    <input type="text" id="fxb_google_fonts_api" name="fxb_google_fonts_api" class="regular-text" value="<?php echo get_option( 'fxb_google_fonts_api' ); ?>">
-                                    <br><small>Use your Google Fonts API key here. <a href="https://developers.google.com/fonts/docs/developer_api">Get a key</a>.</small>
+                                    <input type="text" id="fxb_google_fonts_api" name="fxb_google_fonts_api" class="regular-text" value="<?php echo esc_attr( get_option( 'fxb_google_fonts_api' ) ); ?>">
+                                    <br><small><?php esc_html_e( 'Use your Google Fonts API key here.', 'fx-builder' ); ?> <a href="https://developers.google.com/fonts/docs/developer_api"><?php esc_html_e( 'Get a key.', 'fx-builder' ); ?></a></small>
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label>Google Fonts</label></th>
+                            <th scope="row"><label><?php esc_html_e( 'Google Fonts', 'fx-builder' ); ?></label></th>
                             <td>
                                 <p>
-                                    <small>Note that the following weights will be automatically loaded: 300, 400, 500 and 700.</small>
+                                    <small><?php esc_html_e( 'Note that the following weights will be automatically loaded: 300, 400, 500 and 700.', 'fx-builder' ); ?></small>
                                 </p>
 
                                 <?php if ( (string) get_option( 'fxb_google_fonts_api' ) !== '' ) { ?>
                                     <script>
                                     let currentFXBFontOption = <?php echo wp_json_encode( (array) get_option( 'fxb_google_fonts' ) ); ?>;
 
-                                    fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=<?php echo (string) get_option( 'fxb_google_fonts_api' ); ?>')
+                                    fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=<?php echo esc_attr( get_option( 'fxb_google_fonts_api' ) ); ?>')
                                         .then(response => {
                                             return response.json();
                                         })
@@ -153,22 +151,22 @@ function fxb_build_admin_page() {
                                         });
                                     </script>
                                 <?php } else { ?>
-                                    <p>You need a Google Fonts API key to view Google Fonts. <a href="<?php echo admin_url( 'admin.php?page=saturn-settings&tab=tools' ); ?>">Add one here</a>.</p>
+                                    <p><?php esc_html_e( 'You need a Google Fonts API key to view Google Fonts.', 'fx-builder' ); ?> <a href="<?php echo esc_url( admin_url( 'admin.php?page=saturn-settings&tab=tools' ) ); ?>"><?php esc_html_e( 'Get a key.', 'fx-builder' ); ?></a></p>
                                 <?php } ?>
 
                                 <p>
                                     <select name="fxb_google_fonts[]" id="fxb-font" size="8" multiple>
-                                        <option value="0">Select one or more fonts to be used with FX Builder...</option>
+                                        <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
                                 </p>
                             </td>
                         </tr>
 
                         <tr>
-                            <th scope="row"><label>Bunny Fonts</label></th>
+                            <th scope="row"><label><?php esc_html_e( 'Bunny Fonts', 'fx-builder' ); ?></label></th>
                             <td>
                                 <p>
-                                    <small>Note that the following weights will be automatically loaded: 300, 400, 500 and 700.</small>
+                                    <small><?php esc_html_e( 'Note that the following weights will be automatically loaded: 300, 400, 500 and 700.', 'fx-builder' ); ?></small>
                                 </p>
 
                                 <script>
@@ -214,14 +212,14 @@ function fxb_build_admin_page() {
 
                                 <p>
                                     <select name="fxb_bunny_fonts[]" id="fxb-bunny-fonts" size="8" multiple>
-                                        <option value="0">Select one or more fonts to be used with FX Builder...</option>
+                                        <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
                                 </p>
                             </td>
                         </tr>
 
                         <tr>
-                            <th scope="row"><input type="submit" name="save_settings" class="button button-primary" value="Save Changes"></th>
+                            <th scope="row"><input type="submit" name="save_settings" class="button button-primary" value="<?php esc_html_e( 'Save Changes', 'fx-builder' ); ?>"></th>
                             <td></td>
                         </tr>
                     </tbody>
