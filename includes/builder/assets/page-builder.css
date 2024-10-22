@@ -1,3 +1,7 @@
+:root {
+    --fxb-radius-small: 4px;
+}
+
 /* Box Sizing To All
 ------------------------------------------ */
 .fxb-add-row,
@@ -53,6 +57,10 @@
 }
 #fxb .fxb-icon {
     box-sizing: content-box;
+    opacity: 0.82;
+}
+#fxb .fxb-icon:hover {
+    opacity: 1;
 }
 .fxb-link {
     cursor: pointer;
@@ -68,37 +76,17 @@
 /* Menu
 ------------------------------------------ */
 .fxb-add-row {
+    background: #ffffff;
+    display: flex;
+    flex-wrap: nowrap;
+    border-radius: var(--fxb-radius-small);
     margin-top: 20px;
     padding: 0;
     width: 100%;
 }
-.fxb-add-row:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
 .layout-thumb-wrap {
-    background: #fff;
     display: block;
-    width: 14.2%;
-    float: left;
     padding: 10px 30px;
-    border: 1px solid #f1f1f1;
-    border-right: none;
-}
-.rtl .layout-thumb-wrap {
-    float: right;
-    border: 1px solid #f1f1f1;
-    border-left: none;
-}
-.layout-thumb-wrap:last-child {
-    border-right: 1px solid #f1f1f1;
-}
-.rtl .layout-thumb-wrap:last-child {
-    border-right: none;
-    border-left: 1px solid #f1f1f1;
 }
 .layout-thumb {
     background: #fff;
@@ -158,12 +146,15 @@
 /* Rows
 ------------------------------------------ */
 .fxb-row {
-    background: #f5f5f5;
+    background-color: #ffffff;
+    box-shadow: 0 6px 3px rgb(0 0 0 / 4%), 0 12px 6px rgb(0 0 0 / 3%);
+
     margin-bottom: 20px;
-    border: 1px solid #e5e5e5;
+    border-radius: 0 0 var(--fxb-radius-small) var(--fxb-radius-small);
 }
 .fxb-row-menu {
     color: #fff;
+    border-radius: var(--fxb-radius-small) var(--fxb-radius-small) 0 0;
 }
 .fxb-row-menu .fxb-link:hover {
     opacity: 0.8;
@@ -285,8 +276,10 @@
 .fxb-col-title span {
     top: -10px;
     position: relative;
-    background: #f5f5f5;
+    background: #ffffff;
     padding: 0 10px;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 /* Add Item */
 .fxb-add-item {
@@ -420,7 +413,7 @@
     max-width: 100%;
     max-height: 100%;
     border: none;
-    border-radius: 3px;
+    border-radius: var(--fxb-radius-small);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     z-index: 60100;
     overflow: hidden;
