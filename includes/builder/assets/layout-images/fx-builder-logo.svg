@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+	<title>fx-buildeer-logo</title>
+	<style>
+		.s0 { fill: #3742fa } 
+		.s1 { fill: #ffffff } 
+	</style>
+	<path id="Shape 3" class="s0" d="m0 128c0-70.7 57.3-128 128-128h824c70.7 0 128 57.3 128 128v824c0 70.7-57.3 128-128 128h-824c-70.7 0-128-57.3-128-128z"/>
+	<path id="FX" class="s1" aria-label="FX"  d="m280.8 760h-82.9v-439.2h276.1v75.3h-193.2v106h178.2v75.3h-178.2zm318.7 0h-94.1l128.6-221.5-127.4-217.7h94.1l87.3 158.8h11.2l87.3-158.8h94.1l-127.4 217.7 128.6 221.5h-94.1l-88.5-162.5h-11.2z"/>
+</svg>

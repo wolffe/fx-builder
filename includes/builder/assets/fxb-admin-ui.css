@@ -1,4 +1,12 @@
+:root {
+    --fxb-accent-color: #3742fa;
+}
+
 .identityblock {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+
     font-size: 40px;
     font-weight: 300;
     line-height: 1;
@@ -11,7 +19,7 @@
 .codeblock {
     font-family: "Cascadia Code Web", "SFMono-Regular", Consolas,
         "Liberation Mono", Menlo, Courier, monospace;
-    color: #0366d6;
+    color: var(--fxb-accent-color);
     background: none;
     font-size: 16px;
     font-weight: 400;
@@ -19,6 +27,42 @@
 .titleblock {
     font-size: 24px;
     font-weight: 300;
+}
+
+/**
+ * Ad Box UI
+ */
+.fxb-ad {
+    color: #1d2327;
+    background-color: #ffffff;
+    box-shadow: 0 6px 3px rgb(0 0 0 / 4%), 0 12px 6px rgb(0 0 0 / 3%);
+    border-radius: 8px;
+    margin: 16px 0;
+    padding: 24px;
+}
+.fxb-ad a {
+    text-decoration: underline;
+    text-decoration-color: lightgray;
+    text-decoration-thickness: 2px;
+}
+.fxb-ad a:hover {
+    text-decoration-color: var(--fxb-accent-color);
+}
+.fxb-ad svg {
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: text-bottom;
+}
+.fxb-ad h3 {
+    color: #1d2327;
+    font-size: 1.45em;
+    font-weight: 500;
+}
+.fxb-ad b {
+    font-weight: 500;
+}
+.fxb-ad p {
+    font-size: 15px;
 }
 
 .nav-tab-wrapper.nav-tab-wrapper-fxb,

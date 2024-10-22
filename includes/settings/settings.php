@@ -1,6 +1,6 @@
 <?php
 function fxb_menu_links() {
-    add_menu_page( 'FX Builder Settings', 'FX Builder', 'manage_options', 'fx_builder', 'fxb_build_admin_page', 'dashicons-admin-home', 3 );
+    add_menu_page( 'FX Builder Settings', 'FX Builder', 'manage_options', 'fx_builder', 'fxb_build_admin_page', 'dashicons-block-default', 99 );
 }
 
 add_action( 'admin_menu', 'fxb_menu_links', 10 );
@@ -18,12 +18,35 @@ function fxb_build_admin_page() {
         <h2 class="nav-tab-wrapper nav-tab-wrapper-fxb">
             <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
-            <a href="<?php echo esc_attr( $section ); ?>help" class="nav-tab <?php echo $tab === 'help' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Help', 'fx-builder' ); ?></a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
-            <h3 class="identityblock">FX Builder <code class="codeblock"><?php echo esc_attr( FX_BUILDER_VERSION ); ?></code></h3>
+            <h3 class="identityblock">
+                <img src="<?php echo esc_url( FX_BUILDER_URI ); ?>includes/builder/assets/layout-images/fx-builder-logo.svg" width="48" height="48" alt="FX Builder">
+                FX Builder <code class="codeblock"><?php echo esc_attr( FX_BUILDER_VERSION ); ?></code>
+            </h3>
             <h2 class="titleblock">Reduce your technology overhead, improve site performance, and empower your digital teams with FX Builder.</h2>
+
+            <div class="fxb-ad">
+                <h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 68">
+                        <defs/>
+                        <rect width="100%" height="100%" fill="none"/>
+                        <g class="currentLayer">
+                            <path fill="#87e64b" d="M34.76 33C22.85 21.1 20.1 13.33 28.23 5.2 36.37-2.95 46.74.01 50.53 3.8c3.8 3.8 5.14 17.94-5.04 28.12-2.95 2.95-5.97 5.84-5.97 5.84L34.76 33"/>
+                            <path fill="#87e64b" d="M43.98 42.21c5.54 5.55 14.59 11.06 20.35 5.3 5.76-5.77 3.67-13.1.98-15.79-2.68-2.68-10.87-5.25-18.07 1.96-2.95 2.95-5.96 5.84-5.96 5.84l2.7 2.7m-1.76 1.75c5.55 5.54 11.06 14.59 5.3 20.35-5.77 5.76-13.1 3.67-15.79.98-2.69-2.68-5.25-10.87 1.95-18.07 2.85-2.84 5.84-5.96 5.84-5.96l2.7 2.7"/>
+                            <path fill="#87e64b" d="M33 34.75c-11.9-11.9-19.67-14.67-27.8-6.52-8.15 8.14-5.2 18.5-1.4 22.3 3.8 3.79 17.95 5.13 28.13-5.05 3.1-3.11 5.84-5.97 5.84-5.97L33 34.75"/>
+                        </g>
+                    </svg> Thank you for using FX Builder!</h3>
+                <p>Create pixel-perfect columns with Flex CSS and native responsive styles. Use design tools and options, straight into your TinyMCE editor — customizable font size, font weight, line height, alignment, gaps and more. FX Builder approaches every project with a simplicity and native features in mind, without vendor lock-in, consistently delivering awesome designs.</p>
+                <p>If you enjoy this plugin, do not forget to <a href="https://getbutterfly.com/classicpress-plugins/fx-builder/" rel="external">rate it</a>! We work hard to update it, fix bugs, add new features and make it compatible with the latest web technologies.</p>
+                <p style="font-size:14px">
+                    🔥 Have you tried our other <a href="https://getbutterfly.com/classicpress-plugins/">ClassicPress plugins</a>?
+                </p>
+            </div>
+
+            <hr>
+            <p>&copy;<?php echo esc_attr( gmdate( 'Y' ) ); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>
@@ -101,6 +124,16 @@ function fxb_build_admin_page() {
                             </td>
                         </tr>
                         <tr>
+                            <th scope="row"><label><?php esc_html_e( 'FX Builder Theme', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <p>
+                                    <select name="fxb_theme" id="fxb-theme">
+                                        <option value="light" selected><?php esc_html_e( 'Light', 'fx-builder' ); ?></option>
+                                    </select>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row" colspan="2">
                                 <h3><?php esc_html_e( 'Typography', 'fx-builder' ); ?></h3>
                             </th>
@@ -159,6 +192,7 @@ function fxb_build_admin_page() {
                                     <select name="fxb_google_fonts[]" id="fxb-font" size="8" multiple>
                                         <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
+                                    <br><small><?php esc_html_e( 'Hold CTRL to select multiple font families.', 'fx-builder' ); ?></small>
                                 </p>
                             </td>
                         </tr>
@@ -177,20 +211,12 @@ function fxb_build_admin_page() {
                                 fetch('https://fonts.bunny.net/list')
                                     .then(response => response.json())
                                     .then(data => {
-                                        // Loop through each font family in the JSON
                                         Object.entries(data).forEach(([key, fontData]) => {
                                             const fontFamily = fontData.familyName;  // Get the family name
                                             const fontCategory = fontData.category;  // Get the category
                                             const fontStyles = fontData.styles;      // Get the styles (e.g., normal, italic)
                                             const fontWeights = fontData.weights;    // Get the weights (e.g., 400, 700)
 
-                                            // Example: Log the font family, category, styles, and weights
-                                            //console.log(`Font Family: ${fontFamily}`);
-                                            //console.log(`Category: ${fontCategory}`);
-                                            //console.log(`Styles: ${fontStyles.join(', ')}`);
-                                            //console.log(`Weights: ${fontWeights.join(', ')}`);
-
-                                            // Example: Create an option element for each font
                                             const fxbFontSelector = document.getElementById('fxb-bunny-fonts'),
                                                 fontOption = document.createElement('option');
 
@@ -215,6 +241,7 @@ function fxb_build_admin_page() {
                                     <select name="fxb_bunny_fonts[]" id="fxb-bunny-fonts" size="8" multiple>
                                         <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
+                                    <br><small><?php esc_html_e( 'Hold CTRL to select multiple font families.', 'fx-builder' ); ?></small>
                                 </p>
                             </td>
                         </tr>
