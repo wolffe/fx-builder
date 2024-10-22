@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.2.0
 Requires PHP: 7.0
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,24 +14,22 @@ A simple page builder plugin. The one you can actually use.
 
 **FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types.
 
-**Features:**
-
-1. Super simple to use.
-2. Visual columns in the post editor.
-3. If you disable the plugin, your content is not lost.
-4. Settings to enable/disable for each post type.
-5. 1-5 columns supported.
-6. Free, Open Source, GPL v3.0 or later license. Use it to make something cool :)
-
-== Installation ==
-
-1. Navigate to "Plugins > Add New" Page from your Admin.
-2. To install from plugin .zip file, click "Upload Plugin" button in "Plugins > Add New" Screen. Browse the plugin .zip file, and click "Install Now" button.
-3. Activate the plugin.
-4. Navigate to "Settings > FX Builder" to configure.
-5. Edit your content.
-
 == Changelog ==
+
+= 1.4.0 =
+* Fix unescaped variable
+* Fix typo in readme.txt
+* Add new Settings and Typography options panel
+* Add Google fonts and Bunny fonts functionality to TinyMCE's `fontformats` array
+* Add translatable strings to the Settings page
+* Add admin stylesheet
+* Update readme.md with helpful links and a short description
+* Update ZIP release workflow
+* Switch more elements from floats to Flex CSS
+* Replace deprecated "resize" function with "resize" event
+* Clean up old settings panel (alpha)
+* Remove unused filter
+* Remove tabbing capability in textarea element
 
 = 1.3.1 =
 * Add line height controls
