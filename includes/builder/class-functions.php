@@ -18,7 +18,7 @@ class Functions {
         global $fxb_admin_color;
         $img = URI . 'assets/layout-images/';
         ?>
-        <div class="fxb-add-row" data-add_row_method="<?php echo esc_attr( $method ); ?>" style="color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>">
+        <div class="fxb-add-row" data-add_row_method="<?php echo esc_attr( $method ); ?>" style="color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>; display: flex;">
 
             <div class="layout-thumb-wrap">
                 <div class="layout-thumb" data-row-layout="1" data-row-col_num="1"><img src="<?php echo esc_url( $img . 'layout-1.png' ); ?>"></div>

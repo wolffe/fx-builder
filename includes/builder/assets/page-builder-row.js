@@ -132,6 +132,12 @@ jQuery(document).ready(function ($) {
      * 
      ************************************
      */
+
+    // Also remove on pageload if no row
+    if (!$('#fxb .fxb-row').length) {
+        $('.fxb-add-row[data-add_row_method="append"]').hide();
+    }
+
     $(document.body).on('click', '.fxb-remove-row', function (e) {
         e.preventDefault();
 
