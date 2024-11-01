@@ -310,7 +310,7 @@ class Functions {
 
                     /* = HTML Height = */
                     $row_html_height = '';
-                    if ( isset( $rows_data[ $row_id ]['row_html_height'] ) ) {
+                    if ( isset( $rows_data[ $row_id ]['row_html_height'] ) && isset( $rows_data[ $row_id ]['row_html_height_unit'] ) ) {
                         $row_html_height = 'height: ' . $rows_data[ $row_id ]['row_html_height'] . $rows_data[ $row_id ]['row_html_height_unit'] . ';';
                     }
 
