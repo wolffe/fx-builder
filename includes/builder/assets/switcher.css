@@ -1,12 +1,13 @@
-#fxb-wrapper{
-	display: none !important;
+#fxb-wrapper {
+    display: none !important;
 }
-.fx_builder_active #postdivrich{
-	display: none !important;
+.fx_builder_active #postdivrich {
+    display: none !important;
 }
-.fx_builder_active #fxb-wrapper{
-	display: block !important;
+.fx_builder_active #fxb-wrapper {
+    position: relative;
+    display: block !important;
 }
-.fx_builder_active #post-preview{
-	display: none !important;
+.fx_builder_active #post-preview {
+    display: none !important;
 }
