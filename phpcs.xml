@@ -25,10 +25,6 @@
         <exclude name="WordPress.PHP.YodaConditions" />
     </rule>
 
-    <rule ref="WordPress.Files.FileName">
-        <exclude-pattern>/classes/class-tgm-plugin-activation.php</exclude-pattern>
-    </rule>
-
     <rule ref="Internal.NoCodeFound">
         <severity>0</severity>
     </rule>
