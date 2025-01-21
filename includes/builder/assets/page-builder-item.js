@@ -320,6 +320,7 @@ jQuery(document).ready(function ($) {
     });
 
 
+
     /**
      * REMOVE ITEM
      *
@@ -343,6 +344,98 @@ jQuery(document).ready(function ($) {
             $.fn.fxB_updateItemsIndex(col);
         }
     });
+
+
+
+    /**
+     * DUPLICATE ITEM
+     *
+     * Duplicate an existing item in the column when clicking the duplicate button.
+     * 
+     ************************************
+     */
+    $(document.body).on('click', '.fxb-duplicate-item', function (e) {
+        e.preventDefault();
+
+        /* Vars */
+        var original_item = $(this).closest('.fxb-item'); // The item to duplicate
+        var items_container = $(this).closest('.fxb-col').children('.fxb-col-content'); // Ensure correct container
+        var col = $(this).closest('.fxb-col'); // Column containing the item
+
+        /* Clone the original item */
+        var new_item = original_item.clone();
+
+        /* Generate a new unique ID for the duplicated item */
+        var new_item_id = new Date().getTime();
+        new_item.attr('data-item_id', new_item_id); // Assign a unique ID to the duplicated item
+
+        /* Update the hidden fields */
+        new_item.find('input[type="hidden"]').each(function () {
+            var original_name = $(this).attr('name');
+            var original_value = $(this).val();
+
+            // Update the name for each hidden field
+            if (original_name) {
+                var new_name = original_name.replace(/\[\d+\]/, '[' + new_item_id + ']'); // Replace the old ID with the new unique ID
+                $(this).attr('name', new_name);
+            }
+
+            // Ensure the value for item_id is updated
+            if (original_name && original_name.includes('[item_id]')) {
+                $(this).val(new_item_id); // Set the new unique ID as the value
+            }
+        });
+
+        /* Update other fields */
+        new_item.find('input, textarea, .fxb-editor').each(function () {
+            var original_name = $(this).attr('name');
+            var original_id = $(this).attr('id');
+
+            if (original_name) {
+                var new_name = original_name.replace(/(\d+)/g, new_item_id); // Replace the old ID with the new unique ID
+                $(this).attr('name', new_name);
+            }
+
+            if (original_id) {
+                var new_id = original_id + '-' + new_item_id; // Add unique suffix
+                $(this).attr('id', new_id);
+            }
+        });
+
+        /* Remove any editor instance from the clone */
+        if (typeof tinymce !== 'undefined') {
+            new_item.find('.fxb-editor').each(function () {
+                var editor_id = $(this).attr('id');
+                if (tinymce.get(editor_id)) {
+                    tinymce.remove(`#${editor_id}`);
+                }
+            });
+        }
+
+        /* Insert the new item immediately after the original */
+        new_item.insertAfter(original_item);
+
+        // Add new <span> element with a "Cloned" label after the item index
+        new_item.find('.fxb-icon.fxb_item_index').after('<span class="fxb-icon fxb-item-label"><span class="dashicons dashicons-admin-page"></span></span>');
+
+        /* Update Indexes */
+        $.fn.fxB_updateItemsIndex(col);
+
+        /* Make Sortable */
+        $.fn.fxB_sortItems();
+
+        /* Get the value saved in textarea */
+        var editor_val = $(`[name="_fxb_items[${new_item_id}][content]"]`).val();
+
+        /* Item Textarea */
+        var item_textarea = $(`[name="_fxb_items[${new_item_id}][content]"]`);
+
+        /* Add content back to textarea and item iframe */
+        item_textarea.val(editor_val).trigger('change');
+        item_textarea.siblings('.fxb-item-iframe').fxB_loadIfameContent(iframe_css);
+        item_textarea.removeClass('fxb_editing_active');
+    });
+
 
 
     /**

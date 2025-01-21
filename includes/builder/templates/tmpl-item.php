@@ -35,6 +35,7 @@ namespace fx_builder\builder;
                 <span class="fxb-icon fxb_item_index" data-item-index="{{data.item_index}}"></span>
             </div><!-- .fxb-left -->
             <div class="fxb-right">
+                <span class="fxb-icon fxb-duplicate-item fxb-link dashicons dashicons-admin-page"></span>
                 <span data-confirm="<?php esc_attr_e( 'Delete item?', 'fx-builder' ); ?>" class="fxb-icon fxb-remove-item fxb-link dashicons dashicons-trash"></span>
                 <span class="fxb-icon fxb-toggle-item fxb-link dashicons dashicons-arrow-up"></span>
             </div><!-- .fxb-right -->
