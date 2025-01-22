@@ -3,7 +3,7 @@
  * Plugin Name: FX Builder
  * Plugin URI: https://getbutterfly.com/classicpress-plugins/fx-builder/
  * Description: A simple page builder plugin. The one you can actually use.
- * Version: 1.4.2
+ * Version: 1.4.3
  * Requires PHP: 7.0
  * Requires CP: 2.0
  * Author: Ciprian Popescu
@@ -14,7 +14,7 @@
  * Domain Path: /languages/
  *
  * @author Ciprian Popescu <ciprian@getbutterfly.com>
- * @copyright Copyright (c) 2024, getButterfly
+ * @copyright Copyright (c) 2024-2025, getButterfly
  *
  * @author David Chandra Purnama <david@genbumedia.com>
  * @copyright Copyright (c) 2016, Genbu Media
@@ -27,7 +27,7 @@ define( 'FX_BUILDER_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 define( 'FX_BUILDER_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'FX_BUILDER_FILE', __FILE__ );
 define( 'FX_BUILDER_PLUGIN', plugin_basename( __FILE__ ) );
-define( 'FX_BUILDER_VERSION', '1.4.2' );
+define( 'FX_BUILDER_VERSION', '1.4.3' );
 
 require FX_BUILDER_PATH . '/includes/updater.php';
 
