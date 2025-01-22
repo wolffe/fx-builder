@@ -240,11 +240,9 @@ jQuery(document).ready(function ($) {
      ************************************
      */
     $(document.body).on('change', 'select[data-row_field="layout"]', function (e) {
-
         /* Get selected value */
         var new_layout = $(this).val();
         var new_col_num = $('option:selected', this).attr('data-col_num');
-        console.log(new_layout);
 
         /* Get current row */
         var row = $(this).parents('.fxb-row');
