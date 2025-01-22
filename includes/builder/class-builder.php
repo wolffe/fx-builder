@@ -201,6 +201,7 @@ class Builder {
             delete_post_meta( $post_id, '_fxb_row_ids' );
             delete_post_meta( $post_id, '_fxb_rows' );
             delete_post_meta( $post_id, '_fxb_items' );
+
             return false;
         }
 

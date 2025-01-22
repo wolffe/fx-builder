@@ -5,20 +5,16 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-/**
- * Functions.
- * @since 1.0.0
- */
 class Functions {
-
     /**
      * Add Row
      */
     public static function add_row_field( $method = 'prepend' ) {
-        global $fxb_admin_color;
         $img = URI . 'assets/layout-images/';
         ?>
-        <div class="fxb-add-row" data-add_row_method="<?php echo esc_attr( $method ); ?>" style="color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>; display: flex;">
+
+        <div class="fxb-add-row" data-add_row_method="<?php echo esc_attr( $method ); ?>" style="display: grid;">
+            <div class="fxb-strikethrough"><?php esc_attr_e( 'Outer Sections', 'fx-builder' ); ?></div>
 
             <div class="layout-thumb-wrap">
                 <div class="layout-thumb" data-row-layout="1" data-row-col_num="1"><img src="<?php echo esc_url( $img . 'layout-1.png' ); ?>"></div>
@@ -41,7 +37,6 @@ class Functions {
             <div class="layout-thumb-wrap">
                 <div class="layout-thumb" data-row-layout="15_15_15_15_15" data-row-col_num="5"><img src="<?php echo esc_url( $img . 'layout-15_15_15_15_15.png' ); ?>"></div>
             </div>
-
         </div><!-- .fxb-add-row -->
         <?php
     }
