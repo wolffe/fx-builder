@@ -1,6 +1,7 @@
 :root {
     --fxb-radius-small: 4px;
 
+    /* http://flatuicolors.com/palette/cn */
     --fxb-color-gray: #a4b0be;
     --fxb-color-darkgray: #2f3542;
     --fxb-color-accent: #3742fa;
