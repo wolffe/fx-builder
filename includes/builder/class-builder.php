@@ -279,7 +279,7 @@ class Builder {
      */
     public function scripts( $hook_suffix ) {
         global $post_type;
-        if ( ! post_type_supports( $post_type, 'fx_builder' ) ) {
+        if ( ! isset($post_type) || ! post_type_supports( $post_type, 'fx_builder' ) ) {
             return;
         }
 
