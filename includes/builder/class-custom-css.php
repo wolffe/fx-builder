@@ -115,7 +115,7 @@ class Custom_CSS {
             wp_enqueue_style( 'fx-builder-custom_css', URI . 'assets/custom-css.css', [ 'fx-builder' ], VERSION );
 
             /* JS */
-            wp_enqueue_script( 'fx-builder-custom_css', URI . 'assets/custom-css.js', [ 'jquery' ], VERSION, true );
+            wp_enqueue_script( 'fx-builder-custom_css', URI . 'assets/custom-css.js', [ 'fx-builder-core' ], VERSION, true );
         }
     }
 

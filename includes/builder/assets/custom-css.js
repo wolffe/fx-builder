@@ -1,29 +1,21 @@
-jQuery(document).ready(function ($) {
-    /**
-     * OPEN CUSTOM CSS MODAL
-     */
-    $(document.body).on('click', '#fxb-nav-css', function (e) {
+document.addEventListener('DOMContentLoaded', function () {
+    const FXB = window.FXB;
+    if (!FXB || !FXB.dom || !FXB.modal) return;
+    const qs = FXB.dom.qs;
+    const on = FXB.dom.on;
+
+    const body = document.body;
+
+    // Modal sizing is handled via CSS (flex layout); no JS height math needed.
+
+    on(body, 'click', '#fxb-nav-css', function (e) {
         e.preventDefault();
-
-        /* Show Editor Modal & Modal Overlay */
-        $('.fxb-custom-css').show();
-        $('.fxb-modal-overlay').show();
-
-        /* Fix Height */
-        $('.fxb-custom-css .fxb-modal-content').css("height", $('.fxb-custom-css').height() - 35 + "px");
-        $(window).resize(function () {
-            $('.fxb-custom-css .fxb-modal-content').css("height", "auto").css("height", $('.fxb-custom-css').height() - 35 + "px");
-        });
+        FXB.modal.open('.fxb-custom-css');
+    });
+    on(body, 'click', '.fxb-custom-css .fxb-modal-close', function (e) {
+        e.preventDefault();
+        FXB.modal.close('.fxb-custom-css');
     });
 
-    /**
-     * CLOSE CUSTOM CSS MODAL
-     */
-    $(document.body).on('click', '.fxb-custom-css .fxb-modal-close', function (e) {
-        e.preventDefault();
-
-        /* Show Editor Modal & Modal Overlay */
-        $('.fxb-custom-css').hide();
-        $('.fxb-modal-overlay').hide();
-    });
+    // no resize handler needed
 });

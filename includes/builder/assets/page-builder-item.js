@@ -1,578 +1,182 @@
-; (function ($) {
-
+; (function () {
     /**
-     * UPDATE ITEMS INDEX
-     ************************************
+     * FX Builder Items
      */
-    $.fn.fxB_updateItemsIndex = function (col) {
 
-        /* Var Row IDs */
-        var row_id = col.parents('.fxb-row').data('id');
-        var col_index = col.data('col_index');
-        var items_input = col.find('input[data-row_field="' + col_index + '"]');
-        var item_ids = [];
+    const FXB = window.FXB;
+    if (!FXB || !FXB.dom || !FXB.items || !FXB.editor || !FXB.modal || typeof FXB.reconcile !== 'function') return;
 
-        /* Update each rows attr */
-        $(col).find('.fxb-col-content > .fxb-item').each(function (i) {
+    const qs = FXB.dom.qs;
 
-            /* Var */
-            var num = i + 1;
-            var item_id = $(this).data('item_id');
-
-            /* Set data */
-            $(this).data('item_index', num); // set index
-            var item_index = $(this).data('item_index'); // get index
-
-            /* Update Item Index */
-            $(this).attr('data-item_index', item_index); // set data attr
-            $(this).find('.fxb_item_index').attr('data-item-index', item_index);
-            $(this).find('.fxb_item_index').data('item-index', item_index);
-            $(this).find('input[data-item_field="item_index"]').val(item_index).trigger('change'); // change input
-
-            /* Update Row ID and Col Index */
-            $(this).data('row_id', row_id);
-            $(this).find('input[data-item_field="row_id"]').val(row_id).trigger('change');
-            $(this).data('col_index', col_index);
-            $(this).find('input[data-item_field="col_index"]').val(col_index).trigger('change');
-
-            /* Get ID */
-            item_ids.push(item_id);
+    function reconcileAfterItemDomChange() {
+        // Avoid reloading all iframe previews for single-item operations.
+        FXB.reconcile({
+            rows: false,
+            bottomAdd: false,
+            sortItems: true,
+            iframes: false
         });
+    }
 
-        /* Update Hidden Input */
-        items_input.val(item_ids.join()).trigger('change');
-    };
+    function openEditorForTextarea(textareaEl) {
+        const modal = qs('.fxb-editor');
+        if (!modal) return;
 
-    /**
-     * MAKE ITEMS SORTABLE
-     ************************************
-     */
-    $.fn.fxB_sortItems = function () {
-        // SortableJS for Items
-        document.querySelectorAll('.fxb-col-content').forEach(function (colContent) {
-            new Sortable(colContent, {
-                handle: '.fxb-item-handle',
-                animation: 150,
-                group: 'shared',  // Allow dragging between columns
-                onEnd: function (evt) {
-                    // Get the column and update item indexes
-                    var col = $(evt.from).parents('.fxb-col');
-                    $.fn.fxB_updateItemsIndex(col);
-                }
-            });
-        });
-    };
+        textareaEl.classList.add('fxb_editing_active');
 
-    /**
-     * Get Iframe CSS
-     */
-    $.fn.fxB_getIframeCSS = function () {
-        if (typeof tinymce == 'undefined') {
-            return '';
-        }
-        var iframe_css = '';
-        var iframe_styles = tinyMCEPreInit.mceInit.fxb_editor.content_css;
-        /* Loop each styles and create link el. */
-        iframe_styles.split(',').forEach(function (item) {
-            iframe_css += '<link type="text/css" rel="stylesheet" href="' + item + '" />';
-        });
-        return iframe_css;
-    };
+        const editorId = 'fxb_editor';
+        FXB.editor.setModalContent(editorId, textareaEl.value || '');
 
+        FXB.modal.open(modal);
+    }
 
-    /**
-     * AutoP
-     * Similar to wpautop()
-     * clone of function found in "WP/wp-admin/js/editor.js"
-     */
-    $.fn.fxB_autop = function (text) {
-        var preserve_linebreaks = false,
-            preserve_br = false,
-            blocklist = 'table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre' +
-                '|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section' +
-                '|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary';
+    function closeEditorAndApply() {
+        const editorId = 'fxb_editor';
+        const itemTextarea = qs('.fxb_editing_active');
+        if (itemTextarea) {
+            FXB.editor.applyModalToTextarea(editorId, itemTextarea);
+            itemTextarea.classList.remove('fxb_editing_active');
 
-        // Normalize line breaks
-        text = text.replace(/\r\n|\r/g, '\n');
-
-        if (text.indexOf('\n') === -1) {
-            return text;
-        }
-
-        if (text.indexOf('<object') !== -1) {
-            text = text.replace(/<object[\s\S]+?<\/object>/g, function (a) {
-                return a.replace(/\n+/g, '');
-            });
-        }
-
-        text = text.replace(/<[^<>]+>/g, function (a) {
-            return a.replace(/[\n\t ]+/g, ' ');
-        });
-
-        // Protect pre|script tags
-        if (text.indexOf('<pre') !== -1 || text.indexOf('<script') !== -1) {
-            preserve_linebreaks = true;
-            text = text.replace(/<(pre|script)[^>]*>[\s\S]*?<\/\1>/g, function (a) {
-                return a.replace(/\n/g, '<wp-line-break>');
-            });
-        }
-
-        // keep <br> tags inside captions and convert line breaks
-        if (text.indexOf('[caption') !== -1) {
-            preserve_br = true;
-            text = text.replace(/\[caption[\s\S]+?\[\/caption\]/g, function (a) {
-                // keep existing <br>
-                a = a.replace(/<br([^>]*)>/g, '<wp-temp-br$1>');
-                // no line breaks inside HTML tags
-                a = a.replace(/<[^<>]+>/g, function (b) {
-                    return b.replace(/[\n\t ]+/, ' ');
-                });
-                // convert remaining line breaks to <br>
-                return a.replace(/\s*\n\s*/g, '<wp-temp-br />');
-            });
-        }
-
-        text = text + '\n\n';
-        text = text.replace(/<br \/>\s*<br \/>/gi, '\n\n');
-        text = text.replace(new RegExp('(<(?:' + blocklist + ')(?: [^>]*)?>)', 'gi'), '\n$1');
-        text = text.replace(new RegExp('(</(?:' + blocklist + ')>)', 'gi'), '$1\n\n');
-        text = text.replace(/<hr( [^>]*)?>/gi, '<hr$1>\n\n'); // hr is self closing block element
-        text = text.replace(/\s*<option/gi, '<option'); // No <p> or <br> around <option>
-        text = text.replace(/<\/option>\s*/gi, '</option>');
-        text = text.replace(/\n\s*\n+/g, '\n\n');
-        text = text.replace(/([\s\S]+?)\n\n/g, '<p>$1</p>\n');
-        text = text.replace(/<p>\s*?<\/p>/gi, '');
-        text = text.replace(new RegExp('<p>\\s*(</?(?:' + blocklist + ')(?: [^>]*)?>)\\s*</p>', 'gi'), '$1');
-        text = text.replace(/<p>(<li.+?)<\/p>/gi, '$1');
-        text = text.replace(/<p>\s*<blockquote([^>]*)>/gi, '<blockquote$1><p>');
-        text = text.replace(/<\/blockquote>\s*<\/p>/gi, '</p></blockquote>');
-        text = text.replace(new RegExp('<p>\\s*(</?(?:' + blocklist + ')(?: [^>]*)?>)', 'gi'), '$1');
-        text = text.replace(new RegExp('(</?(?:' + blocklist + ')(?: [^>]*)?>)\\s*</p>', 'gi'), '$1');
-
-        // Remove redundant spaces and line breaks after existing <br /> tags
-        text = text.replace(/(<br[^>]*>)\s*\n/gi, '$1');
-
-        // Create <br /> from the remaining line breaks
-        text = text.replace(/\s*\n/g, '<br />\n');
-
-        text = text.replace(new RegExp('(</?(?:' + blocklist + ')[^>]*>)\\s*<br />', 'gi'), '$1');
-        text = text.replace(/<br \/>(\s*<\/?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)>)/gi, '$1');
-        text = text.replace(/(?:<p>|<br ?\/?>)*\s*\[caption([^\[]+)\[\/caption\]\s*(?:<\/p>|<br ?\/?>)*/gi, '[caption$1[/caption]');
-
-        text = text.replace(/(<(?:div|th|td|form|fieldset|dd)[^>]*>)(.*?)<\/p>/g, function (a, b, c) {
-            if (c.match(/<p( [^>]*)?>/)) {
-                return a;
+            const iframe = itemTextarea.parentElement ? qs('.fxb-item-iframe', itemTextarea.parentElement) : null;
+            if (iframe) {
+                FXB.items.loadIframeContent(iframe, FXB.items.getIframeCSS());
             }
-
-            return b + '<p>' + c + '</p>';
-        });
-
-        // put back the line breaks in pre|script
-        if (preserve_linebreaks) {
-            text = text.replace(/<wp-line-break>/g, '\n');
         }
 
-        if (preserve_br) {
-            text = text.replace(/<wp-temp-br([^>]*)>/g, '<br$1>');
-        }
-
-        return text;
+        FXB.modal.close(qs('.fxb-editor'));
     }
 
-    /**
-     * Load Iframe
-     */
-    $.fn.fxB_loadIfameContent = function (head) {
-        var iframe = this;
-        var editor_body_class = '';
-        if (typeof tinymce != 'undefined') {
-            editor_body_class = tinyMCEPreInit.mceInit.fxb_editor.body_class;
-        }
-        else {
-            head = "<style>.wp-editor{font-family: Consolas,Monaco,monospace;font-size: 13px;line-height: 150%;}</style>"
-        }
-        var body_class = 'wp-editor';
-        var raw_content = iframe.siblings('.fxb-item-textarea').val();
-        var content = $.fn.fxB_autop(raw_content);
-
-        iframe.contents().find('head').html(head);
-        iframe.contents().find('body').attr('id', 'tinymce').addClass(editor_body_class).addClass(body_class).html(content);
-
-        /* 
-         * Firefox Hack + This also fix chrome drag and drop content empty.
-         * @link http://stackoverflow.com/a/24686535
-         */
-        $(iframe).on('load', function () {
-            $(this).contents().find('head').html(head);
-            $(this).contents().find('body').attr('id', 'tinymce').addClass(editor_body_class).addClass(body_class).html(content);
-        });
-    };
-
-
-    /**
-     * Force Switch to Visual Editor
-     */
-    $.fn.fxB_switchEditor = function (id) {
-        if (typeof tinymce == 'undefined') {
-            return;
-        }
-        id = id || 'content';
-
-        var editor = tinymce.get(id),
-            wrap = $('#wp-' + id + '-wrap'),
-            $textarea = $('#' + id),
-            textarea = $textarea[0];
-
-        if (editor && !editor.isHidden()) {
-            return false;
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ensure visual editor is active
+        FXB.editor.switchEditor('fxb_editor');
+        const postForm = qs('#post');
+        if (postForm) {
+            postForm.addEventListener('submit', function () {
+                FXB.editor.switchEditor('fxb_editor');
+            });
         }
 
-        if (typeof (window.QTags) !== 'undefined') {
-            window.QTags.closeAllTags(id);
-        }
-        if (editor) {
-            editor.show();
-        }
-        else {
-            tinymce.init(window.tinyMCEPreInit.mceInit[id]);
-        }
+        // One standardized init pass.
+        FXB.reconcile();
 
-        wrap.removeClass('html-active').addClass('tmce-active');
-        $textarea.attr('aria-hidden', true);
-        window.setUserSetting('editor', 'tinymce');
-    }
-
-
-})(jQuery);
-
-
-/* Document Ready
------------------------------------------- */
-jQuery(document).ready(function ($) {
-
-    /**
-     * Make Sure Visual Editor Is Active
-     */
-    $.fn.fxB_switchEditor("fxb_editor");
-    $(document.body).on('submit', '#post', function () {
-        $.fn.fxB_switchEditor("fxb_editor");
+        // Modal sizing handled via CSS (flex layout).
     });
 
+    const on = FXB.dom.on;
 
-    /**
-     * VAR
-     * 
-     ************************************
-     */
-    var item_template = wp.template('fxb-item');
-    var iframe_css = $.fn.fxB_getIframeCSS();
-
-    /**
-     * MAKE SORTABLE ON PAGE LOAD
-     * 
-     ************************************
-     */
-    $.fn.fxB_sortItems();
-
-
-    /**
-     * PREPARE IFRAME ON PAGE LOAD
-     * 
-     ************************************
-     */
-    $('.fxb-item-iframe').each(function (i) {
-        $(this).fxB_loadIfameContent(iframe_css);
+    // Direct edits in item textareas (if user types without opening the modal) should mark dirty.
+    on(document.body, 'input', '.fxb-item-textarea', function () {
     });
 
-
-
-    /**
-     * ADD NEW ITEM
-     *
-     * Add new item in the column when click new item (+) button.
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-add-item', function (e) {
+    // Add item
+    on(document.body, 'click', '.fxb-add-item', function (e, addBtn) {
         e.preventDefault();
-
-        /* Vars */
-        var items_container = $(this).siblings('.fxb-col-content');
-        var item_id = new Date().getTime();
-        var col = $(this).parents('.fxb-col');
-
-        /* Add template to container */
-        $(items_container).append(item_template({
-            item_id: item_id,
+        const tpl = FXB.templates.get('fxb-item');
+        if (!tpl) return;
+        const col = addBtn.closest('.fxb-col');
+        if (!col) return;
+        const row = col.closest('.fxb-row');
+        const itemId = Date.now();
+        const colIndex = col.getAttribute('data-col_index') || (col.dataset ? col.dataset.col_index : 'col_1');
+        const rowId = row ? (row.getAttribute('data-id') || row.dataset.id) : '';
+        const html = tpl({
+            item_id: itemId,
             item_index: '1',
             item_state: 'open',
             item_type: 'text',
-        }));
-
-        /* Update Index */
-        $.fn.fxB_updateItemsIndex(col);
-
-        /* Load Iframe */
-        $('.fxb-item[data-item_id="' + item_id + '"] .fxb-item-iframe').fxB_loadIfameContent(iframe_css);
-
-        /* Make Sortable */
-        $.fn.fxB_sortItems();
-    });
-
-
-
-    /**
-     * REMOVE ITEM
-     *
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-remove-item', function (e) {
-        e.preventDefault();
-
-        /* Confirm delete */
-        var confirm_delete = confirm($(this).data('confirm'));
-        if (true === confirm_delete) {
-
-            /* Vars */
-            var item = $(this).parents('.fxb-item');
-            var col = $(this).parents('.fxb-col');
-
-            /* Remove item */
-            item.remove();
-
-            /* Update Index */
-            $.fn.fxB_updateItemsIndex(col);
-        }
-    });
-
-
-
-    /**
-     * DUPLICATE ITEM
-     *
-     * Duplicate an existing item in the column when clicking the duplicate button.
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-duplicate-item', function (e) {
-        e.preventDefault();
-
-        /* Vars */
-        var original_item = $(this).closest('.fxb-item'); // The item to duplicate
-        var items_container = $(this).closest('.fxb-col').children('.fxb-col-content'); // Ensure correct container
-        var col = $(this).closest('.fxb-col'); // Column containing the item
-
-        /* Clone the original item */
-        var new_item = original_item.clone();
-
-        /* Generate a new unique ID for the duplicated item */
-        var new_item_id = new Date().getTime();
-        new_item.attr('data-item_id', new_item_id); // Assign a unique ID to the duplicated item
-
-        /* Update the hidden fields */
-        new_item.find('input[type="hidden"]').each(function () {
-            var original_name = $(this).attr('name');
-            var original_value = $(this).val();
-
-            // Update the name for each hidden field
-            if (original_name) {
-                var new_name = original_name.replace(/\[\d+\]/, '[' + new_item_id + ']'); // Replace the old ID with the new unique ID
-                $(this).attr('name', new_name);
-            }
-
-            // Ensure the value for item_id is updated
-            if (original_name && original_name.includes('[item_id]')) {
-                $(this).val(new_item_id); // Set the new unique ID as the value
-            }
+            row_id: rowId,
+            col_index: colIndex,
+            content: ''
         });
 
-        /* Update other fields */
-        new_item.find('input, textarea, .fxb-editor').each(function () {
-            var original_name = $(this).attr('name');
-            var original_id = $(this).attr('id');
+        const container = qs('.fxb-col-content', col);
+        if (container) container.insertAdjacentHTML('beforeend', html);
 
-            if (original_name) {
-                var new_name = original_name.replace(/(\d+)/g, new_item_id); // Replace the old ID with the new unique ID
-                $(this).attr('name', new_name);
-            }
+        FXB.items.updateItemsIndex(col);
+        reconcileAfterItemDomChange();
 
-            if (original_id) {
-                var new_id = original_id + '-' + new_item_id; // Add unique suffix
-                $(this).attr('id', new_id);
-            }
+        const newIframe = qs('.fxb-item[data-item_id="' + itemId + '"] .fxb-item-iframe');
+        if (newIframe) FXB.items.loadIframeContent(newIframe, FXB.items.getIframeCSS());
+    });
+
+    // Remove item
+    on(document.body, 'click', '.fxb-remove-item', function (e, removeBtn) {
+        e.preventDefault();
+        const msg = removeBtn.getAttribute('data-confirm') || 'Delete item?';
+        if (!confirm(msg)) return;
+        const item = removeBtn.closest('.fxb-item');
+        const col = removeBtn.closest('.fxb-col');
+        if (item) item.remove();
+        if (col) FXB.items.updateItemsIndex(col);
+        reconcileAfterItemDomChange();
+    });
+
+    // Duplicate item (template-based, not DOM clone)
+    on(document.body, 'click', '.fxb-duplicate-item', function (e, dupBtn) {
+        e.preventDefault();
+        const tpl = FXB.templates.get('fxb-item');
+        if (!tpl) return;
+        const original = dupBtn.closest('.fxb-item');
+        const col = dupBtn.closest('.fxb-col');
+        const row = dupBtn.closest('.fxb-row');
+        if (!original || !col) return;
+
+        const newId = Date.now();
+        const colIndex = col.getAttribute('data-col_index') || (col.dataset ? col.dataset.col_index : 'col_1');
+        const rowId = row ? (row.getAttribute('data-id') || row.dataset.id) : '';
+        const textarea = qs('.fxb-item-textarea', original);
+        const content = textarea ? textarea.value : '';
+
+        const html = tpl({
+            item_id: newId,
+            item_index: '1',
+            item_state: (original.getAttribute('data-item_state') || original.dataset.item_state || 'open'),
+            item_type: (original.getAttribute('data-item_type') || original.dataset.item_type || 'text'),
+            row_id: rowId,
+            col_index: colIndex,
+            content: content
         });
 
-        /* Remove any editor instance from the clone */
-        if (typeof tinymce !== 'undefined') {
-            new_item.find('.fxb-editor').each(function () {
-                var editor_id = $(this).attr('id');
-                if (tinymce.get(editor_id)) {
-                    tinymce.remove(`#${editor_id}`);
-                }
-            });
+        original.insertAdjacentHTML('afterend', html);
+
+        const newItem = qs('.fxb-item[data-item_id="' + newId + '"]');
+        if (newItem) {
+            const newTextarea = qs('.fxb-item-textarea', newItem);
+            if (newTextarea) newTextarea.value = content;
+            const iframe = qs('.fxb-item-iframe', newItem);
+            if (iframe) FXB.items.loadIframeContent(iframe, FXB.items.getIframeCSS());
         }
 
-        /* Insert the new item immediately after the original */
-        new_item.insertAfter(original_item);
-
-        // Add new <span> element with a "Cloned" label after the item index
-        new_item.find('.fxb-icon.fxb_item_index').after('<span class="fxb-icon fxb-item-label"><span class="dashicons dashicons-admin-page"></span></span>');
-
-        /* Update Indexes */
-        $.fn.fxB_updateItemsIndex(col);
-
-        /* Make Sortable */
-        $.fn.fxB_sortItems();
-
-        /* Get the value saved in textarea */
-        var editor_val = $(`[name="_fxb_items[${new_item_id}][content]"]`).val();
-
-        /* Item Textarea */
-        var item_textarea = $(`[name="_fxb_items[${new_item_id}][content]"]`);
-
-        /* Add content back to textarea and item iframe */
-        item_textarea.val(editor_val).trigger('change');
-        item_textarea.siblings('.fxb-item-iframe').fxB_loadIfameContent(iframe_css);
-        item_textarea.removeClass('fxb_editing_active');
+        FXB.items.updateItemsIndex(col);
+        reconcileAfterItemDomChange();
     });
 
-
-
-    /**
-     * TOGGLE ITEM STATE
-     *
-     * Open/Close item using toggle arrow icon.
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-toggle-item', function (e) {
+    // Toggle item state
+    on(document.body, 'click', '.fxb-toggle-item', function (e, toggleBtn) {
         e.preventDefault();
-
-        /* Var */
-        var item = $(this).parents('.fxb-item');
-        var item_state = item.data('item_state');
-
-        /* Toggle State */
-        if ('open' == item_state) {
-            item.data('item_state', 'close'); // set data
-        }
-        else {
-            item.data('item_state', 'open');
-        }
-
-        /* Update state */
-        var item_state = item.data('item_state'); // get data
-        item.attr('data-item_state', item_state); // change attr for styling
-        item.find('input[data-item_field="item_state"]').val(item_state).trigger('change'); // change hidden input
+        const itemEl = toggleBtn.closest('.fxb-item');
+        if (!itemEl) return;
+        let state = itemEl.getAttribute('data-item_state') || itemEl.dataset.item_state || 'open';
+        state = (state === 'open') ? 'close' : 'open';
+        itemEl.dataset.item_state = state;
+        itemEl.setAttribute('data-item_state', state);
+        const stateInput = qs('input[data-item_field="item_state"]', itemEl);
+        if (stateInput) stateInput.value = state;
     });
 
-
-    /**
-     * SORT ITEM
-     * 
-     ************************************
-     */
-    document.querySelectorAll('.fxb-col-content').forEach(function (colContent) {
-        new Sortable(colContent, {
-            handle: '.fxb-item-handle',
-            animation: 150,
-            group: 'shared',
-            onSort: function (evt) {
-                var col = $(evt.target).parents('.fxb-col');
-                $.fn.fxB_updateItemsIndex(col);
-            }
-        });
-    });
-
-    /**
-     * OPEN EDITOR
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-item-iframe-overlay', function (e) {
+    // Open editor modal (click overlay)
+    on(document.body, 'click', '.fxb-item-iframe-overlay', function (e, overlay) {
         e.preventDefault();
-
-        var editor_id = "fxb_editor";
-
-        /**
-         * Make sure it's using tmce editor
-         * if not it will get "tinyMCE.get(...) is null" error
-         */
-        $.fn.fxB_switchEditor(editor_id);
-
-        /* Textarea source */
-        var target_textarea = $(this).siblings('.fxb-item-textarea');
-
-        /* Add active class */
-        target_textarea.addClass('fxb_editing_active');
-
-        /* Set it to tinyMCE content */
-        var raw_content = target_textarea.val();
-        var content = $.fn.fxB_autop(raw_content);
-        if (typeof tinymce != 'undefined') {
-            var fxb_editor = tinyMCE.get(editor_id);
-            fxb_editor.show();
-            fxb_editor.setContent(content);
-            fxb_editor.undoManager.clear();
-        }
-        else {
-            $("#" + editor_id).val(raw_content).trigger('change');
-        }
-
-        /* Show Editor Modal & Modal Overlay */
-        $('.fxb-editor').show();
-        $('.fxb-modal-overlay').show();
-
-        /* Focus: wonly works if it's no longer hidden */
-        if (typeof tinymce != 'undefined') {
-            fxb_editor.focus();
-        }
-        else {
-            $('#' + editor_id).focus();
-        }
-
-        /* Fix Height */
-        $('.fxb-editor .fxb-modal-content').css("height", $('.fxb-editor').height() - 35 + "px");
-        $(window).on('resize', function () {
-            $('.fxb-editor .fxb-modal-content').css("height", "auto").css("height", $('.fxb-editor').height() - 35 + "px");
-        });
+        const itemEl = overlay.closest('.fxb-item');
+        const textareaEl = itemEl ? qs('.fxb-item-textarea', itemEl) : null;
+        if (textareaEl) openEditorForTextarea(textareaEl);
     });
 
-    /**
-     * CLOSE EDITOR
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-editor .fxb-modal-close', function (e) {
+    // Close editor modal (Apply)
+    on(document.body, 'click', '.fxb-editor .fxb-modal-close', function (e) {
         e.preventDefault();
-
-        var editor_id = "fxb_editor";
-
-        /**
-         * Make sure it's using tmce editor
-         * if not it will get "tinyMCE.get(...) is null" error
-         */
-        $.fn.fxB_switchEditor(editor_id);
-
-        /* Force tinyMCE to save the data to their textarea */
-        if (typeof tinymce != 'undefined') {
-            tinyMCE.get(editor_id).save();
-            tinyMCE.get(editor_id).hide();
-        }
-
-        /* Get the value saved in textarea */
-        var editor_val = $('#' + editor_id).val();
-
-        /* Item Textarea */
-        var item_textarea = $('.fxb_editing_active');
-
-        /* Add content back to textarea and item iframe */
-        item_textarea.val(editor_val).trigger('change');
-        item_textarea.siblings('.fxb-item-iframe').fxB_loadIfameContent(iframe_css);
-        item_textarea.removeClass('fxb_editing_active');
-
-        /* Hide Settings Modal & Overlay */
-        $(this).parents('.fxb-modal').hide();
-        $('.fxb-modal-overlay').hide();
+        closeEditorAndApply();
     });
-});
+})();
+
+

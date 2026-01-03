@@ -128,38 +128,18 @@ class Builder {
      */
     public function load_templates( $post_id ) {
 
-        /* Rows data */
-        $rows_data = Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) );
-        $row_ids   = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );
-        if ( ! $rows_data && $row_ids && is_array( $rows_data ) && is_array( $row_ids ) ) {
-            return false;
-        }
-        $rows = explode( ',', $row_ids );
-
-        /* Items data */
+        $rows_data  = Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) );
+        $row_ids    = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );
         $items_data = Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) );
-        ?>
-        <script type="text/javascript">
-            jQuery( document ).ready( function( $ ) {
-                var row_template = wp.template( 'fxb-row' );
 
-                <?php foreach ( $rows as $row_id ) { ?>
-                    <?php if ( isset( $rows_data[ $row_id ] ) ) { ?>
-                        $( '#fxb' ).append( row_template( <?php echo wp_json_encode( $rows_data[ $row_id ] ); ?> ) );
-                    <?php } ?>
-                <?php } // end foreach ?>
+        // Provide a bootstrap payload. Rendering is handled by FXB core on DOMContentLoaded.
+        $payload = [
+            'row_ids' => $row_ids,
+            'rows'    => $rows_data,
+            'items'   => $items_data,
+        ];
 
-                <?php if ( $items_data && is_array( $items_data ) ) { ?>
-                    var item_template = wp.template( 'fxb-item' );
-                    <?php foreach ( $items_data as $item_id => $item ) { ?>
-                        <?php if ( isset( $rows_data[ $item['row_id'] ] ) ) { ?>
-                            $( '.fxb-row[data-id="<?php echo esc_attr( $item['row_id'] ); ?>"] .fxb-col[data-col_index="<?php echo esc_attr( $item['col_index'] ); ?>"] .fxb-col-content' ).append( item_template( <?php echo wp_json_encode( $item ); ?> ) );
-                        <?php } ?>
-                    <?php } // end foreach ?>
-                <?php } ?>
-            } );
-        </script>
-        <?php
+        echo '<script type="text/javascript">window.FXB_BOOTSTRAP = ' . wp_json_encode( $payload ) . ';</script>';
     }
 
 
@@ -289,15 +269,13 @@ class Builder {
             /* Enqueue CSS */
             wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', [], VERSION );
 
-            /* Enqueue JS: ROW */
-            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', [ 'jquery', 'sortable-js', 'wp-util' ], VERSION, true );
-            $data = [
-                'unload' => __( 'The changes you made will be lost if you navigate away from this page', 'fx-builder' ),
-            ];
-            wp_localize_script( 'fx-builder-row', 'fxb_i18n', $data );
+            // Core utilities / namespace. Depends on wp-util (wp.template()).
+            wp_enqueue_script( 'fx-builder-core', URI . 'assets/fxb-core.js', [ 'wp-util' ], VERSION, true );
 
+            /* Enqueue JS: ROW */
+            wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', [ 'fx-builder-core', 'sortable-js', 'wp-util' ], VERSION, true );
             /* Enqueue JS: ITEM */
-            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', [ 'jquery', 'sortable-js', 'wp-util' ], VERSION, true );
+            wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', [ 'fx-builder-core', 'sortable-js', 'wp-util' ], VERSION, true );
             $ajax_data = [
                 'ajax_url'   => admin_url( 'admin-ajax.php' ),
                 'ajax_nonce' => wp_create_nonce( 'fxb_ajax_nonce' ),

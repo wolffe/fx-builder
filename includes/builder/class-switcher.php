@@ -103,7 +103,7 @@ class Switcher {
             wp_enqueue_style( 'fx-builder-switcher', URI . 'assets/switcher.css', [], VERSION );
 
             /* JS */
-            wp_enqueue_script( 'fx-builder-switcher', URI . 'assets/switcher.js', [ 'jquery', 'fx-builder-item' ], VERSION, true );
+            wp_enqueue_script( 'fx-builder-switcher', URI . 'assets/switcher.js', [ 'fx-builder-core', 'fx-builder-item' ], VERSION, true );
         }
     }
 }

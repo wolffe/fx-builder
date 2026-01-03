@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const FXB = window.FXB;
+    if (!FXB || !FXB.dom) return;
+    const qs = FXB.dom.qs;
+
     // Click Tab
     document.body.addEventListener('click', function (e) {
         const target = e.target;
@@ -24,15 +28,15 @@ document.addEventListener('DOMContentLoaded', function () {
             target.classList.add('switch-confirmed');
 
             // Force Switch to Visual Editor
-            if (typeof window.fxB_switchEditor === 'function') {
-                window.fxB_switchEditor('fxb_editor');
+            if (FXB.editor && typeof FXB.editor.switchEditor === 'function') {
+                FXB.editor.switchEditor('fxb_editor');
             }
 
             const switcherData = target.getAttribute('data-fxb-switcher');
 
             if (switcherData === 'editor') {
                 document.documentElement.classList.remove('fx_builder_active');
-                document.querySelector('input[name="_fxb_active"]').value = '';
+                qs('input[name="_fxb_active"]').value = '';
                 target.classList.add('nav-tab-active');
                 const siblings = target.parentElement.querySelectorAll('.nav-tab');
                 siblings.forEach(function (sibling) {
@@ -42,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             } else if (switcherData === 'builder') {
                 document.documentElement.classList.add('fx_builder_active');
-                document.querySelector('input[name="_fxb_active"]').value = '1';
+                qs('input[name="_fxb_active"]').value = '1';
                 target.classList.add('nav-tab-active');
                 const siblings = target.parentElement.querySelectorAll('.nav-tab');
                 siblings.forEach(function (sibling) {

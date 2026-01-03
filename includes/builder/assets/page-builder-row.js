@@ -1,282 +1,168 @@
-; (function ($) {
+; (function () {
+    const FXB = window.FXB;
+    if (!FXB || !FXB.dom || !FXB.modal || !FXB.rows || !FXB.items || typeof FXB.reconcile !== 'function') return;
+    const qs = FXB.dom.qs;
+    const on = FXB.dom.on;
 
-    /**
-     * UPDATE ROWS INDEX
-     *
-     * Even though sortable provide row ids, it's best to parse each row using each() because:
-     * - There's only one rows level.
-     * - we need to update html element in each row.
-     *
-     * This function should be loaded on:
-     * - Add new row
-     * - Delete row
-     * - Sort row
-     *
-     ************************************
-     */
-    $.fn.fxB_updateRowsIndex = function () {
-
-        /* Var Row IDs */
-        var row_ids = [];
-
-        /* Update each rows attr */
-        $('#fxb > .fxb-row').each(function (i) {
-
-            /* Var */
-            var num = i + 1;
-            var row_id = $(this).data('id');
-
-            /* Set data */
-            $(this).data('index', num); // set index
-            var row_index = $(this).data('index'); // get index
-
-            /* Update Row */
-            $(this).attr('data-index', row_index); // set data attr
-            $(this).find('.fxb_row_index').attr('data-row-index', row_index); // display text
-            $(this).find('input[data-row_field="index"]').val(row_index).trigger('change'); // change input
-
-            /* Get ID */
-            row_ids.push(row_id);
-        });
-
-        /* Update Hidden Input */
-        $('input[name="_fxb_row_ids"]').val(row_ids.join()).trigger('change');
-    };
-
-})(jQuery);
-
-
-/* Document Ready
------------------------------------------- */
-jQuery(document).ready(function ($) {
-
-    /**
-     * Unload Notice
-     */
-    $(document).on('change', '#fxb-wrapper input, #fxb-wrapper select, #fxb-wrapper textarea, #fxb-switcher input, #fxb-switcher select, #fxb-switcher textarea', function () {
-        $(window).on('beforeunload', function () {
-            return fxb_i18n.unload;
-        });
-    });
-    $(document).on('submit', 'form', function () {
-        $(window).unbind('beforeunload');
-    });
-
-    /**
-     * Show Bottom Add Row
-     * 
-     ************************************
-     */
-    if ($('#fxb .fxb-row').length) {
-        $('.fxb-add-row').show();
+    function reconcileRowsOnly() {
+        FXB.reconcile({ sortItems: false, iframes: false });
     }
 
-    /**
-     * VAR
-     * 
-     ************************************
-     */
-    var row_template = wp.template('fxb-row'); // load #tmpl-fxb-row
+    function getRowConfigFromThumb(thumbEl) {
+        const rowId = Date.now();
+        const layout = thumbEl.getAttribute('data-row-layout') || '1';
+        const colNum = thumbEl.getAttribute('data-row-col_num') || '1';
 
-
-    /**
-     * ADD NEW ROW
-     *
-     * Add new row when click new row button.
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-add-row .layout-thumb', function (e) {
-        e.preventDefault();
-
-        /* Var */
-        var row_id = new Date().getTime(); // time stamp when crating row
-        var row_config = {
-            id: row_id,
+        // Provide defaults for all fields referenced in templates to avoid "undefined".
+        return {
+            id: rowId,
             index: '1',
             state: 'open',
-            layout: $(this).data('row-layout'),
-            col_num: $(this).data('row-col_num'),
+            layout: layout,
+            col_num: colNum,
             col_1: '',
             col_2: '',
             col_3: '',
             col_4: '',
             col_5: '',
-        }
-
-        /* Add template to container */
-        if ("prepend" == $(this).parents('.fxb-add-row').data('add_row_method')) {
-            $('#fxb').prepend(row_template(row_config));
-        }
-        else {
-            $('#fxb').append(row_template(row_config));
-        }
-
-        /* Update Index */
-        $.fn.fxB_updateRowsIndex();
-
-        /* Make New Column Sortable */
-        $.fn.fxB_sortItems();
-
-        /* Always show both add row buttons */
-        $('.fxb-add-row').show();
-
-    });
-
-
-    /**
-     * REMOVE ROW
-     *
-     * Delete row when click new row button.
-     * With confirmation message.
-     * 
-     ************************************
-     */
-
-    // Also remove on pageload if no row
-    if (!$('#fxb .fxb-row').length) {
-        $('.fxb-add-row[data-add_row_method="append"]').hide();
+            row_title: '',
+            row_html_width: 'default',
+            row_html_height: '',
+            row_html_height_unit: 'px',
+            row_html_id: '',
+            row_html_class: '',
+            row_column_align: 'start',
+            row_column_gap: '',
+            row_column_gap_unit: 'px'
+        };
     }
 
-    $(document.body).on('click', '.fxb-remove-row', function (e) {
-        e.preventDefault();
+    // Modal sizing handled via CSS (flex layout).
 
-        /* Confirm delete */
-        var confirm_delete = confirm($(this).data('confirm'));
-        if (true === confirm_delete) {
+    document.addEventListener('DOMContentLoaded', function () {
+        reconcileRowsOnly();
 
-            /* Remove Row */
-            $(this).parents('.fxb-row').remove();
+        // Row sortable.
+        const fxb = document.getElementById('fxb');
+        if (fxb && typeof Sortable !== 'undefined') {
+            new Sortable(fxb, {
+                handle: '.fxb-row-handle',
+                animation: 150,
+                onEnd: function () {
+                    reconcileRowsOnly();
+                }
+            });
+        }
 
-            /* Update Index */
-            $.fn.fxB_updateRowsIndex();
-
-            /* No Row, Hide Bottom Add Row */
-            if (!$('#fxb .fxb-row').length) {
-                $('.fxb-add-row[data-add_row_method="append"]').hide();
+        // Add new row from layout thumb.
+        on(document.body, 'click', '.fxb-add-row .layout-thumb', function (e, thumb) {
+            e.preventDefault();
+            const rowTemplate = FXB.templates.get('fxb-row');
+            if (!rowTemplate) return;
+            const addRowWrap = thumb.closest('.fxb-add-row');
+            const method = addRowWrap ? addRowWrap.getAttribute('data-add_row_method') : 'append';
+            const cfg = getRowConfigFromThumb(thumb);
+            const html = rowTemplate(cfg);
+            if (fxb) {
+                if (method === 'prepend') fxb.insertAdjacentHTML('afterbegin', html);
+                else fxb.insertAdjacentHTML('beforeend', html);
             }
-        }
-    });
+            FXB.reconcile({ iframes: false });
+        });
 
+        // Remove row.
+        on(document.body, 'click', '.fxb-remove-row', function (e, removeBtn) {
+            e.preventDefault();
+            const msg = removeBtn.getAttribute('data-confirm') || 'Delete row?';
+            if (!confirm(msg)) return;
+            const rowEl = removeBtn.closest('.fxb-row');
+            if (rowEl) rowEl.remove();
+            reconcileRowsOnly();
+        });
 
-    /**
-     * TOGGLE ROW STATE
-     *
-     * Open/Close Row using toggle arrow icon.
-     * 
-     ************************************
-     */
-    $(document.body).on('click', '.fxb-toggle-row', function (e) {
-        e.preventDefault();
+        // Toggle row state.
+        on(document.body, 'click', '.fxb-toggle-row', function (e, toggleBtn) {
+            e.preventDefault();
+            const row = toggleBtn.closest('.fxb-row');
+            if (!row) return;
+            let state = (row.dataset && row.dataset.state) ? row.dataset.state : row.getAttribute('data-state');
+            state = (state === 'open') ? 'close' : 'open';
+            row.dataset.state = state;
+            row.setAttribute('data-state', state);
+            const stateInput = qs('input[data-row_field="state"]', row);
+            if (stateInput) stateInput.value = state;
+        });
 
-        /* Var */
-        var row = $(this).parents('.fxb-row');
-        var row_state = row.data('state'); // old
+        // Open row settings.
+        on(document.body, 'click', '.fxb-settings', function (e, settingsBtn) {
+            e.preventDefault();
+            const dataTarget = settingsBtn.getAttribute('data-target');
+            const container = settingsBtn.parentElement;
+            const modal = dataTarget && container ? qs(dataTarget, container) : null;
+            if (modal) FXB.modal.open(modal);
+        });
 
-        /* Toggle state data */
-        if ('open' == row_state) {
-            row.data('state', 'close'); // set data
-        }
-        else {
-            row.data('state', 'open');
-        }
-
-        /* Update state */
-        var row_state = row.data('state'); // get new state data
-        row.attr('data-state', row_state); // change attr for styling
-        row.find('input[data-row_field="state"]').val(row_state).trigger('change'); // change hidden input
-    });
-
-
-    /**
-     * OPEN/CLOSE ROW SETTINGS
-     * 
-     ************************************
-     */
-    /* == Open settings == */
-    $(document.body).on('click', '.fxb-settings', function (e) {
-        e.preventDefault();
-
-        /* Show settings target */
-        $(this).siblings($(this).data('target')).show();
-
-        /* Show overlay background */
-        $('.fxb-modal-overlay').show();
-
-        /* Disable Enter to Submit Form */
-        $('.fxb-row-settings').bind("keypress", function (e) {
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                return false;
+        // Close settings (Apply).
+        on(document.body, 'click', '.fxb-row-settings .fxb-modal-close', function (e, closeBtn) {
+            e.preventDefault();
+            const modalEl = closeBtn.closest('.fxb-modal');
+            const rowEl = closeBtn.closest('.fxb-row');
+            if (rowEl && modalEl) {
+                const titleInput = qs('input[data-row_field="row_title"]', modalEl);
+                const title = titleInput ? titleInput.value : '';
+                const titleBadge = qs('.fxb_row_title', rowEl);
+                if (titleBadge) {
+                    titleBadge.dataset.rowTitle = title;
+                    titleBadge.setAttribute('data-row-title', title);
+                }
+                FXB.modal.close(modalEl);
             }
         });
 
-        /* Fix Height */
-        $('.fxb-row-settings .fxb-modal-content').css("height", $('.fxb-row-settings').height() - 35 + "px");
-        $(window).resize(function () {
-            $('.fxb-row-settings .fxb-modal-content').css("height", "auto").css("height", $('.fxb-row-settings').height() - 35 + "px");
+        // Prevent Enter in settings modal from submitting the post form.
+        document.body.addEventListener('keydown', function (e) {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                if (target.closest('.fxb-row-settings')) {
+                    e.preventDefault();
+                }
+            }
         });
+
+        // No resize handler needed (CSS handles modal sizing).
+
+        // mousedown/mouseup visual grabbing indicator.
+        on(document.body, 'mousedown', '.fxb-grab', function (e, grab) {
+            grab.classList.add('fxb-grabbing');
+        });
+        on(document.body, 'mouseup', '.fxb-grab', function (e, grab) {
+            grab.classList.remove('fxb-grabbing');
+        });
+
+        // Layout change: update row dataset + hidden input.
+        document.body.addEventListener('change', function (e) {
+            const t = e.target;
+            if (!(t instanceof Element)) return;
+            if (t.matches('select[data-row_field="layout"]')) {
+                const row = t.closest('.fxb-row');
+                if (!row) return;
+                const newLayout = t.value;
+                const opt = t.options[t.selectedIndex];
+                const newColNum = opt ? opt.getAttribute('data-col_num') : '';
+
+                row.dataset.layout = newLayout;
+                row.setAttribute('data-layout', newLayout);
+                if (newColNum) {
+                    row.dataset.col_num = newColNum;
+                    row.setAttribute('data-col_num', newColNum);
+                    const colInput = qs('input[data-row_field="col_num"]', row);
+                    if (colInput) {
+                        colInput.value = newColNum;
+                    }
+                }
+            }
+        });
+
     });
-
-    /* == Close Settings == */
-    $(document.body).on('click', '.fxb-row-settings .fxb-modal-close', function (e) {
-        e.preventDefault();
-
-        /* Update Title in Row */
-        var this_title = $(this).parents('.fxb-modal').find('input[data-row_field="row_title"]').val();
-        $(this).parents('.fxb-row-menu').find('.fxb_row_title').data('row-title', this_title).attr('data-row-title', this_title);
-
-        /* Hide Settings Modal */
-        $(this).parents('.fxb-modal').hide();
-
-        /* Hide overlay background */
-        $('.fxb-modal-overlay').hide();
-    });
-
-
-    /**
-     * ROW SETTINGS: CHANGE LAYOUT
-     * 
-     ************************************
-     */
-    $(document.body).on('change', 'select[data-row_field="layout"]', function (e) {
-        /* Get selected value */
-        var new_layout = $(this).val();
-        var new_col_num = $('option:selected', this).attr('data-col_num');
-
-        /* Get current row */
-        var row = $(this).parents('.fxb-row');
-
-        /* Update Row Data */
-        row.data('layout', new_layout); // set layout
-        row.attr('data-layout', row.data('layout')); // update data attr
-        row.data('col_num', new_col_num);
-        row.attr('data-col_num', row.data('col_num'));
-
-        /* Update hidden Input */
-        row.find('input[data-row_field="col_num"]').val(row.data('col_num')).trigger('change');
-    });
-
-
-
-    /**
-     * SORT ROW
-     * 
-     * Make row sortable.
-     * 
-     ************************************
-     */
-    // SortableJS for Rows
-    var sortableRows = new Sortable(document.getElementById('fxb'), {
-        handle: '.fxb-row-handle',
-        animation: 150,
-        onEnd: function (evt) {
-            // Call the function to update row indexes
-            $.fn.fxB_updateRowsIndex();
-        }
-    });
-
-    $(document.body).on('mousedown mouseup', '.fxb-grab', function (event) {
-        $(this).toggleClass('fxb-grabbing');
-    });
-});
+})();

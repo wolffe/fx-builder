@@ -229,7 +229,7 @@ class Functions {
             <?php /* Column Title */ ?>
             <h3 class="fxb-col-title"><span><?php echo esc_attr( $title ); ?></span></h3>
 
-            <div class="fxb-col-content"></div><!-- .fxb-col-content -->
+            <div class="fxb-col-content">{{{ (data.col_html && data.col_html['<?php echo esc_attr( $field ); ?>']) ? data.col_html['<?php echo esc_attr( $field ); ?>'] : '' }}}</div><!-- .fxb-col-content -->
 
             <div class="fxb-add-item fxb-link" style="color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>">
                 <span><?php esc_attr_e( 'Add Item', 'fx-builder' ); ?></span>
