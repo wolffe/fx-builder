@@ -24,7 +24,7 @@ namespace fx_builder\builder;
 global $fxb_admin_color;
 ?>
 <script id="tmpl-fxb-row" type="text/html">
-    <div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}">
+    <div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}" style="<# if ( data.row_bg_color ) { #>--fxb-row-bg-color: {{data.row_bg_color}};<# } #><# if ( data.row_col_padding ) { #>--fxb-row-col-padding: {{data.row_col_padding}}{{data.row_col_padding_unit}};<# } #>">
 
         <?php /* HIDDEN FIELD */ ?>
         <input type="hidden" data-row_field="id" name="_fxb_rows[{{data.id}}][id]" value="{{data.id}}" autocomplete="off">

@@ -269,6 +269,26 @@ class Builder {
             /* Enqueue CSS */
             wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', [], VERSION );
 
+            $gap      = (string) get_option( 'fxb_templates_gap', '2' );
+            $gap_unit = (string) get_option( 'fxb_templates_gap_unit', 'em' );
+            $debug    = (string) get_option( 'fxb_templates_debug', '0' );
+
+            $gap = preg_replace( '/[^0-9.]/', '', $gap );
+            $gap_unit = in_array( $gap_unit, [ 'px', 'em', 'rem' ], true ) ? $gap_unit : 'em';
+            $gap_value = $gap !== '' ? $gap . $gap_unit : '';
+
+            $css = '';
+            if ( $gap_value !== '' ) {
+                $css .= '#fxb{--fxb-template-gap:' . esc_attr( $gap_value ) . ';}';
+            }
+            if ( $debug === '1' ) {
+                $css .= '#fxb .fxb-row{outline:1px dotted #1d4ed8;outline-offset:-1px;}';
+                $css .= '#fxb .fxb-col{outline:1px dotted #dc2626;outline-offset:-1px;}';
+            }
+            if ( $css !== '' ) {
+                wp_add_inline_style( 'fx-builder', $css );
+            }
+
             // Core utilities / namespace. Depends on wp-util (wp.template()).
             wp_enqueue_script( 'fx-builder-core', URI . 'assets/fxb-core.js', [ 'wp-util' ], VERSION, true );
 

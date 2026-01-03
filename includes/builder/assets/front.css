@@ -1,11 +1,21 @@
 .fxb-row > .fxb-wrap {
     display: flex;
     flex-wrap: nowrap;
-    gap: 2em;
+    gap: var(--fxb-template-gap, 2em);
 }
 
 .fxb-row {
     width: 100%;
+    margin-bottom: var(--fxb-template-gap, 2em);
+    background-color: var(--fxb-row-bg-color, transparent);
+}
+.fxb-row:last-child {
+    margin-bottom: 0;
+}
+
+.fxb-row .fxb-col {
+    box-sizing: border-box;
+    padding: var(--fxb-row-col-padding, 0);
 }
 
 .fxb-row-layout-1 .fxb-col {

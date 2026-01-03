@@ -39,6 +39,9 @@ class Sanitize {
                 'row_column_align'    => 'start',
                 'row_column_gap'      => '',
                 'row_column_gap_unit' => '',
+                'row_bg_color'        => '',
+                'row_col_padding'     => '',
+                'row_col_padding_unit'=> 'px',
             ];
 
             $rows[ $row_id ]                    = wp_parse_args( $row_data, $default );
@@ -61,6 +64,13 @@ class Sanitize {
             $rows[ $row_id ]['row_column_align']    = sanitize_text_field( $rows[ $row_id ]['row_column_align'] );
             $rows[ $row_id ]['row_column_gap']      = sanitize_text_field( $rows[ $row_id ]['row_column_gap'] );
             $rows[ $row_id ]['row_column_gap_unit'] = sanitize_text_field( $rows[ $row_id ]['row_column_gap_unit'] );
+
+            $rows[ $row_id ]['row_bg_color'] = sanitize_hex_color( $rows[ $row_id ]['row_bg_color'] ) ?: '';
+
+            $rows[ $row_id ]['row_col_padding'] = sanitize_text_field( $rows[ $row_id ]['row_col_padding'] );
+            $rows[ $row_id ]['row_col_padding'] = preg_replace( '/[^0-9.]/', '', (string) $rows[ $row_id ]['row_col_padding'] );
+            $rows[ $row_id ]['row_col_padding_unit'] = sanitize_text_field( $rows[ $row_id ]['row_col_padding_unit'] );
+            $rows[ $row_id ]['row_col_padding_unit'] = in_array( $rows[ $row_id ]['row_col_padding_unit'], [ 'px', '%', 'em', 'rem' ], true ) ? $rows[ $row_id ]['row_col_padding_unit'] : 'px';
         }
 
         return $rows;

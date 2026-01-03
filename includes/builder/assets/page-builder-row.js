@@ -33,7 +33,10 @@
             row_html_class: '',
             row_column_align: 'start',
             row_column_gap: '',
-            row_column_gap_unit: 'px'
+            row_column_gap_unit: 'px',
+            row_bg_color: '',
+            row_col_padding: '',
+            row_col_padding_unit: 'px'
         };
     }
 
@@ -102,7 +105,7 @@
             if (modal) FXB.modal.open(modal);
         });
 
-        // Close settings (Apply).
+        // Close settings (Close).
         on(document.body, 'click', '.fxb-row-settings .fxb-modal-close', function (e, closeBtn) {
             e.preventDefault();
             const modalEl = closeBtn.closest('.fxb-modal');
@@ -115,8 +118,52 @@
                     titleBadge.dataset.rowTitle = title;
                     titleBadge.setAttribute('data-row-title', title);
                 }
+
+                // Preview: background color + column padding for this row.
+                const bg = qs('input[data-row_field="row_bg_color"]', modalEl);
+                if (bg && bg.value) rowEl.style.setProperty('--fxb-row-bg-color', bg.value);
+                else rowEl.style.removeProperty('--fxb-row-bg-color');
+
+                const pad = qs('input[data-row_field="row_col_padding"]', modalEl);
+                const padUnit = qs('select[data-row_field="row_col_padding_unit"]', modalEl);
+                const padVal = pad && pad.value ? pad.value : '';
+                const unitVal = padUnit && padUnit.value ? padUnit.value : 'px';
+                if (padVal) rowEl.style.setProperty('--fxb-row-col-padding', padVal + unitVal);
+                else rowEl.style.removeProperty('--fxb-row-col-padding');
+
                 FXB.modal.close(modalEl);
             }
+        });
+
+        // Live preview while editing row settings.
+        document.body.addEventListener('input', function (e) {
+            const t = e.target;
+            if (!(t instanceof Element)) return;
+            const modalEl = t.closest('.fxb-row-settings');
+            const rowEl = t.closest('.fxb-row');
+            if (!modalEl || !rowEl) return;
+
+            if (t.matches('input[data-row_field="row_bg_color"]')) {
+                if (t.value) rowEl.style.setProperty('--fxb-row-bg-color', t.value);
+                else rowEl.style.removeProperty('--fxb-row-bg-color');
+            }
+            if (t.matches('input[data-row_field="row_col_padding"]')) {
+                const padUnit = qs('select[data-row_field="row_col_padding_unit"]', modalEl);
+                const unitVal = padUnit && padUnit.value ? padUnit.value : 'px';
+                if (t.value) rowEl.style.setProperty('--fxb-row-col-padding', t.value + unitVal);
+                else rowEl.style.removeProperty('--fxb-row-col-padding');
+            }
+        });
+        document.body.addEventListener('change', function (e) {
+            const t = e.target;
+            if (!(t instanceof Element)) return;
+            if (!t.matches('select[data-row_field="row_col_padding_unit"]')) return;
+            const modalEl = t.closest('.fxb-row-settings');
+            const rowEl = t.closest('.fxb-row');
+            if (!modalEl || !rowEl) return;
+            const pad = qs('input[data-row_field="row_col_padding"]', modalEl);
+            if (pad && pad.value) rowEl.style.setProperty('--fxb-row-col-padding', pad.value + t.value);
+            else rowEl.style.removeProperty('--fxb-row-col-padding');
         });
 
         // Prevent Enter in settings modal from submitting the post form.

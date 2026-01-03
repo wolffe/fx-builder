@@ -59,7 +59,7 @@ class Functions {
         ?>
         <div class="<?php echo esc_attr( sanitize_title( $args['id'] ) ); ?> fxb-modal" style="display:none;width:<?php echo esc_attr( $args['width'] ); ?>;height:<?php echo esc_attr( $args['height'] ); ?>;">
             <div class="fxb-modal-container">
-                <div class="fxb-modal-title"><?php echo esc_attr( $args['title'] ); ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Apply', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
+                <div class="fxb-modal-title"><?php echo esc_attr( $args['title'] ); ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Close', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
 
                 <div class="fxb-modal-content">
                     <?php
@@ -85,6 +85,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-text">
             <label for="fxb_rows[{{data.id}}][row_title]">
                 <?php esc_html_e( 'Label', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Optional label shown in the row header (for your reference only).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about label', 'fx-builder' ); ?>">?</button>
             </label>
 
             <input autocomplete="off" id="fxb_rows[{{data.id}}][row_title]" data-row_field="row_title" name="_fxb_rows[{{data.id}}][row_title]" type="text" value="{{data.row_title}}">
@@ -94,6 +95,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select">
             <label for="fxb_rows[{{data.id}}][layout]">
                 <?php esc_html_e( 'Layout', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Select how many columns this row has and how they are sized.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about layout', 'fx-builder' ); ?>">?</button>
             </label>
 
             <select id="fxb_rows[{{data.id}}][layout]" data-row_field="layout" name="_fxb_rows[{{data.id}}][layout]" autocomplete="off">
@@ -111,6 +113,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select">
             <label for="fxb_rows[{{data.id}}][row_html_width]">
                 <?php esc_html_e( 'Width', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Default keeps the row inside the content width. Fullwidth stretches to the viewport.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about width', 'fx-builder' ); ?>">?</button>
             </label>
 
             <select id="fxb_rows[{{data.id}}][row_html_width]" data-row_field="row_html_width" name="_fxb_rows[{{data.id}}][row_html_width]" autocomplete="off">
@@ -123,6 +126,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select fxb-group-control--container">
             <label for="fxb_rows[{{data.id}}][row_html_height]">
                 <?php esc_html_e( 'Height', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Optional fixed height for the row wrapper (leave empty for auto).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about height', 'fx-builder' ); ?>">?</button>
             </label>
 
             <div>
@@ -140,6 +144,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select">
             <label for="fxb_rows[{{data.id}}][row_column_align]">
                 <?php esc_html_e( 'Vertical Align', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Align the columns vertically within the row.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about vertical align', 'fx-builder' ); ?>">?</button>
             </label>
 
             <select id="fxb_rows[{{data.id}}][row_column_align]" data-row_field="row_column_align" name="_fxb_rows[{{data.id}}][row_column_align]" autocomplete="off">
@@ -152,6 +157,7 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select fxb-group-control--container">
             <label for="fxb_rows[{{data.id}}][row_column_gap]">
                 <?php esc_html_e( 'Column Gap', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Spacing between columns in this row. (Global gap can override it.)', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about column gap', 'fx-builder' ); ?>">?</button>
             </label>
 
             <div>
@@ -165,6 +171,32 @@ class Functions {
                 </select>
             </div>
         </div>
+
+        <?php /* Row Background Color */ ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
+            <label for="fxb_rows[{{data.id}}][row_bg_color]">
+                <?php esc_html_e( 'Background Color', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Row background color (hex). Applies behind the columns.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about background color', 'fx-builder' ); ?>">?</button>
+            </label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_bg_color]" data-row_field="row_bg_color" name="_fxb_rows[{{data.id}}][row_bg_color]" type="text" value="{{data.row_bg_color}}" placeholder="#ffffff">
+        </div><!-- .fxb-modal-field -->
+
+        <?php /* Column Padding (applies to all columns in the row) */ ?>
+        <div class="fxb-modal-field fxb-modal-field-select fxb-group-control--container">
+            <label for="fxb_rows[{{data.id}}][row_col_padding]">
+                <?php esc_html_e( 'Column Padding', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Adds padding inside each column in this row (useful for “boxed” content).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about column padding', 'fx-builder' ); ?>">?</button>
+            </label>
+            <div>
+                <input autocomplete="off" inputmode="numeric" min="0" step="1" type="number" id="fxb_rows[{{data.id}}][row_col_padding]" data-row_field="row_col_padding" name="_fxb_rows[{{data.id}}][row_col_padding]" value="{{data.row_col_padding}}">
+                <select id="fxb_rows[{{data.id}}][row_col_padding_unit]" data-row_field="row_col_padding_unit" name="_fxb_rows[{{data.id}}][row_col_padding_unit]" autocomplete="off" aria-label="Select unit">
+                    <option value="px" <# if( data.row_col_padding_unit == 'px' ){ print('selected="selected"') } #>>px</option>
+                    <option value="%" <# if( data.row_col_padding_unit == '%' ){ print('selected="selected"') } #>>%</option>
+                    <option value="em" <# if( data.row_col_padding_unit == 'em' ){ print('selected="selected"') } #>>em</option>
+                    <option value="rem" <# if( data.row_col_padding_unit == 'rem' ){ print('selected="selected"') } #>>rem</option>
+                </select>
+            </div>
+        </div><!-- .fxb-modal-field -->
 
         <details class="fxb-details">
             <summary>
@@ -182,6 +214,7 @@ class Functions {
 
                     <label for="fxb_rows[{{data.id}}][row_html_id]">
                         <?php esc_html_e( 'ID (Anchor)', 'fx-builder' ); ?>
+                        <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Optional HTML id for linking to this row (e.g. from a menu).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row id', 'fx-builder' ); ?>">?</button>
                     </label>
 
                     <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_id]" data-row_field="row_html_id" name="_fxb_rows[{{data.id}}][row_html_id]" type="text" value="{{data.row_html_id}}">
@@ -192,10 +225,10 @@ class Functions {
 
                     <label for="fxb_rows[{{data.id}}][row_html_class]">
                         <?php esc_html_e( 'Additional CSS class(es)', 'fx-builder' ); ?>
+                        <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Add one or more CSS classes (separate multiple classes with spaces).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row classes', 'fx-builder' ); ?>">?</button>
                     </label>
 
                     <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_class]" data-row_field="row_html_class" name="_fxb_rows[{{data.id}}][row_html_class]" type="text" value="{{data.row_html_class}}">
-                    <br><small><?php esc_html_e( 'Separate multiple classes with spaces.', 'fx-builder' ); ?></small>
                 </div><!-- .fxb-modal-field -->
             </div><!-- .fxb-modal-content -->
         </details>
@@ -305,7 +338,11 @@ class Functions {
 
                     /* = HTML Height = */
                     $row_html_height = '';
-                    if ( isset( $rows_data[ $row_id ]['row_html_height'] ) && isset( $rows_data[ $row_id ]['row_html_height_unit'] ) ) {
+                    if (
+                        isset( $rows_data[ $row_id ]['row_html_height'], $rows_data[ $row_id ]['row_html_height_unit'] )
+                        && $rows_data[ $row_id ]['row_html_height'] !== ''
+                        && $rows_data[ $row_id ]['row_html_height_unit'] !== ''
+                    ) {
                         $row_html_height = 'height: ' . $rows_data[ $row_id ]['row_html_height'] . $rows_data[ $row_id ]['row_html_height_unit'] . ';';
                     }
 
@@ -322,11 +359,19 @@ class Functions {
 
                     $row_column_align = $rows_data[ $row_id ]['row_column_align'] ? $rows_data[ $row_id ]['row_column_align'] : 'start';
                     $row_column_gap   = $rows_data[ $row_id ]['row_column_gap'] ? $rows_data[ $row_id ]['row_column_gap'] . $rows_data[ $row_id ]['row_column_gap_unit'] : '2em';
+
+                    $row_style_vars = '';
+                    if ( ! empty( $rows_data[ $row_id ]['row_bg_color'] ) ) {
+                        $row_style_vars .= '--fxb-row-bg-color:' . esc_attr( $rows_data[ $row_id ]['row_bg_color'] ) . ';';
+                    }
+                    if ( ! empty( $rows_data[ $row_id ]['row_col_padding'] ) && ! empty( $rows_data[ $row_id ]['row_col_padding_unit'] ) ) {
+                        $row_style_vars .= '--fxb-row-col-padding:' . esc_attr( $rows_data[ $row_id ]['row_col_padding'] . $rows_data[ $row_id ]['row_col_padding_unit'] ) . ';';
+                    }
                     ?>
 
-                    <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>">
+                    <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>"<?php echo $row_style_vars ? ' style="' . esc_attr( $row_style_vars ) . '"' : ''; ?>>
 
-                        <div class="fxb-wrap" style="gap: <?php echo esc_attr( $row_column_gap ); ?>; align-items: <?php echo esc_attr( $row_column_align ); ?>; <?php echo esc_attr( $row_html_height ); ?>">
+                        <div class="fxb-wrap" style="gap: var(--fxb-template-gap, <?php echo esc_attr( $row_column_gap ); ?>); align-items: <?php echo esc_attr( $row_column_align ); ?>; <?php echo esc_attr( $row_html_height ); ?>">
 
                             <?php
                             $cols = range( 1, $rows_data[ $row_id ]['col_num'] );

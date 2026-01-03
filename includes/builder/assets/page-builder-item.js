@@ -172,7 +172,7 @@
         if (textareaEl) openEditorForTextarea(textareaEl);
     });
 
-    // Close editor modal (Apply)
+    // Close editor modal (Close)
     on(document.body, 'click', '.fxb-editor .fxb-modal-close', function (e) {
         e.preventDefault();
         closeEditorAndApply();
