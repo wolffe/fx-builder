@@ -6,8 +6,6 @@ function fxb_menu_links() {
 add_action( 'admin_menu', 'fxb_menu_links', 10 );
 
 function fxb_build_admin_page() {
-    global $wpdb;
-
     $tab     = ( filter_has_var( INPUT_GET, 'tab' ) ) ? filter_input( INPUT_GET, 'tab' ) : 'dashboard';
     $section = 'admin.php?page=fx_builder&amp;tab=';
 
@@ -18,7 +16,6 @@ function fxb_build_admin_page() {
         <h2 class="nav-tab-wrapper nav-tab-wrapper-fxb">
             <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
-            <a href="<?php echo esc_attr( $section ); ?>templates" class="nav-tab <?php echo $tab === 'templates' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Templates', 'fx-builder' ); ?></a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
@@ -249,81 +246,6 @@ function fxb_build_admin_page() {
 
                         <tr>
                             <th scope="row"><input type="submit" name="save_settings" class="button button-primary" value="<?php esc_html_e( 'Save Changes', 'fx-builder' ); ?>"></th>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-            <?php
-        } elseif ( $tab === 'templates' ) {
-            ?>
-            <h2><?php esc_html_e( 'Templates', 'fx-builder' ); ?></h2>
-
-            <?php
-            if ( isset( $_POST['save_templates'] ) ) {
-                if ( ! isset( $_POST['fxb_templates_nonce'] ) || ! check_admin_referer( 'save_fxb_templates_action', 'fxb_templates_nonce' ) ) {
-                    wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'fx-builder' ) );
-                }
-
-                $gap      = isset( $_POST['fxb_templates_gap'] ) ? sanitize_text_field( wp_unslash( $_POST['fxb_templates_gap'] ) ) : '';
-                $gap_unit = isset( $_POST['fxb_templates_gap_unit'] ) ? sanitize_text_field( wp_unslash( $_POST['fxb_templates_gap_unit'] ) ) : 'em';
-
-                // Basic normalization: allow digits and decimal point only.
-                $gap = preg_replace( '/[^0-9.]/', '', (string) $gap );
-
-                $valid_units = [ 'px', 'em', 'rem' ];
-                if ( ! in_array( $gap_unit, $valid_units, true ) ) {
-                    $gap_unit = 'em';
-                }
-
-                update_option( 'fxb_templates_gap', $gap );
-                update_option( 'fxb_templates_gap_unit', $gap_unit );
-                update_option( 'fxb_templates_debug', isset( $_POST['fxb_templates_debug'] ) ? '1' : '0' );
-
-                echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Templates settings updated successfully!', 'fx-builder' ) . '</p></div>';
-            }
-
-            $current_gap      = get_option( 'fxb_templates_gap', '2' );
-            $current_gap_unit = get_option( 'fxb_templates_gap_unit', 'em' );
-            $current_debug    = get_option( 'fxb_templates_debug', '0' );
-            ?>
-
-            <form method="post">
-                <?php wp_nonce_field( 'save_fxb_templates_action', 'fxb_templates_nonce' ); ?>
-
-                <table class="form-table">
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <label for="fxb_templates_gap"><?php esc_html_e( 'Global column/row gap', 'fx-builder' ); ?></label>
-                            </th>
-                            <td>
-                                <div style="display:flex;gap:8px;align-items:center;max-width:360px;">
-                                    <input type="number" step="0.1" min="0" id="fxb_templates_gap" name="fxb_templates_gap" value="<?php echo esc_attr( $current_gap ); ?>" class="small-text">
-                                    <select name="fxb_templates_gap_unit" aria-label="<?php esc_attr_e( 'Gap unit', 'fx-builder' ); ?>">
-                                        <option value="px" <?php selected( $current_gap_unit, 'px' ); ?>>px</option>
-                                        <option value="em" <?php selected( $current_gap_unit, 'em' ); ?>>em</option>
-                                        <option value="rem" <?php selected( $current_gap_unit, 'rem' ); ?>>rem</option>
-                                    </select>
-                                </div>
-                                <p class="description"><?php esc_html_e( 'Used for spacing between columns and between rows (front-end + builder UI).', 'fx-builder' ); ?></p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row">
-                                <label for="fxb_templates_debug"><?php esc_html_e( 'Debug mode', 'fx-builder' ); ?></label>
-                            </th>
-                            <td>
-                                <label>
-                                    <input type="checkbox" id="fxb_templates_debug" name="fxb_templates_debug" value="1" <?php checked( $current_debug, '1' ); ?>>
-                                    <?php esc_html_e( 'Show outlines: blue around rows, red around columns', 'fx-builder' ); ?>
-                                </label>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th scope="row"><input type="submit" name="save_templates" class="button button-primary" value="<?php esc_html_e( 'Save Changes', 'fx-builder' ); ?>"></th>
                             <td></td>
                         </tr>
                     </tbody>
