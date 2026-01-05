@@ -124,13 +124,6 @@ class Custom_CSS {
      * @since 1.0.0
      */
     public function print_css() {
-        echo '<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-            document.documentElement.style.setProperty("--scrollbarWidth", `${scrollbarWidth}px`);
-        });
-        </script>';
-
         if ( ! is_singular() ) {
             return;
         }

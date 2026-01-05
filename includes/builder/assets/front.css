@@ -75,11 +75,11 @@
 .fxb-fullwidth {
     box-sizing: border-box;
     position: relative;
-    width: calc(100vw - var(--scrollbarWidth, 0));
+    width: 100vw;
     max-width: initial;
     left: 50%;
-    margin-left: calc(-50vw + var(--scrollbarWidth, 0) / 2);
-    margin-right: calc(-50vw + var(--scrollbarWidth, 0) / 2);
+    margin-left: -50vw;
+    margin-right: -50vw;
 }
 
 .fxb-wrap img {
