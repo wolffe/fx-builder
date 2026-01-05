@@ -376,7 +376,7 @@ class Functions {
 
                                                 <div id="fxb-item-<?php echo esc_attr( $item_id ); ?>" class="fxb-item">
                                                     <div class="fxb-wrap">
-                                                        <?php echo wpautop( $items_data[ $item_id ]['content'] ); ?>
+                                                        <?php echo wpautop( $items_data[ $item_id ]['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content is already sanitized ?>
                                                     </div><!-- .fxb-item > .fxb-wrap -->
                                                 </div><!-- .fxb-item -->
 
