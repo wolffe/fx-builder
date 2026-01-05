@@ -38,64 +38,6 @@
     direction: ltr;
 }
 
-/**
- * Details Element
- */
-.fxb-details {
-    width: 100%;
-    background: #f2f2f2;
-    border-radius: 3px;
-    position: relative;
-}
-.fxb-details .summary-title {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.fxb-details:hover {
-    cursor: pointer;
-}
-.fxb-details .summary-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-
-    border-top: 1px solid #ffffff;
-    cursor: default;
-    padding: 1em;
-    line-height: 1.5;
-}
-.fxb-details summary,
-#poststuff .fxb-details summary {
-    list-style: none;
-    font-weight: 500;
-    padding: 1em;
-}
-.fxb-details summary:focus {
-    outline: none;
-}
-.fxb-details summary:hover .summary-chevron-up svg {
-    opacity: 1;
-}
-.fxb-details .summary-chevron-up svg {
-    opacity: 0.5;
-}
-.fxb-details .summary-chevron-up,
-.fxb-details .summary-chevron-down {
-    pointer-events: none;
-    position: absolute;
-    top: 0.75em;
-    right: 1em;
-}
-.fxb-details .summary-chevron-up svg,
-.fxb-details .summary-chevron-down svg {
-    display: block;
-}
-.fxb-details summary::-webkit-details-marker {
-    display: none;
-}
-
 /* Media Queries */
 @media only screen and (max-width: 600px) {
     .fxb-nav-css {
