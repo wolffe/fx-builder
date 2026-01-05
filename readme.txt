@@ -2,9 +2,9 @@
 Contributors: butterflymedia
 Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
-Tested up to: 2.5.0
+Tested up to: 2.6.0
 Requires PHP: 7.0
-Stable tag: 1.4.4
+Stable tag: 1.5.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
