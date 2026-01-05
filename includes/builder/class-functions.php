@@ -198,40 +198,29 @@ class Functions {
             </div>
         </div><!-- .fxb-modal-field -->
 
-        <details class="fxb-details">
-            <summary>
-                <span class="summary-title">
-                    <?php esc_html_e( 'Advanced', 'fx-builder' ); ?>
-                </span>
-                <div class="summary-chevron-up">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </div>
-            </summary>
+        <hr style="margin: 1em 0;">
 
-            <div class="summary-content">
-                <?php /* ID (Anchor) */ ?>
-                <div class="fxb-modal-field fxb-modal-field-text">
+        <?php /* ID (Anchor) */ ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
 
-                    <label for="fxb_rows[{{data.id}}][row_html_id]">
-                        <?php esc_html_e( 'ID (Anchor)', 'fx-builder' ); ?>
-                        <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Optional HTML id for linking to this row (e.g. from a menu).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row id', 'fx-builder' ); ?>">?</button>
-                    </label>
+            <label for="fxb_rows[{{data.id}}][row_html_id]">
+                <?php esc_html_e( 'ID (Anchor)', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Optional HTML id for linking to this row (e.g. from a menu).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row id', 'fx-builder' ); ?>">?</button>
+            </label>
 
-                    <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_id]" data-row_field="row_html_id" name="_fxb_rows[{{data.id}}][row_html_id]" type="text" value="{{data.row_html_id}}">
-                </div><!-- .fxb-modal-field -->
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_id]" data-row_field="row_html_id" name="_fxb_rows[{{data.id}}][row_html_id]" type="text" value="{{data.row_html_id}}">
+        </div><!-- .fxb-modal-field -->
 
-                <?php /* Additional CSS class(es) */ ?>
-                <div class="fxb-modal-field fxb-modal-field-text">
+        <?php /* Additional CSS class(es) */ ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
 
-                    <label for="fxb_rows[{{data.id}}][row_html_class]">
-                        <?php esc_html_e( 'Additional CSS class(es)', 'fx-builder' ); ?>
-                        <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Add one or more CSS classes (separate multiple classes with spaces).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row classes', 'fx-builder' ); ?>">?</button>
-                    </label>
+            <label for="fxb_rows[{{data.id}}][row_html_class]">
+                <?php esc_html_e( 'Additional CSS class(es)', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Add one or more CSS classes (separate multiple classes with spaces).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about row classes', 'fx-builder' ); ?>">?</button>
+            </label>
 
-                    <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_class]" data-row_field="row_html_class" name="_fxb_rows[{{data.id}}][row_html_class]" type="text" value="{{data.row_html_class}}">
-                </div><!-- .fxb-modal-field -->
-            </div><!-- .fxb-modal-content -->
-        </details>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_html_class]" data-row_field="row_html_class" name="_fxb_rows[{{data.id}}][row_html_class]" type="text" value="{{data.row_html_class}}">
+        </div><!-- .fxb-modal-field -->
         <?php
     }
 
@@ -387,7 +376,7 @@ class Functions {
 
                                                 <div id="fxb-item-<?php echo esc_attr( $item_id ); ?>" class="fxb-item">
                                                     <div class="fxb-wrap">
-                                                        <?php echo wp_kses_post( wpautop( wp_kses_post( $items_data[ $item_id ]['content'] ) ) ); ?>
+                                                        <?php echo wpautop( $items_data[ $item_id ]['content'] ); ?>
                                                     </div><!-- .fxb-item > .fxb-wrap -->
                                                 </div><!-- .fxb-item -->
 
