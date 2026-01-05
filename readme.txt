@@ -16,6 +16,18 @@ A simple page builder plugin. The one you can actually use.
 
 == Changelog ==
 
+= 1.5.0 =
+* Fix modal content scrolling when settings exceed modal height
+* Remove jQuery dependency (replace with vanilla JavaScript for better performance)
+* Add new Cover shortcode for creating hero sections with background images, overlays, and customizable styling
+* Add new Buttons shortcode for creating styled button groups with customizable colors, borders, and alignment
+* Add row background color setting in Row Settings modal
+* Add column padding setting in Row Settings modal (useful for boxed content)
+* Add contextual help tooltips for all Row Settings fields
+* Change modal close button text from "Apply" to "Close" for better clarity
+* Remove redundant content processing
+* Update JavaScript to modern syntax and best practices
+
 = 1.4.4 =
 * Fix compatibility issue with PHP 8.5 (props @xxsimoxx)
 
