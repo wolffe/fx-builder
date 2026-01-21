@@ -268,6 +268,7 @@ class Builder {
 
             /* Enqueue CSS */
             wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', [], VERSION );
+            wp_enqueue_style( 'fx-builder-akar-icons', URI . 'assets/fonts/akar-icons/akar-icons.min.css', [], VERSION );
 
             // Core utilities / namespace. Depends on wp-util (wp.template()).
             wp_enqueue_script( 'fx-builder-core', URI . 'assets/fxb-core.js', [ 'wp-util' ], VERSION, true );
