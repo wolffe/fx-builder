@@ -456,20 +456,35 @@
 .rtl .fxb-modal-title {
     padding: 10px 10px 10px 36px;
 }
-.fxb-modal-close {
+.fxb-modal-buttons {
     position: absolute;
     top: 0;
     right: 0;
+    display: flex;
+    gap: 0;
+}
+.rtl .fxb-modal-buttons {
+    right: auto;
+    left: 0;
+}
+.fxb-modal-close,
+.fxb-modal-cancel {
     display: block;
     padding: 10px;
     margin: 0;
     border: none;
     cursor: pointer;
-    color: #fff;
+    color: #ffffff;
+    font-weight: 400;
 }
-.rtl .fxb-modal-close {
-    right: auto;
-    left: 0;
+.fxb-modal-cancel {
+    background-color: #666;
+}
+.fxb-modal-close {
+    background-color: #2cdd76;
+}
+.fxb-modal-cancel:hover {
+    background-color: #555;
 }
 .fxb-modal-close:hover {
     color: #fff;

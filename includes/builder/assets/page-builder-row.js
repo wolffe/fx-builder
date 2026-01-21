@@ -51,6 +51,8 @@
             new Sortable(fxb, {
                 handle: '.fxb-row-handle',
                 animation: 150,
+                filter: null,
+                draggable: '.fxb-row',
                 onEnd: function () {
                     reconcileRowsOnly();
                 }
@@ -96,16 +98,42 @@
             if (stateInput) stateInput.value = state;
         });
 
+        let originalRowSettings = {};
+
+        function saveRowSettingsState(modalEl) {
+            const fields = ['row_title', 'layout', 'row_html_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
+            originalRowSettings = {};
+            fields.forEach(function (field) {
+                const el = qs('[data-row_field="' + field + '"]', modalEl);
+                if (el) originalRowSettings[field] = el.value || '';
+            });
+        }
+
+        function restoreRowSettingsState(modalEl, rowEl) {
+            Object.keys(originalRowSettings).forEach(function (field) {
+                const el = qs('[data-row_field="' + field + '"]', modalEl);
+                if (el) el.value = originalRowSettings[field] || '';
+            });
+            if (rowEl) {
+                rowEl.style.removeProperty('--fxb-row-bg-color');
+                rowEl.style.removeProperty('--fxb-row-col-padding');
+            }
+            originalRowSettings = {};
+        }
+
         // Open row settings.
         on(document.body, 'click', '.fxb-settings', function (e, settingsBtn) {
             e.preventDefault();
             const dataTarget = settingsBtn.getAttribute('data-target');
             const container = settingsBtn.parentElement;
             const modal = dataTarget && container ? qs(dataTarget, container) : null;
-            if (modal) FXB.modal.open(modal);
+            if (modal) {
+                saveRowSettingsState(modal);
+                FXB.modal.open(modal);
+            }
         });
 
-        // Close settings (Close).
+        // Close settings (Save & Close).
         on(document.body, 'click', '.fxb-row-settings .fxb-modal-close', function (e, closeBtn) {
             e.preventDefault();
             const modalEl = closeBtn.closest('.fxb-modal');
@@ -131,6 +159,18 @@
                 if (padVal) rowEl.style.setProperty('--fxb-row-col-padding', padVal + unitVal);
                 else rowEl.style.removeProperty('--fxb-row-col-padding');
 
+                FXB.modal.close(modalEl);
+                originalRowSettings = {};
+            }
+        });
+
+        // Cancel row settings.
+        on(document.body, 'click', '.fxb-row-settings .fxb-modal-cancel', function (e, cancelBtn) {
+            e.preventDefault();
+            const modalEl = cancelBtn.closest('.fxb-modal');
+            const rowEl = cancelBtn.closest('.fxb-row');
+            if (modalEl) {
+                restoreRowSettingsState(modalEl, rowEl);
                 FXB.modal.close(modalEl);
             }
         });

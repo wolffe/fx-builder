@@ -18,14 +18,17 @@
         });
     }
 
+    let originalContent = '';
+
     function openEditorForTextarea(textareaEl) {
         const modal = qs('.fxb-editor');
         if (!modal) return;
 
         textareaEl.classList.add('fxb_editing_active');
+        originalContent = textareaEl.value || '';
 
         const editorId = 'fxb_editor';
-        FXB.editor.setModalContent(editorId, textareaEl.value || '');
+        FXB.editor.setModalContent(editorId, originalContent);
 
         FXB.modal.open(modal);
     }
@@ -44,6 +47,18 @@
         }
 
         FXB.modal.close(qs('.fxb-editor'));
+        originalContent = '';
+    }
+
+    function closeEditorAndCancel() {
+        const itemTextarea = qs('.fxb_editing_active');
+        if (itemTextarea) {
+            itemTextarea.value = originalContent;
+            itemTextarea.classList.remove('fxb_editing_active');
+        }
+
+        FXB.modal.close(qs('.fxb-editor'));
+        originalContent = '';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -172,10 +187,16 @@
         if (textareaEl) openEditorForTextarea(textareaEl);
     });
 
-    // Close editor modal (Close)
+    // Close editor modal (Save & Close)
     on(document.body, 'click', '.fxb-editor .fxb-modal-close', function (e) {
         e.preventDefault();
         closeEditorAndApply();
+    });
+
+    // Cancel editor modal
+    on(document.body, 'click', '.fxb-editor .fxb-modal-cancel', function (e) {
+        e.preventDefault();
+        closeEditorAndCancel();
     });
 })();
 
