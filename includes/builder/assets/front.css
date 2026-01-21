@@ -3,6 +3,9 @@
     flex-wrap: nowrap;
     gap: var(--fxb-template-gap, 2em);
 }
+.fxb-row > .fxb-wrap[style*="height:"] {
+    overflow: hidden;
+}
 
 .fxb-row {
     width: 100%;

@@ -59,7 +59,7 @@ class Functions {
         ?>
         <div class="<?php echo esc_attr( sanitize_title( $args['id'] ) ); ?> fxb-modal" style="display:none;width:<?php echo esc_attr( $args['width'] ); ?>;height:<?php echo esc_attr( $args['height'] ); ?>;">
             <div class="fxb-modal-container">
-                <div class="fxb-modal-title"><?php echo esc_attr( $args['title'] ); ?><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><?php esc_attr_e( 'Close', 'fx-builder' ); ?></span></div><!-- .fxb-modal-title -->
+                <div class="fxb-modal-title"><?php echo esc_attr( $args['title'] ); ?><span class="fxb-modal-buttons"><span class="fxb-modal-cancel"><i class="ai-x-small"></i> <?php esc_attr_e( 'Cancel', 'fx-builder' ); ?></span><span class="fxb-modal-close" style="background-color:<?php echo esc_attr( $fxb_admin_color['2'] ); ?>"><i class="ai-double-check"></i> <?php esc_attr_e( 'Save & Close', 'fx-builder' ); ?></span></span></div><!-- .fxb-modal-title -->
 
                 <div class="fxb-modal-content">
                     <?php
@@ -332,7 +332,7 @@ class Functions {
                         && $rows_data[ $row_id ]['row_html_height'] !== ''
                         && $rows_data[ $row_id ]['row_html_height_unit'] !== ''
                     ) {
-                        $row_html_height = 'height: ' . $rows_data[ $row_id ]['row_html_height'] . $rows_data[ $row_id ]['row_html_height_unit'] . ';';
+                        $row_html_height = 'height: ' . $rows_data[ $row_id ]['row_html_height'] . $rows_data[ $row_id ]['row_html_height_unit'] . '; overflow: hidden;';
                     }
 
                     $row_html_class[] = $row_html_width;
