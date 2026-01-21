@@ -445,6 +445,8 @@
                 handle: '.fxb-item-handle',
                 animation: 150,
                 group: 'shared',
+                filter: null,
+                draggable: '.fxb-item',
                 onEnd: function (evt) {
                     const col = evt.from ? evt.from.closest('.fxb-col') : null;
                     if (col) FXB.items.updateItemsIndex(col);
