@@ -25,6 +25,11 @@ function fxb_check_for_plugin_update( $checked_data ) {
     }
 
     if ( is_object( $response ) && ! empty( $response ) ) { // Feed the update data into WP updater
+        // Normalize requires_cp header for ClassicPress compatibility
+        // If the API returns 'requires' but not 'requires_cp', copy it as a fallback
+        if ( isset( $response->requires ) && ! isset( $response->requires_cp ) ) {
+            $response->requires_cp = $response->requires;
+        }
         $checked_data->response[ $plugin_slug . '/' . $plugin_slug . '.php' ] = $response;
     }
 
@@ -64,6 +69,12 @@ function fxb_plugin_api_call( $def, $action, $args ) {
 
         if ( $res === false ) {
             $res = new WP_Error( 'plugins_api_failed', __( 'An unknown error occurred', 'fx-builder' ), $request['body'] );
+        } elseif ( is_object( $res ) ) {
+            // Normalize requires_cp header for ClassicPress compatibility
+            // If the API returns 'requires' but not 'requires_cp', copy it as a fallback
+            if ( isset( $res->requires ) && ! isset( $res->requires_cp ) ) {
+                $res->requires_cp = $res->requires;
+            }
         }
     }
 
