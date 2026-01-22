@@ -2,6 +2,7 @@
 /**
  * Plugin Name: FX Builder
  * Plugin URI: https://getbutterfly.com/classicpress-plugins/fx-builder/
+ * Update URI: https://getbutterfly.com
  * Description: A simple page builder plugin. The one you can actually use.
  * Version: 1.5.1
  * Requires PHP: 8.0
