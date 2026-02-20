@@ -106,6 +106,20 @@ function fxb_build_admin_page() {
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="2">
+                                <p class="description" style="margin-top:0;"><strong><?php esc_html_e( 'Frequently used widths (for reference)', 'fx-builder' ); ?></strong></p>
+                                <ul class="description" style="margin:0.5em 0 0 1.5em;list-style:disc;">
+                                    <li><strong>320 px</strong> — <?php esc_html_e( 'Small phones (portrait)', 'fx-builder' ); ?></li>
+                                    <li><strong>375 px</strong> — <?php esc_html_e( 'iPhone SE, many phones', 'fx-builder' ); ?></li>
+                                    <li><strong>480 px</strong> — <?php esc_html_e( 'Large phones, small phablets (default Small)', 'fx-builder' ); ?></li>
+                                    <li><strong>768 px</strong> — <?php esc_html_e( 'Tablets portrait, large phones landscape (default Medium)', 'fx-builder' ); ?></li>
+                                    <li><strong>1024 px</strong> — <?php esc_html_e( 'Tablets landscape, small laptops', 'fx-builder' ); ?></li>
+                                    <li><strong>1280 px</strong> — <?php esc_html_e( 'Laptops, small desktops', 'fx-builder' ); ?></li>
+                                    <li><strong>1920 px</strong> — <?php esc_html_e( 'Full HD desktops', 'fx-builder' ); ?></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row"><input type="submit" name="save_design" class="button button-primary" value="<?php esc_html_e( 'Save Changes', 'fx-builder' ); ?>"></th>
                             <td></td>
                         </tr>
