@@ -16,6 +16,7 @@ function fxb_build_admin_page() {
         <h2 class="nav-tab-wrapper nav-tab-wrapper-fxb">
             <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
+            <a href="<?php echo esc_attr( $section ); ?>design" class="nav-tab <?php echo $tab === 'design' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Design', 'fx-builder' ); ?></a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
@@ -45,6 +46,97 @@ function fxb_build_admin_page() {
 
             <hr>
             <p>&copy;<?php echo esc_attr( gmdate( 'Y' ) ); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
+            <?php
+        } elseif ( $tab === 'design' ) {
+            $small_val  = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_small', 480 ) ) ) );
+            $medium_val = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_medium', 768 ) ) ) );
+            ?>
+            <h2><?php esc_html_e( 'Design', 'fx-builder' ); ?></h2>
+
+            <?php
+            if ( isset( $_POST['save_design'] ) ) {
+                if ( ! isset( $_POST['fxb_design_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['fxb_design_nonce'] ) ), 'save_fxb_design_action' ) ) {
+                    wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'fx-builder' ) );
+                }
+                $small  = isset( $_POST['fxb_breakpoint_small'] ) ? absint( $_POST['fxb_breakpoint_small'] ) : 480;
+                $medium = isset( $_POST['fxb_breakpoint_medium'] ) ? absint( $_POST['fxb_breakpoint_medium'] ) : 768;
+                $small  = max( 320, min( 1920, $small ) );
+                $medium = max( 320, min( 1920, $medium ) );
+                update_option( 'fxb_breakpoint_small', $small );
+                update_option( 'fxb_breakpoint_medium', $medium );
+                echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Design settings updated successfully!', 'fx-builder' ) . '</p></div>';
+                $small_val  = $small;
+                $medium_val = $medium;
+            }
+            ?>
+            <form method="post">
+                <?php wp_nonce_field( 'save_fxb_design_action', 'fxb_design_nonce' ); ?>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <th scope="row" colspan="2">
+                                <h3><?php esc_html_e( 'Responsive Breakpoints', 'fx-builder' ); ?></h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="fxb_breakpoint_small"><?php esc_html_e( 'Small Screen', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <p>
+                                    <input type="range" id="fxb_breakpoint_small_range" min="320" max="1920" step="1" value="<?php echo esc_attr( (string) $small_val ); ?>" aria-describedby="fxb_breakpoint_small_desc">
+                                    <input type="number" id="fxb_breakpoint_small" name="fxb_breakpoint_small" value="<?php echo esc_attr( (string) $small_val ); ?>" min="320" max="1920" step="1" class="small-text"> px
+                                </p>
+                                <p class="description" id="fxb_breakpoint_small_desc"><?php esc_html_e( 'Controls when the small screen options and visibility should take effect. In pixels.', 'fx-builder' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="fxb_breakpoint_medium"><?php esc_html_e( 'Medium Screen', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <p>
+                                    <input type="range" id="fxb_breakpoint_medium_range" min="320" max="1920" step="1" value="<?php echo esc_attr( (string) $medium_val ); ?>" aria-describedby="fxb_breakpoint_medium_desc">
+                                    <input type="number" id="fxb_breakpoint_medium" name="fxb_breakpoint_medium" value="<?php echo esc_attr( (string) $medium_val ); ?>" min="320" max="1920" step="1" class="small-text"> px
+                                </p>
+                                <p class="description" id="fxb_breakpoint_medium_desc"><?php esc_html_e( 'Controls when the medium screen options and visibility should take effect. In pixels.', 'fx-builder' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="fxb_breakpoint_large_display"><?php esc_html_e( 'Large Screen', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <input type="text" id="fxb_breakpoint_large_display" value="<?php echo esc_attr( (string) ( $medium_val + 1 ) ); ?> px" class="small-text" readonly>
+                                <p class="description"><?php esc_html_e( 'Any screen larger than that which is defined as the medium screen will be counted as a large screen.', 'fx-builder' ); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="submit" name="save_design" class="button button-primary" value="<?php esc_html_e( 'Save Changes', 'fx-builder' ); ?>"></th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <script>
+            (function(){
+                var minBp = 320, maxBp = 1920;
+                var smallNum = document.getElementById('fxb_breakpoint_small');
+                var smallRange = document.getElementById('fxb_breakpoint_small_range');
+                var medNum = document.getElementById('fxb_breakpoint_medium');
+                var medRange = document.getElementById('fxb_breakpoint_medium_range');
+                var largeDisplay = document.getElementById('fxb_breakpoint_large_display');
+                function clamp(v) { return Math.max(minBp, Math.min(maxBp, parseInt(v, 10) || 768)); }
+                function updateLarge() {
+                    if (largeDisplay && medNum) {
+                        var v = clamp(medNum.value);
+                        largeDisplay.value = (v + 1) + ' px';
+                    }
+                }
+                if (smallNum && smallRange) {
+                    smallRange.addEventListener('input', function(){ smallNum.value = smallRange.value; });
+                    smallNum.addEventListener('change', function(){ smallRange.value = clamp(smallNum.value); smallNum.value = smallRange.value; });
+                }
+                if (medNum && medRange) {
+                    medRange.addEventListener('input', function(){ medNum.value = medRange.value; updateLarge(); });
+                    medNum.addEventListener('change', function(){ medRange.value = clamp(medNum.value); medNum.value = medRange.value; updateLarge(); });
+                }
+            })();
+            </script>
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>

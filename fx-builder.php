@@ -48,4 +48,8 @@ function fx_builder_init() {
     require_once $path . 'includes/setup.php';
     require_once $path . 'includes/editor.php';
     require_once $path . 'includes/settings/settings.php';
+
+    if ( is_admin() ) {
+        require_once $path . 'includes/list-columns.php';
+    }
 }

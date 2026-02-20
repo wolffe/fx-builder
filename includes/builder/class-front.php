@@ -67,6 +67,16 @@ class Front {
     public function scripts() {
         if ( apply_filters( 'fx_builder_css', true ) ) {
             wp_enqueue_style( 'fx-builder', URI . 'assets/front.css', [], VERSION );
+            $medium = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_medium', 768 ) ) ) );
+            $small  = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_small', 480 ) ) ) );
+            $inline = sprintf(
+                '@media screen and (max-width:%dpx){.fxb-container .fxb-row>.fxb-wrap{grid-template-columns:1fr 1fr}}',
+                $medium
+            ) . sprintf(
+                '@media screen and (max-width:%dpx){.fxb-container .fxb-row>.fxb-wrap{grid-template-columns:1fr}}',
+                $small
+            );
+            wp_add_inline_style( 'fx-builder', $inline );
         }
     }
 
