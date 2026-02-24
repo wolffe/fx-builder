@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         FXB.modal.close('.fxb-custom-css');
     });
+    on(body, 'click', '.fxb-custom-css .fxb-modal-cancel', function (e) {
+        e.preventDefault();
+        FXB.modal.close('.fxb-custom-css');
+    });
 
     // no resize handler needed
 });

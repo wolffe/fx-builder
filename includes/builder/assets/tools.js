@@ -128,6 +128,10 @@
         e.preventDefault();
         closeTools();
     });
+    on(document.body, 'click', '.fxb-tools .fxb-modal-cancel', function (e) {
+        e.preventDefault();
+        closeTools();
+    });
     on(document.body, 'click', '.fxb-tools-nav-bar', function (e, tabLink) {
         e.preventDefault();
         const href = tabLink.getAttribute('href');

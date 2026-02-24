@@ -2,10 +2,11 @@
     font-size: 14px;
     float: right;
     text-decoration: none;
-    padding: 5px 10px;
+    padding: 0.334em 0.667em;
     background: #f5f5f5;
-    border: 1px solid #ccc;
-    color: #555;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    color: #555555;
     font-weight: 400;
     display: none;
 }
@@ -20,13 +21,6 @@
 .fxb-nav-css:focus {
     color: #222;
     background: #eee;
-}
-.fxb-nav-css span:before {
-    content: "\f540";
-    font-family: "dashicons";
-    vertical-align: top;
-    margin-right: 5px;
-    -webkit-font-smoothing: antialiased;
 }
 .fxb-custom-css-textarea {
     width: 100%;
@@ -43,11 +37,5 @@
     .fxb-nav-css {
         padding: 8px 10px;
         margin: 10px -14px 0 0;
-    }
-}
-@media only screen and (max-width: 390px) {
-    .fxb-nav-css span:before {
-        content: "";
-        margin-right: 0;
     }
 }

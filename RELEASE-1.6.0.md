@@ -1,8 +1,8 @@
-# FX Builder 1.6.0 — CSS Grid Layout System
+# FX Builder 1.6.0 Release Notes
 
 ## Overview
 
-Version 1.6.0 introduces a **CSS Grid–based layout system** for all FX Builder rows and columns. The front-end no longer uses Flexbox for the main grid; instead, each row is a Grid container whose columns are defined by simple, predictable template rules. This improves reliability (no more 50% wrapping issues), keeps the markup the same, and makes responsive behavior easier to control from **Design → Responsive Breakpoints**.
+Version 1.6.0 adds a **CSS Grid layout system**, a **Design** tab with configurable **Responsive Breakpoints**, an **FX Builder column** on post list screens, and several compatibility and UX improvements. The front-end no longer uses Flexbox for the main grid; each row is a Grid container whose columns are defined by template rules. Breakpoints are configurable from **FX Builder → Design → Responsive Breakpoints**, with no hardcoded pixel values in the stylesheet.
 
 ---
 
@@ -65,6 +65,29 @@ No pixel values are hardcoded in the main stylesheet; the actual breakpoint numb
 
 ---
 
+## Design Tab and Responsive Breakpoints
+
+- A new **Design** tab in FX Builder settings hosts **Responsive Breakpoints**.
+- **Small Screen** (default 480 px) and **Medium Screen** (default 768 px) set when the layout switches to two columns and then one column. **Large Screen** is read-only and shows Medium + 1.
+- Each breakpoint has a **range slider** and a number input; they stay in sync. If you drag Small past Medium, Medium (and thus Large) increases so the order stays Small < Medium < Large. If you lower Medium below Small, Small is reduced to Medium − 1.
+- A short **“Frequently used widths”** reference list (480, 768, 1024, 1280, 1920 px) with typical device contexts is shown below the fields.
+
+---
+
+## Other Changes in 1.6.0
+
+**List column**
+- On the Posts/Pages (and other supported post types) list screen, an **FX Builder** column indicates which items were built with FX Builder (icon + label, linking to edit). Similar to Elementor’s list column.
+
+**Update URI and ClassicPress**
+- The plugin header now supports **Update URI** (e.g. `https://getbutterfly.com`) so ClassicPress and custom updaters can use the correct update source.
+- The updater normalizes API responses: if the update server returns `requires` but not `requires_cp`, the plugin sets `requires_cp` from that value so ClassicPress can show compatibility correctly.
+
+**Modals**
+- **Tools** and **Custom CSS** modals: the **Cancel** button now closes the modal (previously only “Save & Close” did).
+
+---
+
 ## Summary
 
-In 1.6.0, FX Builder’s front-end layout is **CSS Grid**: one grid container per row, `grid-template-columns` for each layout, and two responsive overrides (medium → two columns, small → one column) driven by your Design breakpoint settings. The same row/column structure and options you already use are unchanged; only the underlying layout mechanism has moved from Flexbox to Grid for more predictable, maintainable behavior.
+In 1.6.0, the front-end layout uses **CSS Grid**: one grid container per row, `grid-template-columns` per layout, and two responsive overrides (medium → two columns, small → one column) from Design breakpoint options. The **Design** tab lets you set and link Small/Medium breakpoints with sliders and a device reference. A new **FX Builder** column appears on post list screens, and Update URI plus `requires_cp` normalization improve ClassicPress and custom update behavior. Cancel on Tools and Custom CSS modals now closes the modal.

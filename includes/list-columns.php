@@ -3,7 +3,7 @@
  * FX Builder list table column for post types that support the builder.
  * Shows whether a post was built with FX Builder (like Elementor).
  *
- * @since 1.5.1
+ * @since 1.6.0
  */
 if ( ! defined( 'WPINC' ) ) {
     die;

@@ -85,7 +85,7 @@ function fxb_build_admin_page() {
                                     <input type="range" id="fxb_breakpoint_small_range" min="320" max="1920" step="1" value="<?php echo esc_attr( (string) $small_val ); ?>" aria-describedby="fxb_breakpoint_small_desc">
                                     <input type="number" id="fxb_breakpoint_small" name="fxb_breakpoint_small" value="<?php echo esc_attr( (string) $small_val ); ?>" min="320" max="1920" step="1" class="small-text"> px
                                 </p>
-                                <p class="description" id="fxb_breakpoint_small_desc"><?php esc_html_e( 'Controls when the small screen options and visibility should take effect. In pixels.', 'fx-builder' ); ?></p>
+                                <p class="description" id="fxb_breakpoint_small_desc"><?php esc_html_e( 'Controls when the small screen options and visibility should take effect. In pixels. Default is 480.', 'fx-builder' ); ?></p>
                             </td>
                         </tr>
                         <tr>
@@ -95,13 +95,13 @@ function fxb_build_admin_page() {
                                     <input type="range" id="fxb_breakpoint_medium_range" min="320" max="1920" step="1" value="<?php echo esc_attr( (string) $medium_val ); ?>" aria-describedby="fxb_breakpoint_medium_desc">
                                     <input type="number" id="fxb_breakpoint_medium" name="fxb_breakpoint_medium" value="<?php echo esc_attr( (string) $medium_val ); ?>" min="320" max="1920" step="1" class="small-text"> px
                                 </p>
-                                <p class="description" id="fxb_breakpoint_medium_desc"><?php esc_html_e( 'Controls when the medium screen options and visibility should take effect. In pixels.', 'fx-builder' ); ?></p>
+                                <p class="description" id="fxb_breakpoint_medium_desc"><?php esc_html_e( 'Controls when the medium screen options and visibility should take effect. In pixels. Default is 768.', 'fx-builder' ); ?></p>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="fxb_breakpoint_large_display"><?php esc_html_e( 'Large Screen', 'fx-builder' ); ?></label></th>
                             <td>
-                                <input type="text" id="fxb_breakpoint_large_display" value="<?php echo esc_attr( (string) ( $medium_val + 1 ) ); ?> px" class="small-text" readonly>
+                                <input type="text" id="fxb_breakpoint_large_display" value="<?php echo esc_attr( (string) ( $medium_val + 1 ) ); ?>" class="small-text" readonly> px
                                 <p class="description"><?php esc_html_e( 'Any screen larger than that which is defined as the medium screen will be counted as a large screen.', 'fx-builder' ); ?></p>
                             </td>
                         </tr>
@@ -109,8 +109,6 @@ function fxb_build_admin_page() {
                             <td colspan="2">
                                 <p class="description" style="margin-top:0;"><strong><?php esc_html_e( 'Frequently used widths (for reference)', 'fx-builder' ); ?></strong></p>
                                 <ul class="description" style="margin:0.5em 0 0 1.5em;list-style:disc;">
-                                    <li><strong>320 px</strong> — <?php esc_html_e( 'Small phones (portrait)', 'fx-builder' ); ?></li>
-                                    <li><strong>375 px</strong> — <?php esc_html_e( 'iPhone SE, many phones', 'fx-builder' ); ?></li>
                                     <li><strong>480 px</strong> — <?php esc_html_e( 'Large phones, small phablets (default Small)', 'fx-builder' ); ?></li>
                                     <li><strong>768 px</strong> — <?php esc_html_e( 'Tablets portrait, large phones landscape (default Medium)', 'fx-builder' ); ?></li>
                                     <li><strong>1024 px</strong> — <?php esc_html_e( 'Tablets landscape, small laptops', 'fx-builder' ); ?></li>
@@ -134,20 +132,50 @@ function fxb_build_admin_page() {
                 var medNum = document.getElementById('fxb_breakpoint_medium');
                 var medRange = document.getElementById('fxb_breakpoint_medium_range');
                 var largeDisplay = document.getElementById('fxb_breakpoint_large_display');
-                function clamp(v) { return Math.max(minBp, Math.min(maxBp, parseInt(v, 10) || 768)); }
+                function clamp(v) { return Math.max(minBp, Math.min(maxBp, parseInt(v, 10) || 0)); }
+                function getSmall() { return smallNum ? clamp(smallNum.value) : minBp; }
+                function getMed() { return medNum ? clamp(medNum.value) : maxBp; }
                 function updateLarge() {
-                    if (largeDisplay && medNum) {
-                        var v = clamp(medNum.value);
-                        largeDisplay.value = (v + 1) + ' px';
-                    }
+                    if (largeDisplay && medNum) { largeDisplay.value = getMed() + 1; }
+                }
+                function setMedium(val) {
+                    val = clamp(val);
+                    if (medNum) medNum.value = val;
+                    if (medRange) medRange.value = val;
+                    updateLarge();
+                }
+                function setSmall(val) {
+                    val = clamp(val);
+                    if (smallNum) smallNum.value = val;
+                    if (smallRange) smallRange.value = val;
                 }
                 if (smallNum && smallRange) {
-                    smallRange.addEventListener('input', function(){ smallNum.value = smallRange.value; });
-                    smallNum.addEventListener('change', function(){ smallRange.value = clamp(smallNum.value); smallNum.value = smallRange.value; });
+                    smallRange.addEventListener('input', function() {
+                        smallNum.value = smallRange.value;
+                        var s = getSmall(), m = getMed();
+                        if (s >= m) setMedium(s + 1);
+                    });
+                    smallNum.addEventListener('change', function() {
+                        smallRange.value = clamp(smallNum.value);
+                        smallNum.value = smallRange.value;
+                        var s = getSmall(), m = getMed();
+                        if (s >= m) setMedium(s + 1);
+                    });
                 }
                 if (medNum && medRange) {
-                    medRange.addEventListener('input', function(){ medNum.value = medRange.value; updateLarge(); });
-                    medNum.addEventListener('change', function(){ medRange.value = clamp(medNum.value); medNum.value = medRange.value; updateLarge(); });
+                    medRange.addEventListener('input', function() {
+                        medNum.value = medRange.value;
+                        var s = getSmall(), m = getMed();
+                        if (m <= s) setSmall(m - 1);
+                        updateLarge();
+                    });
+                    medNum.addEventListener('change', function() {
+                        medRange.value = clamp(medNum.value);
+                        medNum.value = medRange.value;
+                        var s = getSmall(), m = getMed();
+                        if (m <= s) setSmall(m - 1);
+                        updateLarge();
+                    });
                 }
             })();
             </script>

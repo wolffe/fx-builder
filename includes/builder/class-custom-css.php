@@ -47,7 +47,7 @@ class Custom_CSS {
     public function add_css_control( $post ) {
         $post_id = $post->ID;
         ?>
-        <a href="#" id="fxb-nav-css" class="fxb-nav-css"><span><?php esc_attr_e( 'CSS', 'fx-builder' ); ?></span></a>
+        <a href="#" id="fxb-nav-css" class="fxb-nav-css"><i class="ai-pencil"></i> <?php esc_attr_e( 'CSS', 'fx-builder' ); ?></a>
         <?php wp_nonce_field( __FILE__, 'fx_builder_custom_css_nonce' ); ?>
         <?php
         Functions::render_settings(

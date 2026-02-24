@@ -45,7 +45,7 @@ class Tools {
     public function add_tools_control( $post ) {
         $post_id = $post->ID;
         ?>
-        <a href="#" id="fxb-nav-tools" class="fxb-nav-tools"><span><?php esc_attr_e( 'Tools', 'fx-builder' ); ?></span></a>
+        <a href="#" id="fxb-nav-tools" class="fxb-nav-tools"><i class="ai-arrow-right-left"></i> <?php esc_attr_e( 'Tools', 'fx-builder' ); ?></a>
         <?php
         Functions::render_settings(
             [
