@@ -425,19 +425,20 @@ add_shortcode(
         }
 
         $style_parts = [
-            '--fxb-sticky-bg:' . $bg_color,
-            '--fxb-sticky-color:' . $text_color,
-            '--fxb-sticky-padding:' . $padding,
-            '--fxb-sticky-rotate:' . $rotate,
-            '--fxb-sticky-radius:' . $border_radius,
-            '--fxb-sticky-aspect:' . $aspect_ratio,
-            'background:' . $bg_color,
-            'color:' . $text_color,
-            'padding:' . $padding,
-            'border-radius:' . $border_radius,
-            'transform:rotate(' . $rotate . ')',
-            'aspect-ratio:' . $aspect_ratio,
-        ];
+    'box-sizing:border-box',           // <-- ensure padding is counted
+    '--fxb-sticky-bg:' . $bg_color,
+    '--fxb-sticky-color:' . $text_color,
+    '--fxb-sticky-padding:' . $padding,
+    '--fxb-sticky-rotate:' . $rotate,
+    '--fxb-sticky-radius:' . $border_radius,
+    '--fxb-sticky-aspect:' . $aspect_ratio,
+    'background:' . $bg_color,
+    'color:' . $text_color,
+    'padding:' . $padding,
+    'border-radius:' . $border_radius,
+    'transform:rotate(' . $rotate . ')',
+    'aspect-ratio:' . $aspect_ratio,
+];
 
         $classes = 'fxb-sticky';
         if ( $has_shadow ) {
