@@ -355,6 +355,7 @@ add_shortcode(
          * - rotate: Rotation (e.g. -2deg, default: -2deg)
          * - border-radius: Border radius (default: 6px)
          * - shadow: Enable shadow (0/1, default: 1)
+         * - aspect-ratio: Aspect ratio (e.g. 1/1, default: 1/1)
          */
         $atts = is_array( $atts ) ? $atts : [];
 
@@ -363,6 +364,7 @@ add_shortcode(
             'bg_color'      => 'bg-color',
             'text_color'    => 'text-color',
             'border_radius' => 'border-radius',
+            'aspect_ratio'  => 'aspect-ratio',
         ];
         foreach ( $alias_map as $from => $to ) {
             if ( isset( $atts[ $from ] ) && ! isset( $atts[ $to ] ) ) {
@@ -378,6 +380,7 @@ add_shortcode(
                 'rotate'        => '-2deg',
                 'border-radius' => '6px',
                 'shadow'        => '1',
+                'aspect-ratio'  => '1/1',
             ],
             $atts,
             'sticky'
@@ -401,6 +404,11 @@ add_shortcode(
             $border_radius = '6px';
         }
 
+        $aspect_ratio = trim( (string) $atts['aspect-ratio'] );
+        if ( ! preg_match( '/^\d+\/\d+$/', $aspect_ratio ) ) {
+            $aspect_ratio = '1/1';
+        }
+
         $shadow = strtolower( trim( (string) $atts['shadow'] ) );
         $has_shadow = in_array( $shadow, [ '1', 'true', 'yes', 'on' ], true );
 
@@ -422,11 +430,13 @@ add_shortcode(
             '--fxb-sticky-padding:' . $padding,
             '--fxb-sticky-rotate:' . $rotate,
             '--fxb-sticky-radius:' . $border_radius,
+            '--fxb-sticky-aspect:' . $aspect_ratio,
             'background:' . $bg_color,
             'color:' . $text_color,
             'padding:' . $padding,
             'border-radius:' . $border_radius,
             'transform:rotate(' . $rotate . ')',
+            'aspect-ratio:' . $aspect_ratio,
         ];
 
         $classes = 'fxb-sticky';
@@ -444,3 +454,4 @@ add_shortcode(
         );
     }
 );
+
