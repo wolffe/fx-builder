@@ -5,7 +5,7 @@
  * Update URI: https://getbutterfly.com
  * Description: A simple page builder plugin. The one you can actually use.
  * Version: 1.6.0
- * Requires PHP: 8.0
+ * Requires PHP: 7.4
  * Requires CP: 2.0
  * Author: Ciprian Popescu
  * Author URI: https://getbutterfly.com/
