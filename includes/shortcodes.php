@@ -342,4 +342,117 @@ add_shortcode(
     }
 );
 
+add_shortcode(
+    'sticky',
+    function ( $atts, $content = null ) {
+        static $did_enqueue_css = false;
+
+        /**
+         * [sticky] shortcode parameters:
+         * - bg-color: Background color (hex, default: #fff3cd)
+         * - text-color: Text color (hex, default: #212529)
+         * - padding: Inner padding (default: 1.5em)
+         * - rotate: Rotation (e.g. -2deg, default: -2deg)
+         * - border-radius: Border radius (default: 6px)
+         * - shadow: Enable shadow (0/1, default: 1)
+         * - aspect-ratio: Aspect ratio (e.g. 1/1, default: 1/1)
+         */
+        $atts = is_array( $atts ) ? $atts : [];
+
+        // Back-compat aliases
+        $alias_map = [
+            'bg_color'      => 'bg-color',
+            'text_color'    => 'text-color',
+            'border_radius' => 'border-radius',
+            'aspect_ratio'  => 'aspect-ratio',
+        ];
+        foreach ( $alias_map as $from => $to ) {
+            if ( isset( $atts[ $from ] ) && ! isset( $atts[ $to ] ) ) {
+                $atts[ $to ] = $atts[ $from ];
+            }
+        }
+
+        $atts = shortcode_atts(
+            [
+                'bg-color'      => '#fff3cd',
+                'text-color'    => '#212529',
+                'padding'       => '1.5em',
+                'rotate'        => '-2deg',
+                'border-radius' => '6px',
+                'shadow'        => '1',
+                'aspect-ratio'  => '1/1',
+            ],
+            $atts,
+            'sticky'
+        );
+
+        $bg_color = sanitize_hex_color( trim( (string) $atts['bg-color'] ) ) ?: '#fff3cd';
+        $text_color = sanitize_hex_color( trim( (string) $atts['text-color'] ) ) ?: '#212529';
+
+        $padding = trim( (string) $atts['padding'] );
+        if ( ! preg_match( '/^(0|\d+(\.\d+)?(px|%|em|rem|vh|vw))( (0|\d+(\.\d+)?(px|%|em|rem|vh|vw))){0,3}$/', $padding ) ) {
+            $padding = '1.5em';
+        }
+
+        $rotate = trim( (string) $atts['rotate'] );
+        if ( ! preg_match( '/^-?\d+(\.\d+)?deg$/', $rotate ) ) {
+            $rotate = '-2deg';
+        }
+
+        $border_radius = trim( (string) $atts['border-radius'] );
+        if ( $border_radius !== '' && ! preg_match( '/^\d+(\.\d+)?(px|%|em|rem)$/', $border_radius ) ) {
+            $border_radius = '6px';
+        }
+
+        $aspect_ratio = trim( (string) $atts['aspect-ratio'] );
+        if ( ! preg_match( '/^\d+\/\d+$/', $aspect_ratio ) ) {
+            $aspect_ratio = '1/1';
+        }
+
+        $shadow = strtolower( trim( (string) $atts['shadow'] ) );
+        $has_shadow = in_array( $shadow, [ '1', 'true', 'yes', 'on' ], true );
+
+        if ( ! $did_enqueue_css ) {
+            wp_register_style( 'fxb-sticky-shortcode', false, [], FX_BUILDER_VERSION );
+            wp_enqueue_style( 'fxb-sticky-shortcode' );
+            wp_add_inline_style(
+                'fxb-sticky-shortcode',
+                '.fxb-sticky{position:relative;display:block}' .
+                '.fxb-sticky__inner{display:block}' .
+                '.fxb-sticky--shadow{box-shadow:0 10px 20px rgba(0,0,0,.15)}'
+            );
+            $did_enqueue_css = true;
+        }
+
+        $style_parts = [
+    'box-sizing:border-box',           // <-- ensure padding is counted
+    '--fxb-sticky-bg:' . $bg_color,
+    '--fxb-sticky-color:' . $text_color,
+    '--fxb-sticky-padding:' . $padding,
+    '--fxb-sticky-rotate:' . $rotate,
+    '--fxb-sticky-radius:' . $border_radius,
+    '--fxb-sticky-aspect:' . $aspect_ratio,
+    'background:' . $bg_color,
+    'color:' . $text_color,
+    'padding:' . $padding,
+    'border-radius:' . $border_radius,
+    'transform:rotate(' . $rotate . ')',
+    'aspect-ratio:' . $aspect_ratio,
+];
+
+        $classes = 'fxb-sticky';
+        if ( $has_shadow ) {
+            $classes .= ' fxb-sticky--shadow';
+        }
+
+        return sprintf(
+            '<div class="%s" style="%s">' .
+                '<div class="fxb-sticky__inner">%s</div>' .
+            '</div>',
+            esc_attr( $classes ),
+            esc_attr( implode( ';', $style_parts ) . ';' ),
+            do_shortcode( shortcode_unautop( $content ?? '' ) )
+        );
+    }
+);
 
