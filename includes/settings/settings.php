@@ -341,7 +341,7 @@ function fxb_build_admin_page() {
 																title: '<?php echo esc_js( __( 'Remove all selected fonts', 'fx-builder' ) ); ?>'
 															}
 														},
-														placeholder: '<?php echo esc_js( __( 'Search Google Fonts\u2026', 'fx-builder' ) ); ?>'
+														placeholder: '<?php echo esc_js( __( 'Search Google Fonts', 'fx-builder' ) ); ?>'
 													});
 												}
 											})
@@ -373,7 +373,7 @@ function fxb_build_admin_page() {
 									document.addEventListener('DOMContentLoaded', function () {
 										if (typeof TomSelect !== 'undefined') {
 											var ts = new TomSelect('#fxb-font-disabled', {
-												placeholder: '<?php echo esc_js( __( 'Enter an API key above and save to unlock Google Fonts\u2026', 'fx-builder' ) ); ?>'
+												placeholder: '<?php echo esc_js( __( 'Enter an API key above and save to unlock Google Fonts', 'fx-builder' ) ); ?>'
 											});
 											ts.disable();
 										}
@@ -429,7 +429,7 @@ function fxb_build_admin_page() {
 															title: '<?php echo esc_js( __( 'Remove all selected fonts', 'fx-builder' ) ); ?>'
 														}
 													},
-													placeholder: '<?php echo esc_js( __( 'Search Bunny Fonts\u2026', 'fx-builder' ) ); ?>'
+													placeholder: '<?php echo esc_js( __( 'Search Bunny Fonts', 'fx-builder' ) ); ?>'
 												});
 											}
 										})
