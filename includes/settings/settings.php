@@ -277,16 +277,7 @@ function fxb_build_admin_page() {
 								<div class="notice notice-info inline" style="margin:0 0 0.5em;padding:10px 14px;">
 									<p>
 										<strong><?php esc_html_e( 'Google Fonts vs. Bunny Fonts', 'fx-builder' ); ?></strong><br>
-										<?php
-										esc_html_e(
-											'Both services offer the same large catalogue of web fonts and can be used simultaneously. ' .
-											'Google Fonts loads assets from Google\'s servers: this requires an API key and may raise GDPR compliance concerns for EU-based sites, ' .
-											'because visitor IP addresses are transmitted to Google\'s infrastructure. ' .
-											'Bunny Fonts is a fully GDPR-compliant, privacy-friendly drop-in replacement: ' .
-											'it serves the identical font catalogue from EU-based servers with no tracking, no data sharing, and no API key required.',
-											'fx-builder'
-										);
-										?>
+										<?php esc_html_e( 'Both services offer the same large catalogue of web fonts and can be used simultaneously. Google Fonts loads assets from Google\'s servers: this requires an API key and may raise GDPR compliance concerns for EU-based sites, because visitor IP addresses are transmitted to Google\'s infrastructure. Bunny Fonts is a fully GDPR-compliant, privacy-friendly drop-in replacement: it serves the identical font catalogue from EU-based servers with no tracking, no data sharing, and no API key required.', 'fx-builder' ); ?>
 									</p>
 								</div>
 							</td>
