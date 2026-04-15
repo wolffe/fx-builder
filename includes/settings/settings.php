@@ -5,6 +5,48 @@ function fxb_menu_links() {
 
 add_action( 'admin_menu', 'fxb_menu_links', 10 );
 
+add_action( 'admin_enqueue_scripts', 'fxb_settings_enqueue_tail_select', 20 );
+
+/**
+ * Load tail.select for Google Fonts and Bunny Fonts on the Settings tab.
+ */
+function fxb_settings_enqueue_tail_select( $hook ) {
+    if ( $hook !== 'toplevel_page_fx_builder' ) {
+        return;
+    }
+    $tab = filter_has_var( INPUT_GET, 'tab' ) ? filter_input( INPUT_GET, 'tab' ) : '';
+    if ( $tab !== 'settings' ) {
+        return;
+    }
+
+    $base_uri = FX_BUILDER_URI . 'includes/builder/assets/tail.select/';
+    wp_enqueue_style( 'fxb-tail-select', $base_uri . 'css/tail.select.css', [], FX_BUILDER_VERSION );
+    wp_enqueue_script( 'fxb-tail-select', $base_uri . 'js/tail.select.js', [], FX_BUILDER_VERSION, true );
+    wp_enqueue_script(
+        'fxb-settings-fonts',
+        FX_BUILDER_URI . 'includes/settings/settings-fonts.js',
+        [ 'fxb-tail-select' ],
+        FX_BUILDER_VERSION,
+        true
+    );
+
+    wp_localize_script(
+        'fxb-settings-fonts',
+        'fxbSettingsFonts',
+        [
+            'googleApiKey' => (string) get_option( 'fxb_google_fonts_api' ),
+            'googleFonts'  => (array) get_option( 'fxb_google_fonts' ),
+            'bunnyFonts'   => (array) get_option( 'fxb_bunny_fonts' ),
+            'strings'      => [
+                'placeholderGoogle' => __( 'Select Google Font(s)...', 'fx-builder' ),
+                'placeholderBunny'  => __( 'Select Bunny Font(s)...', 'fx-builder' ),
+                'all'               => __( 'All', 'fx-builder' ),
+                'none'              => __( 'None', 'fx-builder' ),
+            ],
+        ]
+    );
+}
+
 function fxb_build_admin_page() {
     $tab     = ( filter_has_var( INPUT_GET, 'tab' ) ) ? filter_input( INPUT_GET, 'tab' ) : 'dashboard';
     $section = 'admin.php?page=fx_builder&amp;tab=';
@@ -215,8 +257,19 @@ function fxb_build_admin_page() {
 
                 update_option( 'fxb_google_fonts_api', sanitize_text_field( wp_unslash( $_POST['fxb_google_fonts_api'] ?? '' ) ) );
 
-                update_option( 'fxb_google_fonts', isset( $_POST['fxb_google_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_google_fonts'] ) ) : [] );
-                update_option( 'fxb_bunny_fonts', isset( $_POST['fxb_bunny_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_bunny_fonts'] ) ) : [] );
+                $google_fonts_post = isset( $_POST['fxb_google_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_google_fonts'] ) ) : [];
+                $google_fonts_post = array_values( array_filter( $google_fonts_post, 'strlen' ) );
+                $google_fonts_post = array_values( array_filter( $google_fonts_post, static function ( $v ) {
+                    return $v !== '0';
+                } ) );
+                update_option( 'fxb_google_fonts', $google_fonts_post );
+
+                $bunny_fonts_post = isset( $_POST['fxb_bunny_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_bunny_fonts'] ) ) : [];
+                $bunny_fonts_post = array_values( array_filter( $bunny_fonts_post, 'strlen' ) );
+                $bunny_fonts_post = array_values( array_filter( $bunny_fonts_post, static function ( $v ) {
+                    return $v !== '0';
+                } ) );
+                update_option( 'fxb_bunny_fonts', $bunny_fonts_post );
 
                 delete_option( 'fxb_font_provider' );
 
@@ -271,6 +324,17 @@ function fxb_build_admin_page() {
                             </th>
                         </tr>
                         <tr>
+                            <th scope="row"></th>
+                            <td>
+                                <div class="notice notice-info inline" style="margin:0 0 0.5em;padding:10px 14px;">
+									<p>
+                                        <strong><?php esc_html_e( 'Google Fonts vs Bunny Fonts', 'fx-builder' ); ?></strong><br>
+										<?php esc_html_e( 'Both services offer the same large catalogue of web fonts and can be used simultaneously. Google Fonts loads assets from Google\'s servers: this requires an API key and may raise GDPR compliance concerns for EU-based sites, because visitor IP addresses are transmitted to Google\'s infrastructure. Bunny Fonts is a fully GDPR-compliant, privacy-friendly drop-in replacement: it serves the identical font catalogue from EU-based servers with no tracking, no data sharing, and no API key required.', 'fx-builder' ); ?>
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row"><label><?php esc_html_e( 'Google Fonts API', 'fx-builder' ); ?></label></th>
                             <td>
                                 <p>
@@ -286,45 +350,14 @@ function fxb_build_admin_page() {
                                     <small><?php esc_html_e( 'Note that the following weights will be automatically loaded: 300, 400, 500 and 700.', 'fx-builder' ); ?></small>
                                 </p>
 
-                                <?php if ( (string) get_option( 'fxb_google_fonts_api' ) !== '' ) { ?>
-                                    <script>
-                                    let currentFXBFontOption = <?php echo wp_json_encode( (array) get_option( 'fxb_google_fonts' ) ); ?>;
-
-                                    fetch('https://www.googleapis.com/webfonts/v1/webfonts?key=<?php echo esc_attr( get_option( 'fxb_google_fonts_api' ) ); ?>')
-                                        .then(response => {
-                                            return response.json();
-                                        })
-                                        .then(data => {
-                                            const fontArray = Object.keys(data).map((key) => [key, data[key]]);
-
-                                            fontArray[1][1].forEach(function (fontFamily) {
-                                                var fxbFontSelector = document.getElementById('fxb-font'),
-                                                    fontOption1 = document.createElement('option');
-
-                                                fontOption1.value = fontFamily.family;
-                                                fontOption1.text = fontFamily.family + ' (' + fontFamily.category + ')';
-
-                                                fxbFontSelector.add(fontOption1);
-
-                                                // Check if the current font family is in the selected array of fonts
-                                                if (currentFXBFontOption.includes(fontFamily.family)) {
-                                                    fontOption1.selected = true; // Select the option if it matches one of the saved fonts
-                                                }
-                                            });
-                                        })
-                                        .catch(err => {
-                                            // error
-                                        });
-                                    </script>
-                                <?php } else { ?>
-                                    <p><?php esc_html_e( 'You need a Google Fonts API key to view Google Fonts.', 'fx-builder' ); ?> <a href="<?php echo esc_url( admin_url( 'admin.php?page=saturn-settings&tab=tools' ) ); ?>"><?php esc_html_e( 'Get a key.', 'fx-builder' ); ?></a></p>
+                                <?php if ( (string) get_option( 'fxb_google_fonts_api' ) === '' ) { ?>
+                                    <p><?php esc_html_e( 'You need a Google Fonts API key to load the Google Fonts list.', 'fx-builder' ); ?> <a href="https://developers.google.com/fonts/docs/developer_api"><?php esc_html_e( 'Get a key.', 'fx-builder' ); ?></a></p>
                                 <?php } ?>
 
                                 <p>
-                                    <select name="fxb_google_fonts[]" id="fxb-font" size="8" multiple>
+                                    <select name="fxb_google_fonts[]" id="fxb-font" class="fxb-font-tail-select" size="8" multiple<?php echo (string) get_option( 'fxb_google_fonts_api' ) !== '' ? ' data-fxb-google-dynamic="1"' : ''; ?>>
                                         <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
-                                    <br><small><?php esc_html_e( 'Hold CTRL to select multiple font families.', 'fx-builder' ); ?></small>
                                 </p>
                             </td>
                         </tr>
@@ -336,44 +369,10 @@ function fxb_build_admin_page() {
                                     <small><?php esc_html_e( 'Note that the following weights will be automatically loaded: 300, 400, 500 and 700.', 'fx-builder' ); ?></small>
                                 </p>
 
-                                <script>
-                                let currentFXBBunnyFontOption = <?php echo wp_json_encode( (array) get_option( 'fxb_bunny_fonts' ) ); ?>;
-
-                                // Fetch the font data from the Bunny Fonts API
-                                fetch('https://fonts.bunny.net/list')
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        Object.entries(data).forEach(([key, fontData]) => {
-                                            const fontFamily = fontData.familyName;  // Get the family name
-                                            const fontCategory = fontData.category;  // Get the category
-                                            const fontStyles = fontData.styles;      // Get the styles (e.g., normal, italic)
-                                            const fontWeights = fontData.weights;    // Get the weights (e.g., 400, 700)
-
-                                            const fxbFontSelector = document.getElementById('fxb-bunny-fonts'),
-                                                fontOption = document.createElement('option');
-
-                                            fontOption.value = fontFamily;
-                                            fontOption.text = `${fontFamily} (${fontCategory})`;
-
-                                            // Add the option to the select element
-                                            fxbFontSelector.add(fontOption);
-
-                                            // Check if the current font family is in the selected array of fonts
-                                            if (currentFXBBunnyFontOption.includes(fontFamily)) {
-                                                fontOption.selected = true; // Select the option if it matches one of the saved fonts
-                                            }
-                                        });
-                                    })
-                                    .catch(error => {
-                                        console.error('Error fetching font data:', error);
-                                    });
-                                </script>
-
                                 <p>
-                                    <select name="fxb_bunny_fonts[]" id="fxb-bunny-fonts" size="8" multiple>
+                                    <select name="fxb_bunny_fonts[]" id="fxb-bunny-fonts" class="fxb-font-tail-select" size="8" multiple>
                                         <option value="0"><?php esc_html_e( 'Select one or more fonts...', 'fx-builder' ); ?></option>
                                     </select>
-                                    <br><small><?php esc_html_e( 'Hold CTRL to select multiple font families.', 'fx-builder' ); ?></small>
                                 </p>
                             </td>
                         </tr>
