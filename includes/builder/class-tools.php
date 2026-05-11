@@ -4,7 +4,7 @@ use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-Tools::get_instance();
+new Tools();
 
 /**
  * Tools: Export Import
@@ -12,20 +12,6 @@ Tools::get_instance();
  */
 class Tools {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Add CSS Button */
@@ -88,7 +74,7 @@ class Tools {
     public function admin_scripts( $hook_suffix ) {
         global $post_type;
         if ( ! in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
-            return false;
+            return;
         }
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 

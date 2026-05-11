@@ -3,7 +3,7 @@ namespace fx_builder\builder;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-Revisions::get_instance();
+new Revisions();
 
 /**
  * Stuff
@@ -11,20 +11,6 @@ Revisions::get_instance();
  */
 class Revisions {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Save FX Builder Revision */
@@ -34,42 +20,34 @@ class Revisions {
         add_action( 'wp_restore_post_revision', [ $this, 'restore_revision' ], 10, 2 );
     }
 
+    const REVISION_META_KEYS = [
+        '_fxb_db_version',
+        '_fxb_row_ids',
+        '_fxb_rows',
+        '_fxb_items',
+        '_fxb_custom_css',
+    ];
+
     /**
      * Save Revision
      * Simply Clone To Revision If FX Builder Data Exists In Post
      * @link https://johnblackbourn.com/post-meta-revisions-wordpress
      */
     public function save_revision( $post_id, $post ) {
-
         $parent_id = wp_is_post_revision( $post_id );
+        if ( ! $parent_id ) {
+            return;
+        }
 
-        if ( $parent_id ) {
+        $active = get_post_meta( $parent_id, '_fxb_active', true );
+        if ( $active ) {
+            add_metadata( 'post', $post_id, '_fxb_active', $active );
+        }
 
-            $parent     = get_post( $parent_id );
-            $active     = get_post_meta( $parent->ID, '_fxb_active', true );
-            $db_version = get_post_meta( $parent->ID, '_fxb_db_version', true );
-            $row_ids    = get_post_meta( $parent->ID, '_fxb_row_ids', true );
-            $rows       = get_post_meta( $parent->ID, '_fxb_rows', true );
-            $items      = get_post_meta( $parent->ID, '_fxb_items', true );
-            $css        = get_post_meta( $parent->ID, '_fxb_custom_css', true );
-
-            if ( $active ) {
-                add_metadata( 'post', $post_id, '_fxb_active', $active );
-            }
-            if ( false !== $db_version ) {
-                add_metadata( 'post', $post_id, '_fxb_db_version', $db_version );
-            }
-            if ( false !== $row_ids ) {
-                add_metadata( 'post', $post_id, '_fxb_row_ids', $row_ids );
-            }
-            if ( false !== $rows ) {
-                add_metadata( 'post', $post_id, '_fxb_rows', $rows );
-            }
-            if ( false !== $items ) {
-                add_metadata( 'post', $post_id, '_fxb_items', $items );
-            }
-            if ( false !== $css ) {
-                add_metadata( 'post', $post_id, '_fxb_custom_css', $css );
+        foreach ( self::REVISION_META_KEYS as $key ) {
+            $value = get_post_meta( $parent_id, $key, true );
+            if ( false !== $value ) {
+                add_metadata( 'post', $post_id, $key, $value );
             }
         }
     }
@@ -80,49 +58,20 @@ class Revisions {
      * @link https://johnblackbourn.com/post-meta-revisions-wordpress
      */
     public function restore_revision( $post_id, $revision_id ) {
-
-        $revision   = get_post( $revision_id );
-        $active     = get_metadata( 'post', $revision->ID, '_fxb_active', true );
-        $db_version = get_metadata( 'post', $revision->ID, '_fxb_db_version', true );
-        $row_ids    = get_metadata( 'post', $revision->ID, '_fxb_row_ids', true );
-        $rows       = get_metadata( 'post', $revision->ID, '_fxb_rows', true );
-        $items      = get_metadata( 'post', $revision->ID, '_fxb_items', true );
-        $css        = get_metadata( 'post', $revision->ID, '_fxb_custom_css', true );
-
+        $active = get_metadata( 'post', $revision_id, '_fxb_active', true );
         if ( $active ) {
             update_post_meta( $post_id, '_fxb_active', $active );
         } else {
             delete_post_meta( $post_id, '_fxb_active' );
         }
 
-        if ( false !== $db_version ) {
-            update_post_meta( $post_id, '_fxb_db_version', $db_version );
-        } else {
-            delete_post_meta( $post_id, '_fxb_db_version' );
-        }
-
-        if ( false !== $row_ids ) {
-            update_post_meta( $post_id, '_fxb_row_ids', $row_ids );
-        } else {
-            delete_post_meta( $post_id, '_fxb_row_ids' );
-        }
-
-        if ( false !== $rows ) {
-            update_post_meta( $post_id, '_fxb_rows', $rows );
-        } else {
-            delete_post_meta( $post_id, '_fxb_rows' );
-        }
-
-        if ( false !== $items ) {
-            update_post_meta( $post_id, '_fxb_items', $items );
-        } else {
-            delete_post_meta( $post_id, '_fxb_items' );
-        }
-
-        if ( false !== $css ) {
-            update_post_meta( $post_id, '_fxb_custom_css', $css );
-        } else {
-            delete_post_meta( $post_id, '_fxb_custom_css' );
+        foreach ( self::REVISION_META_KEYS as $key ) {
+            $value = get_metadata( 'post', $revision_id, $key, true );
+            if ( false !== $value ) {
+                update_post_meta( $post_id, $key, $value );
+            } else {
+                delete_post_meta( $post_id, $key );
+            }
         }
     }
 }

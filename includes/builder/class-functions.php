@@ -136,7 +136,7 @@ class Functions {
                     <option value="%" <# if( data.row_html_height_unit == '%' ){ print('selected="selected"') } #>>%</option>
                     <option value="em" <# if( data.row_html_height_unit == 'em' ){ print('selected="selected"') } #>>em</option>
                     <option value="rem" <# if( data.row_html_height_unit == 'rem' ){ print('selected="selected"') } #>>rem</option>
-                    <option value="vw" <# if( data.row_html_height_unit == 'vh' ){ print('selected="selected"') } #>>vh</option>
+                    <option value="vh" <# if( data.row_html_height_unit == 'vh' ){ print('selected="selected"') } #>>vh</option>
                 </select>
             </div>
         </div><!-- .fxb-modal-field -->
@@ -406,17 +406,15 @@ class Functions {
      * Get Col Number from Layout
      */
     public static function get_col_num( $layout ) {
-        if ( '1' == $layout ) {
-            return 1;
-        } elseif ( in_array( $layout, [ '12_12', '13_23', '23_13' ] ) ) {
-            return 2;
-        } elseif ( '13_13_13' == $layout ) {
-            return 3;
-        } elseif ( '14_14_14_14' == $layout ) {
-            return 4;
-        } elseif ( '15_15_15_15_15' == $layout ) {
-            return 5;
-        }
-        return 1; // fallback
+        $map = [
+            '1'              => 1,
+            '12_12'          => 2,
+            '13_23'          => 2,
+            '23_13'          => 2,
+            '13_13_13'       => 3,
+            '14_14_14_14'    => 4,
+            '15_15_15_15_15' => 5,
+        ];
+        return $map[ $layout ] ?? 1;
     }
 } // end class

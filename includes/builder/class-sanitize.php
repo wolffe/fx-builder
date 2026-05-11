@@ -112,27 +112,30 @@ class Sanitize {
     ------------------------------------------ */
 
     /**
-     * Sanitize State
+     * Return $input if it appears in $valid, otherwise $default.
      */
-    public static function state( $input ) {
-        $default = 'open';
-        $valid   = [ 'open', 'close' ];
-        if ( in_array( $input, $valid ) ) {
-            return $input;
-        }
-        return $default;
+    private static function enum_or_default( $input, array $valid, $default ) {
+        return in_array( $input, $valid ) ? $input : $default;
     }
 
-    /**
-     * Sanitize Layout
-     */
+    public static function state( $input ) {
+        return self::enum_or_default( $input, [ 'open', 'close' ], 'open' );
+    }
+
     public static function layout( $layout ) {
-        $default = '1';
-        $valid   = [ '1', '12_12', '13_23', '23_13', '13_13_13', '14_14_14_14', '15_15_15_15_15' ];
-        if ( in_array( $layout, $valid ) ) {
-            return $layout;
-        }
-        return $default;
+        return self::enum_or_default(
+            $layout,
+            [ '1', '12_12', '13_23', '23_13', '13_13_13', '14_14_14_14', '15_15_15_15_15' ],
+            '1'
+        );
+    }
+
+    public static function item_type( $input ) {
+        return self::enum_or_default( $input, [ 'text' ], 'text' );
+    }
+
+    public static function item_col_index( $input ) {
+        return self::enum_or_default( $input, [ 'col_1', 'col_2', 'col_3', 'col_4', 'col_5' ], 'col_1' );
     }
 
     /**
@@ -143,30 +146,6 @@ class Sanitize {
         $output = array_map( 'wp_strip_all_tags', $output );
         $output = implode( ',', $output );
         return $output;
-    }
-
-    /**
-     * Sanitize Col Number from Layout
-     */
-    public static function item_type( $input ) {
-        $default = 'text';
-        $valid   = [ 'text' ];
-        if ( in_array( $input, $valid ) ) {
-            return $input;
-        }
-        return $default;
-    }
-
-    /**
-     * Sanitize Col Index
-     */
-    public static function item_col_index( $input ) {
-        $default = 'col_1';
-        $valid   = [ 'col_1', 'col_2', 'col_3', 'col_4', 'col_5' ];
-        if ( in_array( $input, $valid ) ) {
-            return $input;
-        }
-        return $default;
     }
 
     /**
@@ -191,16 +170,9 @@ class Sanitize {
 
     /**
      * Sanitize Custom CSS
+     * Strips any HTML tags (including <script>/<style> blocks); print_css() escapes at output.
      */
     public static function css( $css ) {
-        $css = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $css );
-        $css = wp_kses( $css, [] );
-        $css = esc_html( $css );
-        $css = str_replace( '&gt;', '>', $css );
-        $css = str_replace( '&quot;', '"', $css );
-        $css = str_replace( '&amp;', '&', $css );
-        $css = str_replace( '&amp;#039;', "'", $css );
-        $css = str_replace( '&#039;', "'", $css );
-        return $css;
+        return wp_strip_all_tags( (string) $css );
     }
 } // end class

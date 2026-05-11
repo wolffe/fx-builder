@@ -4,7 +4,7 @@ use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-Custom_CSS::get_instance();
+new Custom_CSS();
 
 /**
  * Custom CSS
@@ -12,20 +12,6 @@ Custom_CSS::get_instance();
  */
 class Custom_CSS {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Add CSS Button */
@@ -75,14 +61,14 @@ class Custom_CSS {
     public function save( $post_id, $post ) {
         $request = stripslashes_deep( $_POST );
         if ( ! isset( $request['fx_builder_custom_css_nonce'] ) || ! wp_verify_nonce( $request['fx_builder_custom_css_nonce'], __FILE__ ) ) {
-            return false;
+            return;
         }
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return false;
+            return;
         }
         $post_type = get_post_type_object( $post->post_type );
         if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
-            return false;
+            return;
         }
 
         /* Save Data */
@@ -107,7 +93,7 @@ class Custom_CSS {
     public function admin_scripts( $hook_suffix ) {
         global $post_type;
         if ( ! in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
-            return false;
+            return;
         }
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 

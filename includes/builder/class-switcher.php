@@ -4,7 +4,7 @@ use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-Switcher::get_instance();
+new Switcher();
 
 /**
  * Switcher: Toggle between FX Builder / wp editor.
@@ -13,20 +13,6 @@ Switcher::get_instance();
  */
 class Switcher {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Add HTML Class */
@@ -44,10 +30,10 @@ class Switcher {
      * Add Builder Active HTML Class
      * This is added using this method, so we can hide/show builder properly without waiting all page loaded.
      */
-    function html_class_script() {
+    public function html_class_script() {
         global $pagenow, $post_type;
         if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
-            return false;
+            return;
         }
 
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
@@ -95,7 +81,7 @@ class Switcher {
     public function scripts( $hook_suffix ) {
         global $post_type;
         if ( ! in_array( $hook_suffix, [ 'post.php', 'post-new.php' ] ) ) {
-            return false;
+            return;
         }
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 

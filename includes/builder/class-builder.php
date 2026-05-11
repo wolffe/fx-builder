@@ -5,8 +5,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-/* Load Class */
-Builder::get_instance();
+new Builder();
 
 /**
  * Builder
@@ -14,20 +13,6 @@ Builder::get_instance();
  */
 class Builder {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Get Admin Color */
@@ -51,7 +36,7 @@ class Builder {
         global $pagenow, $_wp_admin_css_colors, $fxb_admin_color;
         $fxb_admin_color = [ '#222', '#333', '#0073aa', '#00a0d2' ]; // default (fresh)
         if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
-            return false;
+            return;
         }
         $user_admin_color_scheme = get_user_option( 'admin_color' );
         if ( isset( $_wp_admin_css_colors[ $user_admin_color_scheme ]->colors ) ) {
@@ -167,7 +152,7 @@ class Builder {
             return $post_id;
         }
 
-        /* Check Swicther
+        /* Check Switcher
         ------------------------------------------ */
         $active = isset( $request['_fxb_active'] ) ? $request['_fxb_active'] : false;
 
@@ -182,58 +167,24 @@ class Builder {
             delete_post_meta( $post_id, '_fxb_rows' );
             delete_post_meta( $post_id, '_fxb_items' );
 
-            return false;
+            return;
         }
 
         /* FX Builder Data
         ------------------------------------------ */
-
-        /* DB Version */
-        if ( isset( $request['_fxb_db_version'] ) ) {
-            $db_version = Sanitize::version( $request['_fxb_db_version'] );
-            if ( $db_version ) {
-                update_post_meta( $post_id, '_fxb_db_version', $db_version );
+        $meta_map = [
+            '_fxb_db_version' => [ Sanitize::class, 'version' ],
+            '_fxb_row_ids'    => [ Sanitize::class, 'ids' ],
+            '_fxb_rows'       => [ Sanitize::class, 'rows_data' ],
+            '_fxb_items'      => [ Sanitize::class, 'items_data' ],
+        ];
+        foreach ( $meta_map as $key => $sanitizer ) {
+            $value = isset( $request[ $key ] ) ? call_user_func( $sanitizer, $request[ $key ] ) : null;
+            if ( $value ) {
+                update_post_meta( $post_id, $key, $value );
             } else {
-                delete_post_meta( $post_id, '_fxb_db_version' );
+                delete_post_meta( $post_id, $key );
             }
-        } else {
-            delete_post_meta( $post_id, '_fxb_db_version' );
-        }
-
-        /* Row IDs */
-        if ( isset( $request['_fxb_row_ids'] ) ) {
-            $row_ids = Sanitize::ids( $request['_fxb_row_ids'] );
-            if ( $row_ids ) {
-                update_post_meta( $post_id, '_fxb_row_ids', $row_ids );
-            } else {
-                delete_post_meta( $post_id, '_fxb_row_ids' );
-            }
-        } else {
-            delete_post_meta( $post_id, '_fxb_row_ids' );
-        }
-
-        /* Rows Datas */
-        if ( isset( $request['_fxb_rows'] ) ) {
-            $rows = Sanitize::rows_data( $request['_fxb_rows'] );
-            if ( $rows ) {
-                update_post_meta( $post_id, '_fxb_rows', $rows );
-            } else {
-                delete_post_meta( $post_id, '_fxb_rows' );
-            }
-        } else {
-            delete_post_meta( $post_id, '_fxb_rows' );
-        }
-
-        /*  Items Datas */
-        if ( isset( $request['_fxb_items'] ) ) {
-            $items = Sanitize::items_data( $request['_fxb_items'] );
-            if ( $items ) {
-                update_post_meta( $post_id, '_fxb_items', $items );
-            } else {
-                delete_post_meta( $post_id, '_fxb_items' );
-            }
-        } else {
-            delete_post_meta( $post_id, '_fxb_items' );
         }
 
         /* Content Data

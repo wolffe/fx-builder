@@ -3,7 +3,7 @@ namespace fx_builder\builder;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
-Front::get_instance();
+new Front();
 
 /**
  * Front-End Implementation
@@ -11,20 +11,6 @@ Front::get_instance();
  */
 class Front {
 
-    /**
-     * Returns the instance.
-     */
-    public static function get_instance() {
-        static $instance = null;
-        if ( is_null( $instance ) ) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct() {
 
         /* Filter content with FX Builder content. */

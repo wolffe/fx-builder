@@ -1,69 +1,53 @@
 <?php
 /**
- * Build Google fonts string
+ * Build a fonts CSS URL from a saved option list.
  */
-function fxb_google_fonts() {
-    $font_array       = [];
-    $fxb_google_fonts = array_map( 'sanitize_text_field', (array) get_option( 'fxb_google_fonts' ) );
-    $fxb_google_fonts = array_values(
-        array_filter(
-            $fxb_google_fonts,
-            function ( $v ) {
-                $v = (string) $v;
-                return $v !== '' && $v !== '0';
-            }
-        )
+function fxb_build_fonts_url( $option_key, $base_url, $separator, $font_format ) {
+    $fonts = array_map( 'sanitize_text_field', (array) get_option( $option_key ) );
+    $fonts = array_filter(
+        $fonts,
+        static function ( $v ) {
+            $v = (string) $v;
+            return $v !== '' && $v !== '0';
+        }
     );
-
-        foreach ( $fxb_google_fonts as $font ) {
-            $font_array[] = 'family=' . $font . ':wght@300;400;500;700';
-    }
-
-    $font_array = array_filter( $font_array );
-    $font_array = array_unique( $font_array );
-    $font_array = str_replace( ' ', '+', $font_array );
-
-    if ( empty( $font_array ) ) {
+    if ( empty( $fonts ) ) {
         return '';
     }
 
-    // Build URL (fonts are already sanitized; spaces converted to '+').
-    $fxb_fonts = 'https://fonts.googleapis.com/css2?' . implode( '&', $font_array ) . '&display=swap';
+    $parts = array_map(
+        static function ( $font ) use ( $font_format ) {
+            return sprintf( $font_format, $font );
+        },
+        $fonts
+    );
+    $parts = array_unique( str_replace( ' ', '+', $parts ) );
 
-    return $fxb_fonts;
+    return $base_url . implode( $separator, $parts ) . '&display=swap';
 }
 
 /**
- * Build Bunny fonts string
+ * Build Google fonts URL.
+ */
+function fxb_google_fonts() {
+    return fxb_build_fonts_url(
+        'fxb_google_fonts',
+        'https://fonts.googleapis.com/css2?',
+        '&',
+        'family=%s:wght@300;400;500;700'
+    );
+}
+
+/**
+ * Build Bunny fonts URL.
  */
 function fxb_bunny_fonts() {
-    $font_array      = [];
-    $fxb_bunny_fonts = array_map( 'sanitize_text_field', (array) get_option( 'fxb_bunny_fonts' ) );
-    $fxb_bunny_fonts = array_values(
-        array_filter(
-            $fxb_bunny_fonts,
-            function ( $v ) {
-                $v = (string) $v;
-                return $v !== '' && $v !== '0';
-            }
-        )
+    return fxb_build_fonts_url(
+        'fxb_bunny_fonts',
+        'https://fonts.bunny.net/css?family=',
+        '|',
+        '%s:300,400,500,700'
     );
-
-        foreach ( $fxb_bunny_fonts as $font ) {
-            $font_array[] = $font . ':300,400,500,700';
-    }
-
-    $font_array = array_filter( $font_array );
-    $font_array = array_unique( $font_array );
-    $font_array = str_replace( ' ', '+', $font_array );
-
-    if ( empty( $font_array ) ) {
-        return '';
-    }
-
-    $fxb_fonts = 'https://fonts.bunny.net/css?family=' . implode( '|', $font_array ) . '&display=swap';
-
-    return $fxb_fonts;
 }
 
 function fxb_enqueue() {
