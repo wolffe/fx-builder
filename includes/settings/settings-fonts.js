@@ -12,7 +12,12 @@
         var option = document.createElement("option");
         option.value = value;
         option.textContent = label;
-        option.selected = selectedValues.indexOf(value) !== -1;
+        if (selectedValues.indexOf(value) !== -1) {
+            // tail.select reads the `selected` HTML attribute (not just the property)
+            // when initially populating its checkbox list, so both must be set.
+            option.selected = true;
+            option.setAttribute("selected", "selected");
+        }
         selectEl.add(option);
     }
 
