@@ -16,6 +16,10 @@ A simple page builder plugin. The one you can actually use.
 
 == Changelog ==
 
+= 1.7.0 =
+* Move [cover] and [sticky] shortcodes to the dedicated FX Shortcodes plugin (https://getbutterfly.com/classicpress-plugins/fx-shortcodes/). [sticky] continues to work as before via FX Shortcodes' back-compat shortcode; [cover] should be migrated to the [element type="cover"] form (parameters: image -> background, overlay-color -> overlay, text-color -> text, valign -> vertical-align, fullscreen="1" -> width="full")
+* Remove [buttons]/[button] shortcodes; use FX Shortcodes' [element type="button"] instead
+
 = 1.6.0 =
 * Switch front-end layout from Flexbox to CSS Grid for more reliable column sizing and no 50% wrap issues
 * Add Design tab with Responsive Breakpoints (Small/Medium/Large), range sliders, and linked behavior so Small < Medium < Large
