@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.7.0
 Requires PHP: 7.4
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,8 +17,14 @@ A simple page builder plugin. The one you can actually use.
 == Changelog ==
 
 = 1.7.0 =
+* Fix font dropdown not saving content due to tail.select library conflict
+* Add aspect ratio support to shortcode attributes
+* Add tail.select library for Google Fonts and Bunny Fonts selectors
+* Modernize code and speed up routines
+* Update and consolidate brand colours; replace dynamic admin colour variable with CSS custom property (--fxb-accent-color)
 * Move [cover] and [sticky] shortcodes to the dedicated FX Shortcodes plugin (https://getbutterfly.com/classicpress-plugins/fx-shortcodes/). [sticky] continues to work as before via FX Shortcodes' back-compat shortcode; [cover] should be migrated to the [element type="cover"] form (parameters: image -> background, overlay-color -> overlay, text-color -> text, valign -> vertical-align, fullscreen="1" -> width="full")
 * Remove [buttons]/[button] shortcodes; use FX Shortcodes' [element type="button"] instead
+* Remove global_admin_color() function and $fxb_admin_color global variable
 
 = 1.6.0 =
 * Switch front-end layout from Flexbox to CSS Grid for more reliable column sizing and no 50% wrap issues
