@@ -1,5 +1,5 @@
 :root {
-    --fxb-accent-color: #3742fa;
+    --fxb-accent-color: #3498db;
 }
 
 .identityblock {
@@ -17,8 +17,9 @@
     font-size: 24px;
 }
 .codeblock {
-    font-family: "Cascadia Code Web", "SFMono-Regular", Consolas,
-        "Liberation Mono", Menlo, Courier, monospace;
+    font-family:
+        "Cascadia Code Web", "SFMono-Regular", Consolas, "Liberation Mono",
+        Menlo, Courier, monospace;
     color: var(--fxb-accent-color);
     background: none;
     font-size: 16px;
@@ -35,7 +36,9 @@
 .fxb-ad {
     color: #1d2327;
     background-color: #ffffff;
-    box-shadow: 0 6px 3px rgb(0 0 0 / 4%), 0 12px 6px rgb(0 0 0 / 3%);
+    box-shadow:
+        0 6px 3px rgb(0 0 0 / 4%),
+        0 12px 6px rgb(0 0 0 / 3%);
     border-radius: 8px;
     margin: 16px 0;
     padding: 24px;

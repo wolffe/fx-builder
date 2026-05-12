@@ -4,7 +4,7 @@
     /* http://flatuicolors.com/palette/cn */
     --fxb-color-gray: #a4b0be;
     --fxb-color-darkgray: #2f3542;
-    --fxb-color-accent: #3742fa;
+    --fxb-color-accent: #3498db;
 }
 
 /* Box Sizing To All
@@ -149,7 +149,9 @@
 ------------------------------------------ */
 .fxb-row {
     background-color: #ffffff;
-    box-shadow: 0 6px 3px rgb(0 0 0 / 4%), 0 12px 6px rgb(0 0 0 / 3%);
+    box-shadow:
+        0 6px 3px rgb(0 0 0 / 4%),
+        0 12px 6px rgb(0 0 0 / 3%);
 
     margin-bottom: var(--fxb-template-gap, 20px);
     border-radius: 0 0 var(--fxb-radius-small) var(--fxb-radius-small);
@@ -564,7 +566,10 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 120ms ease, transform 120ms ease, visibility 0ms linear 120ms;
+    transition:
+        opacity 120ms ease,
+        transform 120ms ease,
+        visibility 0ms linear 120ms;
 }
 
 /* Tooltip bubble */
@@ -609,7 +614,9 @@
     opacity: 1;
     visibility: visible;
     transform: translate(0, -50%);
-    transition: opacity 120ms ease, transform 120ms ease;
+    transition:
+        opacity 120ms ease,
+        transform 120ms ease;
 }
 
 /* MCE FullScreen

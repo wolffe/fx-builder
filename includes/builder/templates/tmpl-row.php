@@ -20,8 +20,6 @@
  * - "col_5"
  **/
 namespace fx_builder\builder;
-
-global $fxb_admin_color;
 ?>
 <script id="tmpl-fxb-row" type="text/html">
     <div class="fxb-row fxb-clear" data-id="{{data.id}}" data-index="{{data.index}}"  data-state="{{data.state}}" data-col_num="{{data.col_num}}" data-layout="{{data.layout}}" style="<# if ( data.row_bg_color ) { #>--fxb-row-bg-color: {{data.row_bg_color}};<# } #><# if ( data.row_col_padding ) { #>--fxb-row-col-padding: {{data.row_col_padding}}{{data.row_col_padding_unit}};<# } #>">
@@ -33,7 +31,7 @@ global $fxb_admin_color;
         <input type="hidden" data-row_field="col_num" name="_fxb_rows[{{data.id}}][col_num]" value="{{data.col_num}}" autocomplete="off">
 
         <?php /* ROW MENU */ ?>
-        <div class="fxb-row-menu fxb-clear" style="background-color:<?php echo esc_attr( $fxb_admin_color['1'] ); ?>">
+        <div class="fxb-row-menu fxb-clear" style="background-color:#2c3e50">
             <div class="fxb-left">
                 <span class="fxb-icon fxb-grab fxb-row-handle dashicons dashicons-sort"></span>
                 <span class="fxb-icon fxb_row_index" data-row-index="{{data.index}}"></span>
