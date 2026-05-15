@@ -141,12 +141,9 @@ class Builder {
         if ( $active ) {
             update_post_meta( $post_id, '_fxb_active', 1 );
         } else {
-            /* FX Builder Not Selected: Delete Data and Bail. */
+            /* FX Builder Not Selected: deactivate but preserve row/item data
+            so switching back to FX Builder restores the previous layout. */
             delete_post_meta( $post_id, '_fxb_active' );
-            delete_post_meta( $post_id, '_fxb_db_version' );
-            delete_post_meta( $post_id, '_fxb_row_ids' );
-            delete_post_meta( $post_id, '_fxb_rows' );
-            delete_post_meta( $post_id, '_fxb_items' );
 
             return;
         }
