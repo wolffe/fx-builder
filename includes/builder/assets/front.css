@@ -10,6 +10,10 @@
     width: 100%;
     margin-bottom: var(--fxb-template-gap, 2em);
     background-color: var(--fxb-row-bg-color, transparent);
+    background-image: var(--fxb-row-bg-image, none);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 .fxb-row:last-child {
     margin-bottom: 0;

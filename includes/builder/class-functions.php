@@ -180,6 +180,15 @@ class Functions {
             <input autocomplete="off" id="fxb_rows[{{data.id}}][row_bg_color]" data-row_field="row_bg_color" name="_fxb_rows[{{data.id}}][row_bg_color]" type="text" value="{{data.row_bg_color}}" placeholder="#ffffff">
         </div><!-- .fxb-modal-field -->
 
+        <?php /* Row Background Image */ ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
+            <label for="fxb_rows[{{data.id}}][row_bg_image]">
+                <?php esc_html_e( 'Background Image', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Row background image URL. Rendered with background-size:cover, centered.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about background image', 'fx-builder' ); ?>">?</button>
+            </label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_bg_image]" data-row_field="row_bg_image" name="_fxb_rows[{{data.id}}][row_bg_image]" type="url" value="{{data.row_bg_image}}" placeholder="https://...">
+        </div><!-- .fxb-modal-field -->
+
         <?php /* Column Padding (applies to all columns in the row) */ ?>
         <div class="fxb-modal-field fxb-modal-field-select fxb-group-control--container">
             <label for="fxb_rows[{{data.id}}][row_col_padding]">
@@ -350,6 +359,9 @@ class Functions {
                     $row_style_vars = '';
                     if ( ! empty( $rows_data[ $row_id ]['row_bg_color'] ) ) {
                         $row_style_vars .= '--fxb-row-bg-color:' . esc_attr( $rows_data[ $row_id ]['row_bg_color'] ) . ';';
+                    }
+                    if ( ! empty( $rows_data[ $row_id ]['row_bg_image'] ) ) {
+                        $row_style_vars .= "--fxb-row-bg-image:url('" . esc_url( $rows_data[ $row_id ]['row_bg_image'] ) . "');";
                     }
                     if ( ! empty( $rows_data[ $row_id ]['row_col_padding'] ) && ! empty( $rows_data[ $row_id ]['row_col_padding_unit'] ) ) {
                         $row_style_vars .= '--fxb-row-col-padding:' . esc_attr( $rows_data[ $row_id ]['row_col_padding'] . $rows_data[ $row_id ]['row_col_padding_unit'] ) . ';';
