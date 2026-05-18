@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.7.0
 Requires PHP: 7.4
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,6 +15,11 @@ A simple page builder plugin. The one you can actually use.
 **FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types.
 
 == Changelog ==
+
+= 1.7.1 =
+* Add background image option to rows
+* Fix empty paragraphs when using FX Shortcodes
+* Preserve row/item data when deactivating FX Builder, restoring layout on reactivation
 
 = 1.7.0 =
 * Fix font dropdown not saving content due to tail.select library conflict
