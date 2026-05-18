@@ -62,6 +62,9 @@ class Front {
                 '@media screen and (max-width:%dpx){.fxb-container .fxb-row>.fxb-wrap{grid-template-columns:1fr}}',
                 $small
             );
+            if ( get_option( 'fxb_hide_empty_paragraphs', 1 ) ) {
+                $inline .= '.fxb-container p:empty{display:none}';
+            }
             wp_add_inline_style( 'fx-builder', $inline );
         }
     }

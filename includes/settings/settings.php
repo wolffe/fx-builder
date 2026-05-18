@@ -90,8 +90,9 @@ function fxb_build_admin_page() {
             <p>&copy;<?php echo esc_attr( gmdate( 'Y' ) ); ?> <a href="https://getbutterfly.com/" rel="external"><strong>getButterfly</strong>.com</a> &middot; <small>Code wrangling since 2005</small></p>
             <?php
         } elseif ( $tab === 'design' ) {
-            $small_val  = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_small', 480 ) ) ) );
-            $medium_val = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_medium', 768 ) ) ) );
+            $small_val             = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_small', 480 ) ) ) );
+            $medium_val            = max( 320, min( 1920, absint( get_option( 'fxb_breakpoint_medium', 768 ) ) ) );
+            $hide_empty_paragraphs = (bool) get_option( 'fxb_hide_empty_paragraphs', 1 );
             ?>
             <h2><?php esc_html_e( 'Design', 'fx-builder' ); ?></h2>
 
@@ -106,9 +107,11 @@ function fxb_build_admin_page() {
                 $medium = max( 320, min( 1920, $medium ) );
                 update_option( 'fxb_breakpoint_small', $small );
                 update_option( 'fxb_breakpoint_medium', $medium );
+                update_option( 'fxb_hide_empty_paragraphs', isset( $_POST['fxb_hide_empty_paragraphs'] ) ? 1 : 0 );
                 echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Design settings updated successfully!', 'fx-builder' ) . '</p></div>';
-                $small_val  = $small;
-                $medium_val = $medium;
+                $small_val             = $small;
+                $medium_val            = $medium;
+                $hide_empty_paragraphs = isset( $_POST['fxb_hide_empty_paragraphs'] );
             }
             ?>
             <form method="post">
@@ -157,6 +160,23 @@ function fxb_build_admin_page() {
                                     <li><strong>1280 px</strong> — <?php esc_html_e( 'Laptops, small desktops', 'fx-builder' ); ?></li>
                                     <li><strong>1920 px</strong> — <?php esc_html_e( 'Full HD desktops', 'fx-builder' ); ?></li>
                                 </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row" colspan="2">
+                                <h3><?php esc_html_e( 'Output Cleanup', 'fx-builder' ); ?></h3>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="fxb_hide_empty_paragraphs"><?php esc_html_e( 'Hide empty paragraphs', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" id="fxb_hide_empty_paragraphs" name="fxb_hide_empty_paragraphs" value="1" <?php checked( $hide_empty_paragraphs ); ?>>
+                                        <?php esc_html_e( 'Inject CSS to hide stray empty <p></p> elements on the front end.', 'fx-builder' ); ?>
+                                    </label>
+                                </p>
+                                <p class="description"><?php esc_html_e( 'WordPress\' wpautop filter often wraps block-level shortcodes (e.g. [element type="cover"]) with empty <p> tags, leaving small visual gaps. When enabled, the rule "p:empty { display: none; }" is added to the front-end stylesheet. Enabled by default.', 'fx-builder' ); ?></p>
                             </td>
                         </tr>
                         <tr>
@@ -259,16 +279,26 @@ function fxb_build_admin_page() {
 
                 $google_fonts_post = isset( $_POST['fxb_google_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_google_fonts'] ) ) : [];
                 $google_fonts_post = array_values( array_filter( $google_fonts_post, 'strlen' ) );
-                $google_fonts_post = array_values( array_filter( $google_fonts_post, static function ( $v ) {
-                    return $v !== '0';
-                } ) );
+                $google_fonts_post = array_values(
+                    array_filter(
+                        $google_fonts_post,
+                        static function ( $v ) {
+                            return $v !== '0';
+                        }
+                    )
+                );
                 update_option( 'fxb_google_fonts', $google_fonts_post );
 
                 $bunny_fonts_post = isset( $_POST['fxb_bunny_fonts'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_bunny_fonts'] ) ) : [];
                 $bunny_fonts_post = array_values( array_filter( $bunny_fonts_post, 'strlen' ) );
-                $bunny_fonts_post = array_values( array_filter( $bunny_fonts_post, static function ( $v ) {
-                    return $v !== '0';
-                } ) );
+                $bunny_fonts_post = array_values(
+                    array_filter(
+                        $bunny_fonts_post,
+                        static function ( $v ) {
+                            return $v !== '0';
+                        }
+                    )
+                );
                 update_option( 'fxb_bunny_fonts', $bunny_fonts_post );
 
                 delete_option( 'fxb_font_provider' );
@@ -286,24 +316,33 @@ function fxb_build_admin_page() {
                             <th scope="row"><label><?php echo esc_html__( 'Enable FX Builder in', 'fx-builder' ); ?></label></th>
                             <td>
                                 <?php
+                                // List anything with an admin UI (not just publicly-queryable types).
+                                // This covers Posts, Pages, custom CPTs (public or admin-only), and
+                                // theme/plugin CPTs that live only in wp-admin (e.g. template parts).
                                 $post_types = get_post_types(
                                     [
-                                        'public' => true,
+                                        'show_ui' => true,
                                     ],
                                     'objects'
                                 );
 
+                                // Core internals and media that aren't useful FX Builder targets.
+                                $skip = [ 'attachment', 'wp_block', 'wp_template', 'wp_template_part', 'wp_navigation' ];
+
                                 foreach ( $post_types as $post_type ) {
-                                    // Only if post type supports "editor" (content)
-                                    if ( post_type_supports( $post_type->name, 'editor' ) ) {
-                                        ?>
-                                        <p>
-                                            <label>
-                                                <input type="checkbox" value="<?php echo esc_attr( $post_type->name ); ?>" name="fx-builder_post_types[]" <?php checked( post_type_supports( esc_attr( $post_type->name ), 'fx_builder' ) ); ?>> <?php echo esc_attr( $post_type->label ); ?>
-                                            </label>
-                                        </p>
-                                        <?php
+                                    if ( in_array( $post_type->name, $skip, true ) ) {
+                                        continue;
                                     }
+                                    ?>
+                                    <p>
+                                        <label>
+                                            <input type="checkbox" value="<?php echo esc_attr( $post_type->name ); ?>" name="fx-builder_post_types[]" <?php checked( post_type_supports( esc_attr( $post_type->name ), 'fx_builder' ) ); ?>> <?php echo esc_attr( $post_type->label ); ?>
+                                            <?php if ( ! post_type_supports( $post_type->name, 'editor' ) ) : ?>
+                                                <small style="color:#646970;">&mdash; <?php esc_html_e( 'no editor support; the FX Builder switcher will not appear, but the builder UI will.', 'fx-builder' ); ?></small>
+                                            <?php endif; ?>
+                                        </label>
+                                    </p>
+                                    <?php
                                 }
                                 ?>
                             </td>
@@ -327,9 +366,9 @@ function fxb_build_admin_page() {
                             <th scope="row"></th>
                             <td>
                                 <div class="notice notice-info inline" style="margin:0 0 0.5em;padding:10px 14px;">
-									<p>
+                                    <p>
                                         <strong><?php esc_html_e( 'Google Fonts vs Bunny Fonts', 'fx-builder' ); ?></strong><br>
-										<?php esc_html_e( 'Both services offer the same large catalogue of web fonts and can be used simultaneously. Google Fonts loads assets from Google\'s servers: this requires an API key and may raise GDPR compliance concerns for EU-based sites, because visitor IP addresses are transmitted to Google\'s infrastructure. Bunny Fonts is a fully GDPR-compliant, privacy-friendly drop-in replacement: it serves the identical font catalogue from EU-based servers with no tracking, no data sharing, and no API key required.', 'fx-builder' ); ?>
+                                        <?php esc_html_e( 'Both services offer the same large catalogue of web fonts and can be used simultaneously. Google Fonts loads assets from Google\'s servers: this requires an API key and may raise GDPR compliance concerns for EU-based sites, because visitor IP addresses are transmitted to Google\'s infrastructure. Bunny Fonts is a fully GDPR-compliant, privacy-friendly drop-in replacement: it serves the identical font catalogue from EU-based servers with no tracking, no data sharing, and no API key required.', 'fx-builder' ); ?>
                                     </p>
                                 </div>
                             </td>
