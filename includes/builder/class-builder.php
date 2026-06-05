@@ -204,6 +204,8 @@ class Builder {
 
             /* Enqueue JS: ROW */
             wp_enqueue_script( 'fx-builder-row', URI . 'assets/page-builder-row.js', [ 'fx-builder-core', 'sortable-js', 'wp-util' ], VERSION, true );
+            /* Enqueue JS: COLUMN */
+            wp_enqueue_script( 'fx-builder-col', URI . 'assets/page-builder-col.js', [ 'fx-builder-core' ], VERSION, true );
             /* Enqueue JS: ITEM */
             wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', [ 'fx-builder-core', 'sortable-js', 'wp-util' ], VERSION, true );
             $ajax_data = [

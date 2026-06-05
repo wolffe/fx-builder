@@ -8,6 +8,13 @@
         FXB.reconcile({ sortItems: false, iframes: false });
     }
 
+    function toggleFullwidthRowSettings(modalEl) {
+        const widthSelect = qs('select[data-row_field="row_html_width"]', modalEl);
+        const fullwidthField = qs('.fxb-row-setting-fullwidth-only', modalEl);
+        if (!widthSelect || !fullwidthField) return;
+        fullwidthField.style.display = widthSelect.value === 'fullwidth' ? '' : 'none';
+    }
+
     function getRowConfigFromThumb(thumbEl) {
         const rowId = Date.now();
         const layout = thumbEl.getAttribute('data-row-layout') || '1';
@@ -27,6 +34,7 @@
             col_5: '',
             row_title: '',
             row_html_width: 'default',
+            row_content_page_width: '',
             row_html_height: '',
             row_html_height_unit: 'px',
             row_html_id: '',
@@ -36,7 +44,12 @@
             row_column_gap_unit: 'px',
             row_bg_color: '',
             row_col_padding: '',
-            row_col_padding_unit: 'px'
+            row_col_padding_unit: 'px',
+            col_1_bg_color: '',
+            col_2_bg_color: '',
+            col_3_bg_color: '',
+            col_4_bg_color: '',
+            col_5_bg_color: ''
         };
     }
 
@@ -101,22 +114,31 @@
         let originalRowSettings = {};
 
         function saveRowSettingsState(modalEl) {
-            const fields = ['row_title', 'layout', 'row_html_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
+            const fields = ['row_title', 'layout', 'row_html_width', 'row_content_page_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
             originalRowSettings = {};
             fields.forEach(function (field) {
                 const el = qs('[data-row_field="' + field + '"]', modalEl);
-                if (el) originalRowSettings[field] = el.value || '';
+                if (!el) return;
+                originalRowSettings[field] = el.type === 'checkbox' ? (el.checked ? '1' : '') : (el.value || '');
             });
         }
 
         function restoreRowSettingsState(modalEl, rowEl) {
             Object.keys(originalRowSettings).forEach(function (field) {
                 const el = qs('[data-row_field="' + field + '"]', modalEl);
-                if (el) el.value = originalRowSettings[field] || '';
+                if (!el) return;
+                if (el.type === 'checkbox') {
+                    el.checked = originalRowSettings[field] === '1';
+                } else {
+                    el.value = originalRowSettings[field] || '';
+                }
             });
             if (rowEl) {
                 rowEl.style.removeProperty('--fxb-row-bg-color');
                 rowEl.style.removeProperty('--fxb-row-col-padding');
+            }
+            if (modalEl) {
+                toggleFullwidthRowSettings(modalEl);
             }
             originalRowSettings = {};
         }
@@ -129,6 +151,7 @@
             const modal = dataTarget && container ? qs(dataTarget, container) : null;
             if (modal) {
                 saveRowSettingsState(modal);
+                toggleFullwidthRowSettings(modal);
                 FXB.modal.open(modal);
             }
         });
@@ -197,10 +220,12 @@
         document.body.addEventListener('change', function (e) {
             const t = e.target;
             if (!(t instanceof Element)) return;
-            if (!t.matches('select[data-row_field="row_col_padding_unit"]')) return;
             const modalEl = t.closest('.fxb-row-settings');
             const rowEl = t.closest('.fxb-row');
-            if (!modalEl || !rowEl) return;
+            if (modalEl && t.matches('select[data-row_field="row_html_width"]')) {
+                toggleFullwidthRowSettings(modalEl);
+            }
+            if (!t.matches('select[data-row_field="row_col_padding_unit"]') || !modalEl || !rowEl) return;
             const pad = qs('input[data-row_field="row_col_padding"]', modalEl);
             if (pad && pad.value) rowEl.style.setProperty('--fxb-row-col-padding', pad.value + t.value);
             else rowEl.style.removeProperty('--fxb-row-col-padding');

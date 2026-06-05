@@ -50,7 +50,7 @@ class Functions {
             'id'       => '',
             'title'    => '',
             'callback' => '__return_false',
-            'width'    => '500px',
+            'width'    => '600px',
             'height'   => 'auto',
         ];
 
@@ -108,6 +108,15 @@ class Functions {
             </select>
         </div><!-- .fxb-modal-field -->
 
+        <?php /* Row Content Width (fullwidth rows only) */ ?>
+        <div class="fxb-modal-field fxb-modal-field-checkbox fxb-row-setting-fullwidth-only" style="display:none;">
+            <label for="fxb_rows[{{data.id}}][row_content_page_width]">
+                <?php esc_html_e( 'Nested content matches page width', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Keep columns inside the page content width so only the row background stretches edge to edge.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about nested content width', 'fx-builder' ); ?>">?</button>
+            </label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_content_page_width]" data-row_field="row_content_page_width" name="_fxb_rows[{{data.id}}][row_content_page_width]" type="checkbox" value="1" <# if( data.row_content_page_width == '1' ){ print('checked="checked"') } #>>
+        </div><!-- .fxb-modal-field -->
+
         <?php /* Row Width */ ?>
         <div class="fxb-modal-field fxb-modal-field-select">
             <label for="fxb_rows[{{data.id}}][row_html_width]">
@@ -143,10 +152,11 @@ class Functions {
         <div class="fxb-modal-field fxb-modal-field-select">
             <label for="fxb_rows[{{data.id}}][row_column_align]">
                 <?php esc_html_e( 'Vertical Align', 'fx-builder' ); ?>
-                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Align the columns vertically within the row.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about vertical align', 'fx-builder' ); ?>">?</button>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Stretch makes all columns the same height. Start, Center, and End align shorter columns within the row.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about vertical align', 'fx-builder' ); ?>">?</button>
             </label>
 
             <select id="fxb_rows[{{data.id}}][row_column_align]" data-row_field="row_column_align" name="_fxb_rows[{{data.id}}][row_column_align]" autocomplete="off">
+                <option value="stretch" <# if( data.row_column_align == 'stretch' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Stretch', 'fx-builder' ); ?></option>
                 <option value="start" <# if( data.row_column_align == 'start' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Start', 'fx-builder' ); ?></option>
                 <option value="center" <# if( data.row_column_align == 'center' ){ print('selected="selected"') } #>><?php esc_attr_e( 'Center', 'fx-builder' ); ?></option>
                 <option value="end" <# if( data.row_column_align == 'end' ){ print('selected="selected"') } #>><?php esc_attr_e( 'End', 'fx-builder' ); ?></option>
@@ -234,6 +244,23 @@ class Functions {
 
 
     /**
+     * Column Settings (Modal Box)
+     */
+    public static function column_settings( $index ) {
+        $field = 'col_' . (int) $index . '_bg_color';
+        ?>
+        <div class="fxb-modal-field fxb-modal-field-text">
+            <label for="fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]">
+                <?php esc_html_e( 'Background Color', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Column background color (hex).', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about column background color', 'fx-builder' ); ?>">?</button>
+            </label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]" data-row_field="<?php echo esc_attr( $field ); ?>" name="_fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]" type="text" value="{{data.<?php echo esc_attr( $field ); ?>}}" placeholder="#ffffff">
+        </div><!-- .fxb-modal-field -->
+        <?php
+    }
+
+
+    /**
      * Render (empty) Column
      */
     public static function render_column( $args = [] ) {
@@ -248,15 +275,34 @@ class Functions {
         $index = $args['index'];
 
         /* Var */
-        $field = "col_{$index}";
+        $field    = "col_{$index}";
+        $bg_field = "{$field}_bg_color";
         ?>
-        <div class="fxb-col fxb-clear" data-col_index="<?php echo esc_attr( $field ); ?>">
+        <div class="fxb-col fxb-clear" data-col_index="<?php echo esc_attr( $field ); ?>" style="<# if ( data.<?php echo esc_attr( $bg_field ); ?> ) { #>--fxb-col-bg-color: {{data.<?php echo esc_attr( $bg_field ); ?>}};<# } #>">
 
             <?php /* Hidden input */ ?>
             <input type="hidden" data-id="item_ids" data-row_field="<?php echo esc_attr( $field ); ?>" name="_fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]" value="{{data.<?php echo esc_attr( $field ); ?>}}" autocomplete="off"/>
 
-            <?php /* Column Title */ ?>
-            <h3 class="fxb-col-title"><span><?php echo esc_attr( $title ); ?></span></h3>
+            <?php /* Column menu */ ?>
+            <div class="fxb-col-menu fxb-clear">
+                <div class="fxb-left">
+                    <span class="fxb-col-label"><?php echo esc_html( $title ); ?></span>
+                </div><!-- .fxb-left -->
+                <div class="fxb-right">
+                    <span data-target=".fxb-col-settings" class="fxb-icon fxb-link fxb-col-settings-trigger dashicons dashicons-admin-generic" aria-label="<?php esc_attr_e( 'Column settings', 'fx-builder' ); ?>"></span>
+                    <?php
+                    self::render_settings(
+                        [
+                            'id'       => 'fxb-col-settings',
+                            'title'    => __( 'Column Settings', 'fx-builder' ),
+                            'callback' => function () use ( $index ) {
+                                self::column_settings( $index );
+                            },
+                        ]
+                    );
+                    ?>
+                </div><!-- .fxb-right -->
+            </div><!-- .fxb-col-menu -->
 
             <div class="fxb-col-content">{{{ (data.col_html && data.col_html['<?php echo esc_attr( $field ); ?>']) ? data.col_html['<?php echo esc_attr( $field ); ?>'] : '' }}}</div><!-- .fxb-col-content -->
 
@@ -344,6 +390,14 @@ class Functions {
 
                     $row_html_class[] = $row_html_width;
 
+                    if (
+                        isset( $rows_data[ $row_id ]['row_html_width'], $rows_data[ $row_id ]['row_content_page_width'] )
+                        && 'fullwidth' === $rows_data[ $row_id ]['row_html_width']
+                        && '1' === $rows_data[ $row_id ]['row_content_page_width']
+                    ) {
+                        $row_html_class[] = 'fxb-content-contained';
+                    }
+
                     /* ID */
                     $row_html_class[] = "fxb-row-{$row_id}";
 
@@ -370,15 +424,20 @@ class Functions {
 
                     <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>"<?php echo $row_style_vars ? ' style="' . esc_attr( $row_style_vars ) . '"' : ''; ?>>
 
-                        <div class="fxb-wrap" style="gap: var(--fxb-template-gap, <?php echo esc_attr( $row_column_gap ); ?>); align-items: <?php echo esc_attr( $row_column_align ); ?>; <?php echo esc_attr( $row_html_height ); ?>">
+                        <div class="fxb-wrap fxb-col-align-<?php echo esc_attr( $row_column_align ); ?>" style="gap: var(--fxb-template-gap, <?php echo esc_attr( $row_column_gap ); ?>); <?php echo esc_attr( $row_html_height ); ?>">
 
                             <?php
                             $cols = range( 1, $rows_data[ $row_id ]['col_num'] );
                             foreach ( $cols as $k ) {
-                                $items = $rows_data[ $row_id ][ 'col_' . $k ];
-                                $items = explode( ',', $items );
+                                $items         = $rows_data[ $row_id ][ 'col_' . $k ];
+                                $items         = explode( ',', $items );
+                                $col_bg_key    = 'col_' . $k . '_bg_color';
+                                $col_style_vars = '';
+                                if ( ! empty( $rows_data[ $row_id ][ $col_bg_key ] ) ) {
+                                    $col_style_vars = '--fxb-col-bg-color:' . esc_attr( $rows_data[ $row_id ][ $col_bg_key ] ) . ';';
+                                }
                                 ?>
-                                <div class="fxb-col-<?php echo intval( $k ); ?> fxb-col">
+                                <div class="fxb-col-<?php echo intval( $k ); ?> fxb-col"<?php echo $col_style_vars ? ' style="' . esc_attr( $col_style_vars ) . '"' : ''; ?>>
                                     <div class="fxb-wrap">
 
                                         <?php foreach ( $items as $item_id ) { ?>

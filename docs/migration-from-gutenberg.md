@@ -96,6 +96,11 @@ IDs can be any unique strings. FX Builder itself uses millisecond Unix timestamp
 | `row_bg_color` | string | `""` | Hex color (e.g. `"#f5f5f5"`) for the row background. |
 | `row_col_padding` | string | `""` | Numeric inside-column padding (applies to every column). |
 | `row_col_padding_unit` | string | `"px"` | `px`, `%`, `em`, `rem`. |
+| `col_1_bg_color` | string | `""` | Hex background for the 1st column. |
+| `col_2_bg_color` | string | `""` | Hex background for the 2nd column (multi-column layouts). |
+| `col_3_bg_color` | string | `""` | Hex background for the 3rd column. |
+| `col_4_bg_color` | string | `""` | Hex background for the 4th column. |
+| `col_5_bg_color` | string | `""` | Hex background for the 5th column. |
 
 ### Item object schema
 

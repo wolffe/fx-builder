@@ -31,9 +31,11 @@ class Sanitize {
                 'col_3'               => '',
                 'col_4'               => '',
                 'col_5'               => '',
-                'row_title'           => '',
-                'row_width'           => 'default',
-                'row_html_height'     => '',
+                'row_title'              => '',
+                'row_html_width'         => 'default',
+                'row_content_page_width' => '',
+                'row_html_height'        => '',
+                'row_html_height_unit'   => 'px',
                 'row_html_id'         => '',
                 'row_html_class'      => '',
                 'row_column_align'    => 'start',
@@ -43,6 +45,11 @@ class Sanitize {
                 'row_bg_image'        => '',
                 'row_col_padding'     => '',
                 'row_col_padding_unit'=> 'px',
+                'col_1_bg_color'      => '',
+                'col_2_bg_color'      => '',
+                'col_3_bg_color'      => '',
+                'col_4_bg_color'      => '',
+                'col_5_bg_color'      => '',
             ];
 
             $rows[ $row_id ]                    = wp_parse_args( $row_data, $default );
@@ -56,13 +63,15 @@ class Sanitize {
             $rows[ $row_id ]['col_3']           = self::ids( $rows[ $row_id ]['col_3'] );
             $rows[ $row_id ]['col_4']           = self::ids( $rows[ $row_id ]['col_4'] );
             $rows[ $row_id ]['col_5']           = self::ids( $rows[ $row_id ]['col_5'] );
-            $rows[ $row_id ]['row_title']       = sanitize_text_field( $rows[ $row_id ]['row_title'] );
-            $rows[ $row_id ]['row_width']       = sanitize_text_field( $rows[ $row_id ]['row_width'] );
-            $rows[ $row_id ]['row_html_height'] = sanitize_text_field( $rows[ $row_id ]['row_html_height'] );
+            $rows[ $row_id ]['row_title']              = sanitize_text_field( $rows[ $row_id ]['row_title'] );
+            $rows[ $row_id ]['row_html_width']         = self::row_html_width( $rows[ $row_id ]['row_html_width'] );
+            $rows[ $row_id ]['row_content_page_width'] = self::checkbox( $rows[ $row_id ]['row_content_page_width'] );
+            $rows[ $row_id ]['row_html_height']        = sanitize_text_field( $rows[ $row_id ]['row_html_height'] );
+            $rows[ $row_id ]['row_html_height_unit']   = self::unit( $rows[ $row_id ]['row_html_height_unit'], [ 'px', '%', 'em', 'rem', 'vh' ], 'px' );
             $rows[ $row_id ]['row_html_id']     = sanitize_html_class( $rows[ $row_id ]['row_html_id'] );
             $rows[ $row_id ]['row_html_class']  = self::html_classes( $rows[ $row_id ]['row_html_class'] );
 
-            $rows[ $row_id ]['row_column_align']    = sanitize_text_field( $rows[ $row_id ]['row_column_align'] );
+            $rows[ $row_id ]['row_column_align']    = self::row_column_align( $rows[ $row_id ]['row_column_align'] );
             $rows[ $row_id ]['row_column_gap']      = sanitize_text_field( $rows[ $row_id ]['row_column_gap'] );
             $rows[ $row_id ]['row_column_gap_unit'] = sanitize_text_field( $rows[ $row_id ]['row_column_gap_unit'] );
 
@@ -73,6 +82,11 @@ class Sanitize {
             $rows[ $row_id ]['row_col_padding'] = preg_replace( '/[^0-9.]/', '', (string) $rows[ $row_id ]['row_col_padding'] );
             $rows[ $row_id ]['row_col_padding_unit'] = sanitize_text_field( $rows[ $row_id ]['row_col_padding_unit'] );
             $rows[ $row_id ]['row_col_padding_unit'] = in_array( $rows[ $row_id ]['row_col_padding_unit'], [ 'px', '%', 'em', 'rem' ], true ) ? $rows[ $row_id ]['row_col_padding_unit'] : 'px';
+
+            for ( $col_i = 1; $col_i <= 5; $col_i++ ) {
+                $bg_key                          = "col_{$col_i}_bg_color";
+                $rows[ $row_id ][ $bg_key ]      = sanitize_hex_color( $rows[ $row_id ][ $bg_key ] ) ?: '';
+            }
         }
 
         return $rows;
@@ -130,6 +144,22 @@ class Sanitize {
             [ '1', '12_12', '13_23', '23_13', '13_13_13', '14_14_14_14', '15_15_15_15_15' ],
             '1'
         );
+    }
+
+    public static function row_html_width( $input ) {
+        return self::enum_or_default( $input, [ 'default', 'fullwidth' ], 'default' );
+    }
+
+    public static function row_column_align( $input ) {
+        return self::enum_or_default( $input, [ 'stretch', 'start', 'center', 'end' ], 'start' );
+    }
+
+    public static function checkbox( $input ) {
+        return '1' === (string) $input ? '1' : '';
+    }
+
+    public static function unit( $input, array $valid, $default ) {
+        return self::enum_or_default( $input, $valid, $default );
     }
 
     public static function item_type( $input ) {
