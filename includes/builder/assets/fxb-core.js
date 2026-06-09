@@ -40,10 +40,6 @@
         if (!csv || typeof csv !== 'string') return [];
         return csv.split(',').map(function (s) { return (s || '').trim(); }).filter(Boolean);
     };
-    FXB.util.safeJSONParse = function (text) {
-        try { return JSON.parse(text); } catch (e) { return null; }
-    };
-
     FXB.templates = FXB.templates || {};
     FXB.templates.get = function (name) {
         if (!name) return null;
@@ -467,13 +463,6 @@
         });
     };
 
-    // Events.
-
-    FXB.events = FXB.events || {};
-    FXB.events.emit = function (name, detail) {
-        window.dispatchEvent(new CustomEvent(name, { detail: detail }));
-    };
-
     /**
      * Reconcile UI state after DOM changes (render/import/drag/drop).
      */
@@ -501,8 +490,6 @@
         }
 
         run();
-
-        FXB.events.emit('fxb:reconcile', {});
     };
 
     /**
@@ -517,8 +504,6 @@
 
         const fxb = document.getElementById('fxb');
         if (!fxb) return;
-
-        FXB.events.emit('fxb:render:before', { payload: payload });
 
         // Clear current UI.
         fxb.innerHTML = '';
@@ -546,8 +531,6 @@
             FXB.reconcile();
         }
 
-        // Existing modules still own reconcile for now.
-        FXB.events.emit('fxb:render:after', { payload: payload });
     };
 
     // Bootstrap loader (replaces assets/bootstrap.js).

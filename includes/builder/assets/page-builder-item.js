@@ -79,10 +79,6 @@
 
     const on = FXB.dom.on;
 
-    // Direct edits in item textareas (if user types without opening the modal) should mark dirty.
-    on(document.body, 'input', '.fxb-item-textarea', function () {
-    });
-
     // Add item
     on(document.body, 'click', '.fxb-add-item', function (e, addBtn) {
         e.preventDefault();

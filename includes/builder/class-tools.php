@@ -1,6 +1,5 @@
 <?php
 namespace fx_builder\builder;
-use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }

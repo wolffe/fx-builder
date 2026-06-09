@@ -1,6 +1,5 @@
 <?php
 namespace fx_builder\builder;
-use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
@@ -315,13 +314,25 @@ class Functions {
     }
 
     /**
+     * Load and sanitize builder meta for a post.
+     */
+    public static function get_post_builder_data( $post_id ) {
+        return [
+            'row_ids' => Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) ),
+            'rows'    => Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) ),
+            'items'   => Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) ),
+        ];
+    }
+
+    /**
      * Format Post Builder Data To Single String
      * This is the builder data without div wrapper
      */
     public static function content_raw( $post_id ) {
-        $row_ids    = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );
-        $rows_data  = Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) );
-        $items_data = Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) );
+        $data       = self::get_post_builder_data( $post_id );
+        $row_ids    = $data['row_ids'];
+        $rows_data  = $data['rows'];
+        $items_data = $data['items'];
         if ( ! $row_ids || ! $rows_data ) {
             return false;
         }
@@ -350,9 +361,10 @@ class Functions {
      * This will format FX Builder data to content (single string)
      */
     public static function content( $post_id ) {
-        $row_ids    = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );
-        $rows_data  = Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) );
-        $items_data = Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) );
+        $data       = self::get_post_builder_data( $post_id );
+        $row_ids    = $data['row_ids'];
+        $rows_data  = $data['rows'];
+        $items_data = $data['items'];
         $rows       = explode( ',', $row_ids );
         if ( ! $row_ids || ! $rows_data ) {
             return false;

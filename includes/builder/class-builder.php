@@ -1,6 +1,5 @@
 <?php
 namespace fx_builder\builder;
-use fx_builder\Functions as Fs;
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
@@ -94,15 +93,13 @@ class Builder {
      */
     public function load_templates( $post_id ) {
 
-        $rows_data  = Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) );
-        $row_ids    = Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) );
-        $items_data = Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) );
+        $data = Functions::get_post_builder_data( $post_id );
 
         // Provide a bootstrap payload. Rendering is handled by FXB core on DOMContentLoaded.
         $payload = [
-            'row_ids' => $row_ids,
-            'rows'    => $rows_data,
-            'items'   => $items_data,
+            'row_ids' => $data['row_ids'],
+            'rows'    => $data['rows'],
+            'items'   => $data['items'],
         ];
 
         echo '<script type="text/javascript">window.FXB_BOOTSTRAP = ' . wp_json_encode( $payload ) . ';</script>';

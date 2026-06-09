@@ -1,6 +1,6 @@
 ; (function () {
     const FXB = window.FXB;
-    if (!FXB || !FXB.dom || !FXB.modal || !FXB.rows || !FXB.items || typeof FXB.reconcile !== 'function') return;
+    if (!FXB || !FXB.dom || !FXB.modal || !FXB.templates || typeof FXB.reconcile !== 'function') return;
     const qs = FXB.dom.qs;
     const on = FXB.dom.on;
 
@@ -43,6 +43,7 @@
             row_column_gap: '',
             row_column_gap_unit: 'px',
             row_bg_color: '',
+            row_bg_image: '',
             row_col_padding: '',
             row_col_padding_unit: 'px',
             col_1_bg_color: '',
@@ -114,7 +115,7 @@
         let originalRowSettings = {};
 
         function saveRowSettingsState(modalEl) {
-            const fields = ['row_title', 'layout', 'row_html_width', 'row_content_page_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
+            const fields = ['row_title', 'layout', 'row_html_width', 'row_content_page_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_bg_image', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
             originalRowSettings = {};
             fields.forEach(function (field) {
                 const el = qs('[data-row_field="' + field + '"]', modalEl);
