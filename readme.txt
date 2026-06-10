@@ -4,7 +4,7 @@ Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
 Tested up to: 2.7.0
 Requires PHP: 7.4
-Stable tag: 1.7.2
+Stable tag: 1.7.3
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,6 +15,19 @@ A simple page builder plugin. The one you can actually use.
 **FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types.
 
 == Changelog ==
+
+= 1.7.3 =
+* Add fullwidth row option to keep nested content at page width (background only stretches edge to edge)
+* Add Stretch vertical align option for equal-height columns
+* Move column vertical align from inline styles to CSS classes (fxb-col-align-*)
+* Widen row settings modal to 600px
+* Centralize row layout definitions; reduce duplicated meta loading and content traversal code
+* Skip re-sanitizing stored builder meta on front-end reads (sanitize on save and admin bootstrap only)
+* Build post_content from sanitized save data without a database round-trip
+* Include custom CSS disable flag in post revisions
+* Remove dead code (unused nonces, AJAX export endpoint, legacy CSS/JS)
+* Fix akar-icons stylesheet path
+* Fix fatal error from duplicate content_raw() method
 
 = 1.7.2 =
 * Remove custom updater
