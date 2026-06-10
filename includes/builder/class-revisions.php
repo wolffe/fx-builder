@@ -6,7 +6,7 @@ if ( ! defined( 'WPINC' ) ) {
 new Revisions();
 
 /**
- * Stuff
+ * Revisions
  * @since 1.0.0
  */
 class Revisions {
@@ -26,6 +26,7 @@ class Revisions {
         '_fxb_rows',
         '_fxb_items',
         '_fxb_custom_css',
+        '_fxb_custom_css_disable',
     ];
 
     /**

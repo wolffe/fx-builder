@@ -2,7 +2,6 @@
     const FXB = window.FXB;
     if (!FXB || !FXB.dom || !FXB.modal) return;
     const qs = FXB.dom.qs;
-    const qsa = FXB.dom.qsa;
     const on = FXB.dom.on;
     const show = function (el) { return FXB.dom.show(el, 'block'); };
     const hide = FXB.dom.hide;
@@ -117,7 +116,6 @@
         if (hidden) hidden.value = payload.row_ids || '';
 
         FXB.render(payload);
-        FXB.reconcile();
     }
 
     on(document.body, 'click', '#fxb-nav-tools', function (e) {

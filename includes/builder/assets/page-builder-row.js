@@ -223,13 +223,36 @@
             if (!(t instanceof Element)) return;
             const modalEl = t.closest('.fxb-row-settings');
             const rowEl = t.closest('.fxb-row');
+
+            if (t.matches('select[data-row_field="layout"]')) {
+                const row = t.closest('.fxb-row');
+                if (!row) return;
+                const newLayout = t.value;
+                const opt = t.options[t.selectedIndex];
+                const newColNum = opt ? opt.getAttribute('data-col_num') : '';
+
+                row.dataset.layout = newLayout;
+                row.setAttribute('data-layout', newLayout);
+                if (newColNum) {
+                    row.dataset.col_num = newColNum;
+                    row.setAttribute('data-col_num', newColNum);
+                    const colInput = qs('input[data-row_field="col_num"]', row);
+                    if (colInput) {
+                        colInput.value = newColNum;
+                    }
+                }
+                return;
+            }
+
             if (modalEl && t.matches('select[data-row_field="row_html_width"]')) {
                 toggleFullwidthRowSettings(modalEl);
             }
-            if (!t.matches('select[data-row_field="row_col_padding_unit"]') || !modalEl || !rowEl) return;
-            const pad = qs('input[data-row_field="row_col_padding"]', modalEl);
-            if (pad && pad.value) rowEl.style.setProperty('--fxb-row-col-padding', pad.value + t.value);
-            else rowEl.style.removeProperty('--fxb-row-col-padding');
+
+            if (t.matches('select[data-row_field="row_col_padding_unit"]') && modalEl && rowEl) {
+                const pad = qs('input[data-row_field="row_col_padding"]', modalEl);
+                if (pad && pad.value) rowEl.style.setProperty('--fxb-row-col-padding', pad.value + t.value);
+                else rowEl.style.removeProperty('--fxb-row-col-padding');
+            }
         });
 
         // Prevent Enter in settings modal from submitting the post form.
@@ -251,30 +274,6 @@
         });
         on(document.body, 'mouseup', '.fxb-grab', function (e, grab) {
             grab.classList.remove('fxb-grabbing');
-        });
-
-        // Layout change: update row dataset + hidden input.
-        document.body.addEventListener('change', function (e) {
-            const t = e.target;
-            if (!(t instanceof Element)) return;
-            if (t.matches('select[data-row_field="layout"]')) {
-                const row = t.closest('.fxb-row');
-                if (!row) return;
-                const newLayout = t.value;
-                const opt = t.options[t.selectedIndex];
-                const newColNum = opt ? opt.getAttribute('data-col_num') : '';
-
-                row.dataset.layout = newLayout;
-                row.setAttribute('data-layout', newLayout);
-                if (newColNum) {
-                    row.dataset.col_num = newColNum;
-                    row.setAttribute('data-col_num', newColNum);
-                    const colInput = qs('input[data-row_field="col_num"]', row);
-                    if (colInput) {
-                        colInput.value = newColNum;
-                    }
-                }
-            }
         });
 
     });

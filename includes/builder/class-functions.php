@@ -6,6 +6,21 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Functions {
     /**
+     * Row layout definitions.
+     */
+    public static function layouts(): array {
+        return [
+            '1'              => [ 'cols' => 1, 'label' => __( '1 Column', 'fx-builder' ), 'image' => 'layout-1.png' ],
+            '12_12'          => [ 'cols' => 2, 'label' => __( '1/2 - 1/2', 'fx-builder' ), 'image' => 'layout-12_12.png' ],
+            '13_23'          => [ 'cols' => 2, 'label' => __( '1/3 - 2/3', 'fx-builder' ), 'image' => 'layout-13_23.png' ],
+            '23_13'          => [ 'cols' => 2, 'label' => __( '2/3 - 1/3', 'fx-builder' ), 'image' => 'layout-23_13.png' ],
+            '13_13_13'       => [ 'cols' => 3, 'label' => __( '1/3 - 1/3 - 1/3', 'fx-builder' ), 'image' => 'layout-13_13_13.png' ],
+            '14_14_14_14'    => [ 'cols' => 4, 'label' => __( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ), 'image' => 'layout-14_14_14_14.png' ],
+            '15_15_15_15_15' => [ 'cols' => 5, 'label' => __( '1/5 - 1/5 - 1/5 - 1/5 - 1/5', 'fx-builder' ), 'image' => 'layout-15_15_15_15_15.png' ],
+        ];
+    }
+
+    /**
      * Add Row
      */
     public static function add_row_field( $method = 'prepend' ) {
@@ -15,27 +30,11 @@ class Functions {
         <div class="fxb-add-row" data-add_row_method="<?php echo esc_attr( $method ); ?>" style="display: grid;">
             <div class="fxb-strikethrough"><?php esc_attr_e( 'Outer Sections', 'fx-builder' ); ?></div>
 
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="1" data-row-col_num="1"><img src="<?php echo esc_url( $img . 'layout-1.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="12_12" data-row-col_num="2"><img src="<?php echo esc_url( $img . 'layout-12_12.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="13_23" data-row-col_num="2"><img src="<?php echo esc_url( $img . 'layout-13_23.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="23_13" data-row-col_num="2"><img src="<?php echo esc_url( $img . 'layout-23_13.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="13_13_13" data-row-col_num="3"><img src="<?php echo esc_url( $img . 'layout-13_13_13.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="14_14_14_14" data-row-col_num="4"><img src="<?php echo esc_url( $img . 'layout-14_14_14_14.png' ); ?>"></div>
-            </div>
-            <div class="layout-thumb-wrap">
-                <div class="layout-thumb" data-row-layout="15_15_15_15_15" data-row-col_num="5"><img src="<?php echo esc_url( $img . 'layout-15_15_15_15_15.png' ); ?>"></div>
-            </div>
+            <?php foreach ( self::layouts() as $layout => $config ) { ?>
+                <div class="layout-thumb-wrap">
+                    <div class="layout-thumb" data-row-layout="<?php echo esc_attr( $layout ); ?>" data-row-col_num="<?php echo esc_attr( (string) $config['cols'] ); ?>"><img src="<?php echo esc_url( $img . $config['image'] ); ?>"></div>
+                </div>
+            <?php } ?>
         </div><!-- .fxb-add-row -->
         <?php
     }
@@ -97,13 +96,9 @@ class Functions {
             </label>
 
             <select id="fxb_rows[{{data.id}}][layout]" data-row_field="layout" name="_fxb_rows[{{data.id}}][layout]" autocomplete="off">
-                <option data-col_num="1" value="1" <# if( data.layout == '1' ){ print('selected="selected"') } #>><?php esc_attr_e( '1 Column', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="12_12" <# if( data.layout == '12_12' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/2 - 1/2', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="13_23" <# if( data.layout == '13_23' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/3 - 2/3', 'fx-builder' ); ?></option>
-                <option data-col_num="2" value="23_13" <# if( data.layout == '23_13' ){ print('selected="selected"') } #>><?php esc_attr_e( '2/3 - 1/3', 'fx-builder' ); ?></option>
-                <option data-col_num="3" value="13_13_13" <# if( data.layout == '13_13_13' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/3 - 1/3 - 1/3', 'fx-builder' ); ?></option>
-                <option data-col_num="4" value="14_14_14_14" <# if( data.layout == '14_14_14_14' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/4 - 1/4 - 1/4 - 1/4', 'fx-builder' ); ?></option>
-                <option data-col_num="5" value="15_15_15_15_15" <# if( data.layout == '15_15_15_15_15' ){ print('selected="selected"') } #>><?php esc_attr_e( '1/5 - 1/5 - 1/5 - 1/5 - 1/5', 'fx-builder' ); ?></option>
+                <?php foreach ( self::layouts() as $layout => $config ) { ?>
+                    <option data-col_num="<?php echo esc_attr( (string) $config['cols'] ); ?>" value="<?php echo esc_attr( $layout ); ?>" <# if( data.layout == '<?php echo esc_js( $layout ); ?>' ){ print('selected="selected"') } #>><?php echo esc_html( $config['label'] ); ?></option>
+                <?php } ?>
             </select>
         </div><!-- .fxb-modal-field -->
 
@@ -314,14 +309,70 @@ class Functions {
     }
 
     /**
-     * Load and sanitize builder meta for a post.
+     * Load builder meta for a post.
      */
-    public static function get_post_builder_data( $post_id ) {
+    public static function get_post_builder_data( $post_id, $sanitize = false ) {
+        $row_ids_raw = get_post_meta( $post_id, '_fxb_row_ids', true );
+        $rows_raw    = get_post_meta( $post_id, '_fxb_rows', true );
+        $items_raw   = get_post_meta( $post_id, '_fxb_items', true );
+
+        if ( $sanitize ) {
+            return [
+                'row_ids' => Sanitize::ids( $row_ids_raw ),
+                'rows'    => Sanitize::rows_data( is_array( $rows_raw ) ? $rows_raw : [] ),
+                'items'   => Sanitize::items_data( is_array( $items_raw ) ? $items_raw : [] ),
+            ];
+        }
+
         return [
-            'row_ids' => Sanitize::ids( get_post_meta( $post_id, '_fxb_row_ids', true ) ),
-            'rows'    => Sanitize::rows_data( get_post_meta( $post_id, '_fxb_rows', true ) ),
-            'items'   => Sanitize::items_data( get_post_meta( $post_id, '_fxb_items', true ) ),
+            'row_ids' => is_string( $row_ids_raw ) ? $row_ids_raw : '',
+            'rows'    => is_array( $rows_raw ) ? $rows_raw : [],
+            'items'   => is_array( $items_raw ) ? $items_raw : [],
         ];
+    }
+
+    /**
+     * Walk rows, columns, and items in builder order.
+     */
+    private static function walk_builder_items( string $row_ids, array $rows_data, array $items_data, callable $callback ): void {
+        foreach ( explode( ',', $row_ids ) as $row_id ) {
+            if ( ! isset( $rows_data[ $row_id ] ) ) {
+                continue;
+            }
+            foreach ( range( 1, (int) $rows_data[ $row_id ]['col_num'] ) as $k ) {
+                foreach ( explode( ',', (string) $rows_data[ $row_id ][ 'col_' . $k ] ) as $item_id ) {
+                    $item_id = trim( $item_id );
+                    if ( $item_id === '' ) {
+                        continue;
+                    }
+                    $callback( $row_id, $k, $item_id, $rows_data, $items_data );
+                }
+            }
+        }
+    }
+
+    /**
+     * Build post_content string from builder data arrays.
+     */
+    public static function content_raw_from_data( string $row_ids, array $rows_data, array $items_data ) {
+        if ( ! $row_ids || ! $rows_data ) {
+            return false;
+        }
+
+        $content = '';
+        self::walk_builder_items(
+            $row_ids,
+            $rows_data,
+            $items_data,
+            function ( $row_id, $k, $item_id, $rows_data, $items_data ) use ( &$content ) {
+                unset( $row_id, $k, $rows_data );
+                if ( ! empty( $items_data[ $item_id ]['content'] ) ) {
+                    $content .= $items_data[ $item_id ]['content'] . "\r\n\r\n";
+                }
+            }
+        );
+
+        return $content;
     }
 
     /**
@@ -329,31 +380,13 @@ class Functions {
      * This is the builder data without div wrapper
      */
     public static function content_raw( $post_id ) {
-        $data       = self::get_post_builder_data( $post_id );
-        $row_ids    = $data['row_ids'];
-        $rows_data  = $data['rows'];
-        $items_data = $data['items'];
-        if ( ! $row_ids || ! $rows_data ) {
+        $data = self::get_post_builder_data( $post_id );
+        if ( ! $data['row_ids'] || ! $data['rows'] ) {
             return false;
         }
-        $rows = explode( ',', $row_ids );
 
-        $content = '';
-        foreach ( $rows as $row_id ) {
-            if ( isset( $rows_data[ $row_id ] ) ) {
-                $cols = range( 1, $rows_data[ $row_id ]['col_num'] );
-                foreach ( $cols as $k ) {
-                    $items = $rows_data[ $row_id ][ 'col_' . $k ];
-                    $items = explode( ',', $items );
-                    foreach ( $items as $item_id ) {
-                        if ( isset( $items_data[ $item_id ]['content'] ) && ! empty( $items_data[ $item_id ]['content'] ) ) {
-                            $content .= $items_data[ $item_id ]['content'] . "\r\n\r\n";
-                        }
-                    }
-                }
-            }
-        }
-        return apply_filters( 'fxb_content_raw', $content, $post_id, $row_ids, $rows_data, $items_data );
+        $content = self::content_raw_from_data( $data['row_ids'], $data['rows'], $data['items'] );
+        return apply_filters( 'fxb_content_raw', $content, $post_id, $data['row_ids'], $data['rows'], $data['items'] );
     }
 
     /**
@@ -416,8 +449,7 @@ class Functions {
                     /* Layout */
                     $row_html_class[] = "fxb-row-layout-{$rows_data[$row_id]['layout']}";
 
-                    $row_html_class = array_map( 'sanitize_html_class', $row_html_class );
-                    $row_html_class = implode( ' ', $row_html_class );
+                    $row_html_class = implode( ' ', array_filter( $row_html_class ) );
 
                     $row_column_align = $rows_data[ $row_id ]['row_column_align'] ? $rows_data[ $row_id ]['row_column_align'] : 'start';
                     $row_column_gap   = $rows_data[ $row_id ]['row_column_gap'] ? $rows_data[ $row_id ]['row_column_gap'] . $rows_data[ $row_id ]['row_column_gap_unit'] : '2em';
@@ -487,15 +519,7 @@ class Functions {
      * Get Col Number from Layout
      */
     public static function get_col_num( $layout ) {
-        $map = [
-            '1'              => 1,
-            '12_12'          => 2,
-            '13_23'          => 2,
-            '23_13'          => 2,
-            '13_13_13'       => 3,
-            '14_14_14_14'    => 4,
-            '15_15_15_15_15' => 5,
-        ];
-        return $map[ $layout ] ?? 1;
+        $layouts = self::layouts();
+        return $layouts[ $layout ]['cols'] ?? 1;
     }
 } // end class

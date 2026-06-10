@@ -31,7 +31,8 @@ class Builder {
         if ( ! post_type_supports( $post->post_type, 'fx_builder' ) ) {
             return;
         }
-        $post_id = $post->ID;
+        $post_id   = $post->ID;
+        $bootstrap = Functions::get_post_builder_data( $post_id, true );
         ?>
 
         <div id="fxb-wrapper">
@@ -45,7 +46,7 @@ class Builder {
 
             <?php Functions::add_row_field( 'append' ); ?>
 
-            <input type="hidden" name="_fxb_row_ids" value="<?php echo esc_attr( get_post_meta( $post_id, '_fxb_row_ids', true ) ); ?>" autocomplete="off">
+            <input type="hidden" name="_fxb_row_ids" value="<?php echo esc_attr( $bootstrap['row_ids'] ); ?>" autocomplete="off">
             <input type="hidden" name="_fxb_db_version" value="<?php echo esc_attr( VERSION ); ?>" autocomplete="off">
             <?php wp_nonce_field( __FILE__, 'fxb_nonce' ); // create nonce ?>
 
@@ -93,7 +94,7 @@ class Builder {
      */
     public function load_templates( $post_id ) {
 
-        $data = Functions::get_post_builder_data( $post_id );
+        $data = Functions::get_post_builder_data( $post_id, true );
 
         // Provide a bootstrap payload. Rendering is handled by FXB core on DOMContentLoaded.
         $payload = [
@@ -153,10 +154,12 @@ class Builder {
             '_fxb_rows'       => [ Sanitize::class, 'rows_data' ],
             '_fxb_items'      => [ Sanitize::class, 'items_data' ],
         ];
+        $saved = [];
         foreach ( $meta_map as $key => $sanitizer ) {
             $value = isset( $request[ $key ] ) ? call_user_func( $sanitizer, $request[ $key ] ) : null;
             if ( $value ) {
                 update_post_meta( $post_id, $key, $value );
+                $saved[ $key ] = $value;
             } else {
                 delete_post_meta( $post_id, $key );
             }
@@ -164,7 +167,11 @@ class Builder {
 
         /* Content Data
         ------------------------------------------ */
-        $pb_content = Functions::content_raw( $post_id );
+        $pb_content = Functions::content_raw_from_data(
+            $saved['_fxb_row_ids'] ?? '',
+            $saved['_fxb_rows'] ?? [],
+            $saved['_fxb_items'] ?? []
+        ) ?: '';
         $this_post  = [
             'ID'           => $post_id,
             'post_content' => sanitize_post_field( 'post_content', $pb_content, $post_id, 'db' ),
@@ -194,7 +201,7 @@ class Builder {
 
             /* Enqueue CSS */
             wp_enqueue_style( 'fx-builder', URI . 'assets/page-builder.css', [], VERSION );
-            wp_enqueue_style( 'fx-builder-akar-icons', URI . 'assets/fonts/akar-icons/akar-icons.min.css', [], VERSION );
+            wp_enqueue_style( 'fx-builder-akar-icons', URI . 'assets/fonts/akar-icons/akar-icons.css', [], VERSION );
 
             // Core utilities / namespace. Depends on wp-util (wp.template()).
             wp_enqueue_script( 'fx-builder-core', URI . 'assets/fxb-core.js', [ 'wp-util' ], VERSION, true );
@@ -205,11 +212,6 @@ class Builder {
             wp_enqueue_script( 'fx-builder-col', URI . 'assets/page-builder-col.js', [ 'fx-builder-core' ], VERSION, true );
             /* Enqueue JS: ITEM */
             wp_enqueue_script( 'fx-builder-item', URI . 'assets/page-builder-item.js', [ 'fx-builder-core', 'sortable-js', 'wp-util' ], VERSION, true );
-            $ajax_data = [
-                'ajax_url'   => admin_url( 'admin-ajax.php' ),
-                'ajax_nonce' => wp_create_nonce( 'fxb_ajax_nonce' ),
-            ];
-            wp_localize_script( 'fx-builder-item', 'fxb_ajax', $ajax_data );
         }
     }
 }

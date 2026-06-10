@@ -132,14 +132,14 @@ class Sanitize {
         return in_array( $input, $valid ) ? $input : $default;
     }
 
-    public static function state( $input ) {
+    private static function state( $input ) {
         return self::enum_or_default( $input, [ 'open', 'close' ], 'open' );
     }
 
     private static function layout( $layout ) {
         return self::enum_or_default(
             $layout,
-            [ '1', '12_12', '13_23', '23_13', '13_13_13', '14_14_14_14', '15_15_15_15_15' ],
+            array_keys( Functions::layouts() ),
             '1'
         );
     }
@@ -177,7 +177,7 @@ class Sanitize {
     /**
      * Sanitize HTML Classes
      */
-    public static function html_classes( $classes ) {
+    private static function html_classes( $classes ) {
         $classes = explode( ' ', $classes );
         $classes = array_map( 'sanitize_html_class', $classes );
         $classes = implode( ' ', $classes );
@@ -191,7 +191,7 @@ class Sanitize {
     public static function version( $input ) {
         $output = sanitize_text_field( $input );
         $output = str_replace( ' ', '', $output );
-        return trim( esc_attr( $output ) );
+        return trim( $output );
     }
 
     /**

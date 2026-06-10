@@ -19,8 +19,6 @@ class Tools {
         /* Scripts */
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 
-        /* Ajax: To JSON */
-        add_action( 'wp_ajax_fxb_export_to_json', [ $this, 'ajax_export_to_json' ] );
         add_action( 'wp_ajax_fxb_import_data', [ $this, 'ajax_import_data' ] );
     }
 
@@ -28,7 +26,6 @@ class Tools {
      * CSS Control
      */
     public function add_tools_control( $post ) {
-        $post_id = $post->ID;
         ?>
         <a href="#" id="fxb-nav-tools" class="fxb-nav-tools"><i class="ai-arrow-right-left"></i> <?php esc_attr_e( 'Tools', 'fx-builder' ); ?></a>
         <?php
@@ -38,7 +35,7 @@ class Tools {
                 'title'    => __( 'Tools', 'fx-builder' ),
                 'width'    => '400px',
                 'height'   => '380px',
-                'callback' => function () use ( $post_id ) {
+                'callback' => function () {
                     ?>
                     <ul class="wp-tab-bar">
                         <li id="fxb-export-tab" class="tabs wp-tab-active">
@@ -88,27 +85,6 @@ class Tools {
             ];
             wp_localize_script( 'fx-builder-tools', 'fxb_tools', $ajax_data );
         }
-    }
-
-    /**
-     * Ajax Export To JSon
-     */
-    public function ajax_export_to_json() {
-
-        /* Strip Slash */
-        $request = stripslashes_deep( $_POST );
-
-        /* Check Ajax */
-        check_ajax_referer( 'fxb_tools_nonce', 'nonce' );
-
-        $data = [
-            'row_ids' => isset( $request['row_ids'] ) ? $request['row_ids'] : '',
-            'rows'    => isset( $request['rows'] ) ? $request['rows'] : [],
-            'items'   => isset( $request['items'] ) ? $request['items'] : [],
-        ];
-
-        echo wp_json_encode( $data );
-        wp_die();
     }
 
     /**

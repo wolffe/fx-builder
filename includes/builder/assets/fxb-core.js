@@ -3,7 +3,6 @@
      * FXB Core (no dependencies)
      * - Provides a single namespace (window.FXB)
      * - Small shared utilities used across modules
-     * - Lightweight event bus via CustomEvent
      */
 
     const FXB = window.FXB || {};

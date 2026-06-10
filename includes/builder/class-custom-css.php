@@ -43,7 +43,7 @@ class Custom_CSS {
                 'height'   => '400px',
                 'callback' => function () use ( $post_id ) {
                     ?>
-                    <textarea class="fxb-custom-css-textarea" name="_fxb_custom_css" autocomplete="off" placeholder="<?php esc_attr_e( 'Custom CSS Here...', 'fx-builder' ); ?>"><?php echo esc_textarea( Sanitize::css( get_post_meta( $post_id, '_fxb_custom_css', true ) ) ); ?></textarea>
+                    <textarea class="fxb-custom-css-textarea" name="_fxb_custom_css" autocomplete="off" placeholder="<?php esc_attr_e( 'Custom CSS Here...', 'fx-builder' ); ?>"><?php echo esc_textarea( get_post_meta( $post_id, '_fxb_custom_css', true ) ); ?></textarea>
                     <p><label><input autocomplete="off" type="checkbox" name="_fxb_custom_css_disable" value="1" <?php checked( '1', get_post_meta( $post_id, '_fxb_custom_css_disable', true ) ); ?>><?php esc_attr_e( 'Disable Custom CSS', 'fx-builder' ); ?></label></p>
                     <?php
                 },
@@ -133,7 +133,7 @@ class Custom_CSS {
         if ( $css && ! $disable ) {
             ?>
             <style id="fx-builder-custom-css">
-                <?php echo esc_html( wp_strip_all_tags( $css ) ); ?>
+                <?php echo esc_html( $css ); ?>
             </style>
             <?php
         }
