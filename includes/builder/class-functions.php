@@ -210,6 +210,15 @@ class Functions {
             </div>
         </div><!-- .fxb-modal-field -->
 
+        <?php /* Remove bottom spacing */ ?>
+        <div class="fxb-modal-field fxb-modal-field-checkbox">
+            <label for="fxb_rows[{{data.id}}][row_no_mb]">
+                <?php esc_html_e( 'Remove bottom spacing', 'fx-builder' ); ?>
+                <button type="button" class="fxb-help-tip" data-tooltip="<?php esc_attr_e( 'Removes the gap below this row so the next row sits directly underneath.', 'fx-builder' ); ?>" aria-label="<?php esc_attr_e( 'Help about bottom spacing', 'fx-builder' ); ?>">?</button>
+            </label>
+            <input autocomplete="off" id="fxb_rows[{{data.id}}][row_no_mb]" data-row_field="row_no_mb" name="_fxb_rows[{{data.id}}][row_no_mb]" type="checkbox" value="1" <# if( data.row_no_mb == '1' ){ print('checked="checked"') } #>>
+        </div><!-- .fxb-modal-field -->
+
         <hr style="margin: 1em 0;">
 
         <?php /* ID (Anchor) */ ?>
@@ -441,6 +450,10 @@ class Functions {
                         && '1' === $rows_data[ $row_id ]['row_content_page_width']
                     ) {
                         $row_html_class[] = 'fxb-content-contained';
+                    }
+
+                    if ( isset( $rows_data[ $row_id ]['row_no_mb'] ) && '1' === $rows_data[ $row_id ]['row_no_mb'] ) {
+                        $row_html_class[] = 'fxb-row-no-mb';
                     }
 
                     /* ID */

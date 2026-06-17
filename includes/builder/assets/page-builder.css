@@ -156,6 +156,9 @@
     margin-bottom: var(--fxb-template-gap, 20px);
     border-radius: 0 0 var(--fxb-radius-small) var(--fxb-radius-small);
 }
+.fxb-row-no-mb {
+    margin-bottom: 0;
+}
 .fxb-row-menu {
     color: #fff;
     border-radius: var(--fxb-radius-small) var(--fxb-radius-small) 0 0;

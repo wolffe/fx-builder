@@ -15,6 +15,11 @@
         fullwidthField.style.display = widthSelect.value === 'fullwidth' ? '' : 'none';
     }
 
+    function applyRowNoMbClass(rowEl, enabled) {
+        if (!rowEl) return;
+        rowEl.classList.toggle('fxb-row-no-mb', !!enabled);
+    }
+
     function getRowConfigFromThumb(thumbEl) {
         const rowId = Date.now();
         const layout = thumbEl.getAttribute('data-row-layout') || '1';
@@ -46,6 +51,7 @@
             row_bg_image: '',
             row_col_padding: '',
             row_col_padding_unit: 'px',
+            row_no_mb: '',
             col_1_bg_color: '',
             col_2_bg_color: '',
             col_3_bg_color: '',
@@ -115,7 +121,7 @@
         let originalRowSettings = {};
 
         function saveRowSettingsState(modalEl) {
-            const fields = ['row_title', 'layout', 'row_html_width', 'row_content_page_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_bg_image', 'row_col_padding', 'row_col_padding_unit', 'row_html_id', 'row_html_class'];
+            const fields = ['row_title', 'layout', 'row_html_width', 'row_content_page_width', 'row_html_height', 'row_html_height_unit', 'row_column_align', 'row_column_gap', 'row_column_gap_unit', 'row_bg_color', 'row_bg_image', 'row_col_padding', 'row_col_padding_unit', 'row_no_mb', 'row_html_id', 'row_html_class'];
             originalRowSettings = {};
             fields.forEach(function (field) {
                 const el = qs('[data-row_field="' + field + '"]', modalEl);
@@ -137,6 +143,8 @@
             if (rowEl) {
                 rowEl.style.removeProperty('--fxb-row-bg-color');
                 rowEl.style.removeProperty('--fxb-row-col-padding');
+                const noMb = qs('input[data-row_field="row_no_mb"]', modalEl);
+                applyRowNoMbClass(rowEl, noMb && noMb.checked);
             }
             if (modalEl) {
                 toggleFullwidthRowSettings(modalEl);
@@ -182,6 +190,9 @@
                 const unitVal = padUnit && padUnit.value ? padUnit.value : 'px';
                 if (padVal) rowEl.style.setProperty('--fxb-row-col-padding', padVal + unitVal);
                 else rowEl.style.removeProperty('--fxb-row-col-padding');
+
+                const noMb = qs('input[data-row_field="row_no_mb"]', modalEl);
+                applyRowNoMbClass(rowEl, noMb && noMb.checked);
 
                 FXB.modal.close(modalEl);
                 originalRowSettings = {};
@@ -246,6 +257,10 @@
 
             if (modalEl && t.matches('select[data-row_field="row_html_width"]')) {
                 toggleFullwidthRowSettings(modalEl);
+            }
+
+            if (t.matches('input[data-row_field="row_no_mb"]') && modalEl && rowEl) {
+                applyRowNoMbClass(rowEl, t.checked);
             }
 
             if (t.matches('select[data-row_field="row_col_padding_unit"]') && modalEl && rowEl) {

@@ -30,6 +30,9 @@
 .fxb-row:last-child {
     margin-bottom: 0;
 }
+.fxb-row-no-mb {
+    margin-bottom: 0;
+}
 
 .fxb-row .fxb-col {
     box-sizing: border-box;

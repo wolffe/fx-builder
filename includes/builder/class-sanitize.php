@@ -44,6 +44,7 @@ class Sanitize {
                 'row_bg_image'        => '',
                 'row_col_padding'     => '',
                 'row_col_padding_unit'=> 'px',
+                'row_no_mb'           => '',
                 'col_1_bg_color'      => '',
                 'col_2_bg_color'      => '',
                 'col_3_bg_color'      => '',
@@ -80,6 +81,7 @@ class Sanitize {
             $rows[ $row_id ]['row_col_padding']      = sanitize_text_field( $rows[ $row_id ]['row_col_padding'] );
             $rows[ $row_id ]['row_col_padding']      = preg_replace( '/[^0-9.]/', '', (string) $rows[ $row_id ]['row_col_padding'] );
             $rows[ $row_id ]['row_col_padding_unit'] = self::unit( $rows[ $row_id ]['row_col_padding_unit'], [ 'px', '%', 'em', 'rem' ], 'px' );
+            $rows[ $row_id ]['row_no_mb']            = self::checkbox( $rows[ $row_id ]['row_no_mb'] );
 
             for ( $col_i = 1; $col_i <= 5; $col_i++ ) {
                 $bg_key                          = "col_{$col_i}_bg_color";
