@@ -15,9 +15,22 @@
         });
 
         function applyLineHeight(editor, value) {
-            const selectedText = editor.selection.getContent();
-            if (selectedText) {
-                editor.execCommand('mceInsertContent', false, `<span style="line-height: ${value};">${selectedText}</span>`);
+            const blocks = editor.selection.getSelectedBlocks();
+
+            if (!blocks.length) {
+                const node = editor.selection.getNode();
+                const block = editor.dom.getParent(node, editor.dom.isBlock);
+                if (block) {
+                    blocks.push(block);
+                }
+            }
+
+            blocks.forEach(function (block) {
+                editor.dom.setStyle(block, 'line-height', value);
+            });
+
+            if (blocks.length) {
+                editor.nodeChanged();
             }
         }
     });
