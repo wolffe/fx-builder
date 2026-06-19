@@ -170,6 +170,7 @@
 /* Row background color preview (builder) */
 .fxb-row-content {
     background-color: var(--fxb-row-bg-color, transparent);
+    border-radius: 0 0 var(--fxb-radius-small) var(--fxb-radius-small);
 }
 /* State */
 .fxb-row[data-state="close"] .fxb-row-content {
@@ -281,12 +282,12 @@
 
 /* Column menu */
 .fxb-col-menu {
-    background: #eee;
-    color: #888;
-    margin-top: 10px;
-}
-.fxb-col-menu .fxb-icon {
-    border-color: #ccc;
+    display: flex;
+    align-items: center;
+
+    background: #eeeeee;
+    border-radius: var(--fxb-radius-small);
+    color: #888888;
 }
 .fxb-col-menu .fxb-link:hover {
     color: #444;
@@ -304,8 +305,9 @@
 
 /* Add Item */
 .fxb-add-item {
-    background-color: #fff;
+    background-color: #ffffff;
     border: 1px solid #dfdfdf;
+    border-radius: var(--fxb-radius-small);
     clear: both;
     height: 36px;
 }
@@ -370,6 +372,8 @@
     padding: 0;
     position: relative;
     overflow: hidden;
+    /* Prevent line height from affecting iframe height */
+    line-height: 0;
 }
 /* Iframe overlay */
 .fxb-item-iframe-overlay {

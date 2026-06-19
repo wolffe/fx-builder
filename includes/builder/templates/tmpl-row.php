@@ -58,40 +58,14 @@ namespace fx_builder\builder;
         <div class="fxb-row-content fxb-clear">
 
             <?php
-            Functions::render_column(
-                [
-                    'title' => __( '1st Column', 'fx-builder' ),
-                    'index' => 1,
-                ]
-            );
-
-            Functions::render_column(
-                [
-                    'title' => __( '2nd Column', 'fx-builder' ),
-                    'index' => 2,
-                ]
-            );
-
-            Functions::render_column(
-                [
-                    'title' => __( '3rd Column', 'fx-builder' ),
-                    'index' => 3,
-                ]
-            );
-
-            Functions::render_column(
-                [
-                    'title' => __( '4th Column', 'fx-builder' ),
-                    'index' => 4,
-                ]
-            );
-
-            Functions::render_column(
-                [
-                    'title' => __( '5th Column', 'fx-builder' ),
-                    'index' => 5,
-                ]
-            );
+            for ( $i = 1; $i <= 5; $i++ ) {
+                Functions::render_column(
+                    [
+                        'title' => __( 'Column', 'fx-builder' ),
+                        'index' => $i,
+                    ]
+                );
+            }
             ?>
 
         </div><!-- .fxb-row-content -->

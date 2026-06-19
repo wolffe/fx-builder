@@ -287,11 +287,9 @@ class Functions {
             <input type="hidden" data-id="item_ids" data-row_field="<?php echo esc_attr( $field ); ?>" name="_fxb_rows[{{data.id}}][<?php echo esc_attr( $field ); ?>]" value="{{data.<?php echo esc_attr( $field ); ?>}}" autocomplete="off"/>
 
             <?php /* Column menu */ ?>
-            <div class="fxb-col-menu fxb-clear">
-                <div class="fxb-left">
-                    <span class="fxb-col-label"><?php echo esc_html( $title ); ?></span>
-                </div><!-- .fxb-left -->
-                <div class="fxb-right">
+            <div class="fxb-col-menu">
+                <div class="fxb-col-label"><?php echo esc_html( $title ); ?></div>
+                <div style="margin-left: auto;">
                     <span data-target=".fxb-col-settings" class="fxb-icon fxb-link fxb-col-settings-trigger dashicons dashicons-admin-generic" aria-label="<?php esc_attr_e( 'Column settings', 'fx-builder' ); ?>"></span>
                     <?php
                     self::render_settings(
@@ -304,7 +302,7 @@ class Functions {
                         ]
                     );
                     ?>
-                </div><!-- .fxb-right -->
+                </div>
             </div><!-- .fxb-col-menu -->
 
             <div class="fxb-col-content">{{{ (data.col_html && data.col_html['<?php echo esc_attr( $field ); ?>']) ? data.col_html['<?php echo esc_attr( $field ); ?>'] : '' }}}</div><!-- .fxb-col-content -->
