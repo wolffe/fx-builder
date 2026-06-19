@@ -344,7 +344,29 @@
         if (targetTextarea && editorTextarea) targetTextarea.value = editorTextarea.value || '';
     };
 
+    FXB.editor.applyEditorBackground = function (editorId, bgColor) {
+        const ed = FXB.editor.get(editorId || 'fxb_editor');
+        if (ed && ed.getBody()) {
+            ed.getBody().style.backgroundColor = bgColor || '#ffffff';
+        }
+    };
+
     FXB.items = FXB.items || {};
+
+    FXB.items.getEditorBackground = function (itemEl) {
+        if (!itemEl) return '#ffffff';
+        const col = itemEl.closest('.fxb-col');
+        if (col) {
+            const colBg = getComputedStyle(col).getPropertyValue('--fxb-col-bg-color').trim();
+            if (colBg) return colBg;
+        }
+        const row = itemEl.closest('.fxb-row');
+        if (row) {
+            const rowBg = getComputedStyle(row).getPropertyValue('--fxb-row-bg-color').trim();
+            if (rowBg) return rowBg;
+        }
+        return '#ffffff';
+    };
 
     FXB.items.getIframeCSS = function () {
         if (typeof tinymce === 'undefined' || typeof tinyMCEPreInit === 'undefined') return '';
@@ -373,8 +395,10 @@
         const rawTextarea = iframeEl.parentElement ? qs('.fxb-item-textarea', iframeEl.parentElement) : null;
         const raw = rawTextarea ? rawTextarea.value : '';
         const content = FXB.editor.autop(raw);
+        const bg = FXB.items.getEditorBackground(iframeEl.closest('.fxb-item'));
+        const bodyStyle = ' style="background-color:' + bg + ';"';
 
-        const html = '<!doctype html><html><head>' + (headHtml || '') + '</head><body id="tinymce" class="wp-editor ' + editor_body_class + '">' + content + '</body></html>';
+        const html = '<!doctype html><html><head>' + (headHtml || '') + '</head><body id="tinymce" class="wp-editor ' + editor_body_class + '"' + bodyStyle + '>' + content + '</body></html>';
         iframeEl.srcdoc = html;
     };
 

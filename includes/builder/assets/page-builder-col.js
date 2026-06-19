@@ -1,6 +1,6 @@
 ; (function () {
     const FXB = window.FXB;
-    if (!FXB || !FXB.dom || !FXB.modal || typeof FXB.modal.open !== 'function') return;
+    if (!FXB || !FXB.dom || !FXB.modal || !FXB.items || typeof FXB.modal.open !== 'function') return;
     const qs = FXB.dom.qs;
     const on = FXB.dom.on;
 
@@ -19,6 +19,14 @@
         const input = qs('[data-row_field="' + field + '"]', modalEl);
         if (input && input.value) colEl.style.setProperty('--fxb-col-bg-color', input.value);
         else colEl.style.removeProperty('--fxb-col-bg-color');
+    }
+
+    function refreshColIframes(colEl) {
+        if (!colEl) return;
+        const css = FXB.items.getIframeCSS();
+        colEl.querySelectorAll('.fxb-item-iframe').forEach(function (iframe) {
+            FXB.items.loadIframeContent(iframe, css);
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -42,6 +50,7 @@
             const colEl = closeBtn.closest('.fxb-col');
             if (colEl && modalEl) {
                 applyColBgPreview(colEl, modalEl);
+                refreshColIframes(colEl);
                 FXB.modal.close(modalEl);
                 originalColBg = '';
             }
@@ -57,6 +66,7 @@
             const input = field ? qs('[data-row_field="' + field + '"]', modalEl) : null;
             if (input) input.value = originalColBg;
             applyColBgPreview(colEl, modalEl);
+            refreshColIframes(colEl);
             FXB.modal.close(modalEl);
             originalColBg = '';
         });
@@ -70,6 +80,7 @@
             if (!modalEl || !colEl) return;
             if (t.value) colEl.style.setProperty('--fxb-col-bg-color', t.value);
             else colEl.style.removeProperty('--fxb-col-bg-color');
+            refreshColIframes(colEl);
         });
 
         document.body.addEventListener('keydown', function (e) {

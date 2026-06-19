@@ -221,6 +221,12 @@
             if (t.matches('input[data-row_field="row_bg_color"]')) {
                 if (t.value) rowEl.style.setProperty('--fxb-row-bg-color', t.value);
                 else rowEl.style.removeProperty('--fxb-row-bg-color');
+                if (FXB.items && typeof FXB.items.loadIframeContent === 'function') {
+                    const css = FXB.items.getIframeCSS();
+                    rowEl.querySelectorAll('.fxb-item-iframe').forEach(function (iframe) {
+                        FXB.items.loadIframeContent(iframe, css);
+                    });
+                }
             }
             if (t.matches('input[data-row_field="row_col_padding"]')) {
                 const padUnit = qs('select[data-row_field="row_col_padding_unit"]', modalEl);

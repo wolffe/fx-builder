@@ -29,6 +29,7 @@
 
         const editorId = 'fxb_editor';
         FXB.editor.setModalContent(editorId, originalContent);
+        FXB.editor.applyEditorBackground(editorId, FXB.items.getEditorBackground(textareaEl.closest('.fxb-item')));
 
         FXB.modal.open(modal);
     }
@@ -46,6 +47,7 @@
             }
         }
 
+        FXB.editor.applyEditorBackground('fxb_editor', '#ffffff');
         FXB.modal.close(qs('.fxb-editor'));
         originalContent = '';
     }
@@ -57,6 +59,7 @@
             itemTextarea.classList.remove('fxb_editing_active');
         }
 
+        FXB.editor.applyEditorBackground('fxb_editor', '#ffffff');
         FXB.modal.close(qs('.fxb-editor'));
         originalContent = '';
     }
