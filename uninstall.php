@@ -5,3 +5,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'fx-builder_post_types' );
 delete_option( 'fx-builder_welcome' );
+delete_option( 'fxb_enabled_modules' );

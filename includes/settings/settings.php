@@ -59,6 +59,7 @@ function fxb_build_admin_page() {
             <a href="<?php echo esc_attr( $section ); ?>dashboard" class="nav-tab <?php echo $tab === 'dashboard' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Dashboard', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>settings" class="nav-tab <?php echo $tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Settings', 'fx-builder' ); ?></a>
             <a href="<?php echo esc_attr( $section ); ?>design" class="nav-tab <?php echo $tab === 'design' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Design', 'fx-builder' ); ?></a>
+            <a href="<?php echo esc_attr( $section ); ?>modules" class="nav-tab <?php echo $tab === 'modules' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Modules', 'fx-builder' ); ?></a>
         </h2>
 
         <?php if ( $tab === 'dashboard' ) { ?>
@@ -241,6 +242,56 @@ function fxb_build_admin_page() {
                 }
             })();
             </script>
+            <?php
+        } elseif ( $tab === 'modules' ) {
+            $enabled_modules = (array) get_option( 'fxb_enabled_modules', [] );
+            ?>
+            <h2><?php esc_html_e( 'Modules', 'fx-builder' ); ?></h2>
+
+            <?php
+            if ( isset( $_POST['save_modules'] ) ) {
+                if ( ! isset( $_POST['fxb_modules_nonce'] ) || ! check_admin_referer( 'save_fxb_modules_action', 'fxb_modules_nonce' ) ) {
+                    wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'fx-builder' ) );
+                }
+
+                $selected_modules = isset( $_POST['fxb_enabled_modules'] )
+                    ? array_map( 'sanitize_text_field', wp_unslash( $_POST['fxb_enabled_modules'] ) )
+                    : [];
+
+                $enabled_modules = array_values( array_intersect( $selected_modules, array_keys( fxb_get_modules() ) ) );
+                update_option( 'fxb_enabled_modules', $enabled_modules );
+
+                echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Modules updated successfully!', 'fx-builder' ) . '</p></div>';
+            }
+            ?>
+
+            <form method="post">
+                <?php wp_nonce_field( 'save_fxb_modules_action', 'fxb_modules_nonce' ); ?>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><label><?php esc_html_e( 'Enable modules', 'fx-builder' ); ?></label></th>
+                            <td>
+                                <?php foreach ( fxb_get_modules() as $slug => $module ) { ?>
+                                    <p>
+                                        <label>
+                                            <input type="checkbox" value="<?php echo esc_attr( $slug ); ?>" name="fxb_enabled_modules[]" <?php checked( in_array( $slug, $enabled_modules, true ) ); ?>>
+                                            <?php echo esc_html( $module['name'] ); ?>
+                                        </label>
+                                    </p>
+                                    <?php if ( ! empty( $module['description'] ) ) { ?>
+                                        <p class="description"><?php echo esc_html( $module['description'] ); ?></p>
+                                    <?php } ?>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="submit" name="save_modules" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'fx-builder' ); ?>"></th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
             <?php
         } elseif ( $tab === 'settings' ) {
             ?>
