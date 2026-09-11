@@ -1,10 +1,11 @@
 === FX Builder ===
 Contributors: butterflymedia
+Donate link: https://buymeacoffee.com/wolffe
 Tags: page builder, drag, drop, sortable, columns
 Requires at least: 2.0
-Tested up to: 2.7.0
+Tested up to: 2.7.2
 Requires PHP: 7.4
-Stable tag: 1.7.4
+Stable tag: 1.7.5
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,7 +15,14 @@ A simple page builder plugin. The one you can actually use.
 
 **FX Builder** is a page builder plugin that provides visual columns in the post editor without using shortcodes. From the settings page, you can enable it for posts, pages, and custom post types.
 
+Find more tools at [ClassicPress Plugins](https://getbutterfly.com/classicpress-plugins/).
+
 == Changelog ==
+
+= 1.7.5 =
+* Confirm compatibility with ClassicPress 2.7.2.
+* Add links to ClassicPress Plugins and the donation page.
+* Standardize the installable plugin ZIP included with each GitHub release.
 
 = 1.7.4 =
 * Add Modules settings tab with optional bundled modules (disabled by default)
