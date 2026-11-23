@@ -19,40 +19,7 @@ class Sanitize {
         $rows = [];
 
         foreach ( $input as $row_id => $row_data ) {
-            $default = [
-                'id'                  => $row_id,
-                'index'               => '',
-                'state'               => 'open',
-                'col_num'             => '1',
-                'layout'              => '1',
-                'col_1'               => '',
-                'col_2'               => '',
-                'col_3'               => '',
-                'col_4'               => '',
-                'col_5'               => '',
-                'row_title'              => '',
-                'row_html_width'         => 'default',
-                'row_content_page_width' => '',
-                'row_html_height'        => '',
-                'row_html_height_unit'   => 'px',
-                'row_html_id'         => '',
-                'row_html_class'      => '',
-                'row_column_align'    => 'start',
-                'row_column_gap'      => '',
-                'row_column_gap_unit' => '',
-                'row_bg_color'        => '',
-                'row_bg_image'        => '',
-                'row_col_padding'     => '',
-                'row_col_padding_unit'=> 'px',
-                'row_no_mb'           => '',
-                'col_1_bg_color'      => '',
-                'col_2_bg_color'      => '',
-                'col_3_bg_color'      => '',
-                'col_4_bg_color'      => '',
-                'col_5_bg_color'      => '',
-            ];
-
-            $rows[ $row_id ]                    = wp_parse_args( $row_data, $default );
+            $rows[ $row_id ]                    = wp_parse_args( $row_data, self::row_defaults( $row_id ) );
             $rows[ $row_id ]['id']              = wp_strip_all_tags( $rows[ $row_id ]['id'] );
             $rows[ $row_id ]['index']           = wp_strip_all_tags( $rows[ $row_id ]['index'] );
             $rows[ $row_id ]['state']           = self::state( $rows[ $row_id ]['state'] );
@@ -73,7 +40,7 @@ class Sanitize {
 
             $rows[ $row_id ]['row_column_align']    = self::row_column_align( $rows[ $row_id ]['row_column_align'] );
             $rows[ $row_id ]['row_column_gap']      = sanitize_text_field( $rows[ $row_id ]['row_column_gap'] );
-            $rows[ $row_id ]['row_column_gap_unit'] = self::unit( $rows[ $row_id ]['row_column_gap_unit'], [ 'px', '%', 'em', 'rem', 'vw', '' ], '' );
+            $rows[ $row_id ]['row_column_gap_unit'] = self::unit( $rows[ $row_id ]['row_column_gap_unit'], [ 'px', '%', 'em', 'rem', 'vw' ], 'px' );
 
             $rows[ $row_id ]['row_bg_color'] = sanitize_hex_color( $rows[ $row_id ]['row_bg_color'] ) ?: '';
             $rows[ $row_id ]['row_bg_image'] = esc_url_raw( (string) $rows[ $row_id ]['row_bg_image'] );
@@ -92,6 +59,44 @@ class Sanitize {
         return $rows;
     }
 
+
+    /**
+     * Every row key with its default, used when saving and when rendering rows saved by older versions.
+     */
+    public static function row_defaults( $row_id ) {
+        return [
+            'id'                     => $row_id,
+            'index'                  => '',
+            'state'                  => 'open',
+            'col_num'                => '1',
+            'layout'                 => '1',
+            'col_1'                  => '',
+            'col_2'                  => '',
+            'col_3'                  => '',
+            'col_4'                  => '',
+            'col_5'                  => '',
+            'row_title'              => '',
+            'row_html_width'         => 'default',
+            'row_content_page_width' => '',
+            'row_html_height'        => '',
+            'row_html_height_unit'   => 'px',
+            'row_html_id'            => '',
+            'row_html_class'         => '',
+            'row_column_align'       => 'start',
+            'row_column_gap'         => '',
+            'row_column_gap_unit'    => 'px',
+            'row_bg_color'           => '',
+            'row_bg_image'           => '',
+            'row_col_padding'        => '',
+            'row_col_padding_unit'   => 'px',
+            'row_no_mb'              => '',
+            'col_1_bg_color'         => '',
+            'col_2_bg_color'         => '',
+            'col_3_bg_color'         => '',
+            'col_4_bg_color'         => '',
+            'col_5_bg_color'         => '',
+        ];
+    }
 
     /* ITEMS DATAS
     ------------------------------------------ */

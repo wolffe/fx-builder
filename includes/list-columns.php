@@ -13,14 +13,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Register FX Builder column for supported post types.
  */
 function fxb_list_columns_register() {
-    $post_types = get_option( 'fx-builder_post_types' );
-    if ( ! is_array( $post_types ) || empty( $post_types ) ) {
-        $post_types = [ 'page' ];
-    } else {
-        $post_types = fxb_check_post_types_exists( $post_types );
-    }
-
-    foreach ( $post_types as $pt ) {
+    // Support is added on init (priority 10) by fxb_add_builder_support(); this runs at 20.
+    foreach ( get_post_types_by_support( 'fx_builder' ) as $pt ) {
         add_filter( "manage_edit-{$pt}_columns", 'fxb_list_column_header' );
         add_action( "manage_{$pt}_posts_custom_column", 'fxb_list_column_content', 10, 2 );
     }

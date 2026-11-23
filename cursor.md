@@ -4,7 +4,7 @@ Use this file as ongoing rules for editing the FX Builder plugin.
 
 ## Codebase
 
-- **Plugin type:** ClassicPress/WordPress plugin (page builder). Declared minimum: **PHP 7.4**, **ClassicPress 2.0** (`Requires CP` / readme). No runtime CP version check; testing is typically on current 2.x (e.g. 2.7).
+- **Plugin type:** ClassicPress/WordPress plugin (page builder). Declared minimum: **PHP 7.4**, **ClassicPress 2.5** (`Requires CP` / readme). No runtime CP version check; tested up to 2.7.4.
 - **Main entry:** `fx-builder.php`. Loads `includes/setup.php`, `includes/editor.php`, `includes/settings/settings.php`; in admin also loads `includes/list-columns.php`.
 - **Builder logic:** `includes/builder/` (namespace `fx_builder\builder`). Key files: `class-builder.php` (save, UI), `class-front.php` (front-end output and CSS), `class-functions.php` (content/rows/items), `class-sanitize.php`, `class-switcher.php`, `class-revisions.php`, `class-custom-css.php`, `class-tools.php`.
 - **Settings:** `includes/settings/settings.php` (admin page and tabs), `includes/settings/setup.php` (post type support). Options: `fx-builder_post_types`, `fxb_breakpoint_small`, `fxb_breakpoint_medium`, typography options.

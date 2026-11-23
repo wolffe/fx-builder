@@ -28,22 +28,31 @@ class Front {
      * This will format content with FX Builder data.
      */
     public function content_filter( $content ) {
-
-        /* Check Post Support */
         $post_id   = get_the_ID();
         $post_type = get_post_type( $post_id );
-        if ( ! post_type_supports( $post_type, 'fx_builder' ) ) {
+        if ( ! post_type_supports( $post_type, 'fx_builder' ) || ! get_post_meta( $post_id, '_fxb_active', true ) ) {
             return $content;
         }
 
-        $active = get_post_meta( $post_id, '_fxb_active', true );
-
-        remove_filter( 'the_content', 'wpautop' );
-        if ( $active ) {
-            $content = Functions::content( $post_id ); // autop added in this function.
-        } else {
-            add_filter( 'the_content', 'wpautop' );
+        $builder = Functions::content( $post_id ); // Item content is already run through wpautop.
+        if ( false === $builder ) {
+            return $content;
         }
+
+        /* Skip wpautop for this post only; it is restored after this post so later posts in the loop keep their paragraphs. */
+        if ( has_filter( 'the_content', 'wpautop' ) ) {
+            remove_filter( 'the_content', 'wpautop' );
+            add_filter( 'the_content', [ $this, 'restore_wpautop' ], 11 );
+        }
+        return $builder;
+    }
+
+    /**
+     * Put wpautop back after a builder post has been rendered.
+     */
+    public function restore_wpautop( $content ) {
+        add_filter( 'the_content', 'wpautop' );
+        remove_filter( 'the_content', [ $this, 'restore_wpautop' ], 11 );
         return $content;
     }
 

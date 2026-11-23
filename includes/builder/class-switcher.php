@@ -38,7 +38,7 @@ class Switcher {
         if ( post_type_supports( $post_type, 'editor' ) && post_type_supports( $post_type, 'fx_builder' ) ) {
 
             /* If builder selected */
-            if ( $active = get_post_meta( get_the_ID(), '_fxb_active', true ) ) {
+            if ( get_post_meta( get_the_ID(), '_fxb_active', true ) ) {
                 ?>
                 <script type="text/javascript">
                 /* <![CDATA[ */

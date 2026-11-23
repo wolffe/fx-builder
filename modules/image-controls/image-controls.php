@@ -44,7 +44,7 @@ function fxb_image_controls_allow_tinymce_image_attributes( array $init ): array
         return $init;
     }
 
-    if ( ! str_contains( $init['extended_valid_elements'], 'fetchpriority' ) ) {
+    if ( false === strpos( $init['extended_valid_elements'], 'fetchpriority' ) ) {
         $init['extended_valid_elements'] .= ',' . $img;
     }
 

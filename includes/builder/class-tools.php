@@ -94,6 +94,9 @@ class Tools {
         $request = stripslashes_deep( $_POST );
 
         check_ajax_referer( 'fxb_tools_nonce', 'nonce' );
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_send_json_error( [ 'message' => __( 'You are not allowed to import builder data.', 'fx-builder' ) ], 403 );
+        }
 
         $data    = isset( $request['data'] ) ? $request['data'] : '';
         $data    = json_decode( $data, true );

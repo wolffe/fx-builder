@@ -50,8 +50,14 @@ function fxb_bunny_fonts() {
     );
 }
 
-function fxb_enqueue() {
+function fxb_enqueue( $hook_suffix = '' ) {
     if ( is_admin() ) {
+        // Only the editor of a supported post type and the FX Builder settings screen need these.
+        global $post_type;
+        $editor_screen = in_array( $hook_suffix, [ 'post.php', 'post-new.php' ], true ) && post_type_supports( (string) $post_type, 'fx_builder' );
+        if ( ! $editor_screen && 'toplevel_page_fx_builder' !== $hook_suffix ) {
+            return;
+        }
         wp_enqueue_style( 'fxb-admin-ui', plugins_url( 'includes/builder/assets/fxb-admin-ui.css', FX_BUILDER_FILE ), [], FX_BUILDER_VERSION );
     }
 

@@ -352,8 +352,6 @@ function fxb_build_admin_page() {
                 );
                 update_option( 'fxb_bunny_fonts', $bunny_fonts_post );
 
-                delete_option( 'fxb_font_provider' );
-
                 echo '<div class="updated notice is-dismissible"><p>' . esc_html__( 'Settings updated successfully!', 'fx-builder' ) . '</p></div>';
             }
             ?>
@@ -396,16 +394,6 @@ function fxb_build_admin_page() {
                                     <?php
                                 }
                                 ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label><?php esc_html_e( 'FX Builder Theme', 'fx-builder' ); ?></label></th>
-                            <td>
-                                <p>
-                                    <select name="fxb_theme" id="fxb-theme">
-                                        <option value="light" selected><?php esc_html_e( 'Light', 'fx-builder' ); ?></option>
-                                    </select>
-                                </p>
                             </td>
                         </tr>
                         <tr>

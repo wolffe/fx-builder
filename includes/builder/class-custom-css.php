@@ -65,6 +65,9 @@ class Custom_CSS {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
         $post_type = get_post_type_object( $post->post_type );
         if ( ! current_user_can( $post_type->cap->edit_post, $post_id ) ) {
             return;
@@ -133,7 +136,7 @@ class Custom_CSS {
         if ( $css && ! $disable ) {
             ?>
             <style id="fx-builder-custom-css">
-                <?php echo esc_html( $css ); ?>
+                <?php echo wp_strip_all_tags( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS, not HTML: esc_html() would break selectors such as ".a > .b" and quoted values. Tags are stripped on save and again here. ?>
             </style>
             <?php
         }

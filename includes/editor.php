@@ -78,7 +78,7 @@ add_filter(
 add_filter(
     'mce_external_plugins',
     function ( $plugin_array ) {
-        $plugin_array['custom_line_height'] = plugins_url( '/fx-builder/includes/builder/assets/custom-line-height-plugin.js' );
+        $plugin_array['custom_line_height'] = FX_BUILDER_URI . 'includes/builder/assets/custom-line-height-plugin.js';
         return $plugin_array;
     }
 );

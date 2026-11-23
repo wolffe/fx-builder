@@ -384,20 +384,6 @@ class Functions {
 
     /**
      * Format Post Builder Data To Single String
-     * This is the builder data without div wrapper
-     */
-    public static function content_raw( $post_id ) {
-        $data = self::get_post_builder_data( $post_id );
-        if ( ! $data['row_ids'] || ! $data['rows'] ) {
-            return false;
-        }
-
-        $content = self::content_raw_from_data( $data['row_ids'], $data['rows'], $data['items'] );
-        return apply_filters( 'fxb_content_raw', $content, $post_id, $data['row_ids'], $data['rows'], $data['items'] );
-    }
-
-    /**
-     * Format Post Builder Data To Single String
      * This will format FX Builder data to content (single string)
      */
     public static function content( $post_id ) {
@@ -416,81 +402,50 @@ class Functions {
             <?php foreach ( $rows as $row_id ) { ?>
                 <?php
                 if ( isset( $rows_data[ $row_id ] ) ) {
+                    // Rows saved by older versions may lack newer keys, so fill them in before reading.
+                    $row = wp_parse_args( $rows_data[ $row_id ], Sanitize::row_defaults( $row_id ) );
 
-                    /* = HTML ID = */
-                    $row_html_id = $rows_data[ $row_id ]['row_html_id'] ? $rows_data[ $row_id ]['row_html_id'] : "fxb-row-{$row_id}";
-
-                    /* = HTML CLASS = */
-                    $row_html_class = $rows_data[ $row_id ]['row_html_class'] ? "fxb-row {$rows_data[ $row_id ]['row_html_class']}" : 'fxb-row';
-                    $row_html_class = explode( ' ', $row_html_class ); // array
-
-                    /* = HTML Width = */
-                    $row_html_width = '';
-                    if ( isset( $rows_data[ $row_id ]['row_html_width'] ) ) {
-                        $row_html_width = 'fxb-' . $rows_data[ $row_id ]['row_html_width'];
-                    }
-
-                    /* = HTML Height = */
-                    $row_html_height = '';
-                    if (
-                        isset( $rows_data[ $row_id ]['row_html_height'], $rows_data[ $row_id ]['row_html_height_unit'] )
-                        && $rows_data[ $row_id ]['row_html_height'] !== ''
-                        && $rows_data[ $row_id ]['row_html_height_unit'] !== ''
-                    ) {
-                        $row_html_height = 'height: ' . $rows_data[ $row_id ]['row_html_height'] . $rows_data[ $row_id ]['row_html_height_unit'] . '; overflow: hidden;';
-                    }
-
-                    $row_html_class[] = $row_html_width;
-
-                    if (
-                        isset( $rows_data[ $row_id ]['row_html_width'], $rows_data[ $row_id ]['row_content_page_width'] )
-                        && 'fullwidth' === $rows_data[ $row_id ]['row_html_width']
-                        && '1' === $rows_data[ $row_id ]['row_content_page_width']
-                    ) {
+                    $row_html_id    = $row['row_html_id'] ? $row['row_html_id'] : "fxb-row-{$row_id}";
+                    $row_html_class = explode( ' ', 'fxb-row ' . $row['row_html_class'] );
+                    $row_html_class[] = 'fxb-' . $row['row_html_width'];
+                    if ( 'fullwidth' === $row['row_html_width'] && '1' === $row['row_content_page_width'] ) {
                         $row_html_class[] = 'fxb-content-contained';
                     }
-
-                    if ( isset( $rows_data[ $row_id ]['row_no_mb'] ) && '1' === $rows_data[ $row_id ]['row_no_mb'] ) {
+                    if ( '1' === $row['row_no_mb'] ) {
                         $row_html_class[] = 'fxb-row-no-mb';
                     }
-
-                    /* ID */
                     $row_html_class[] = "fxb-row-{$row_id}";
+                    $row_html_class[] = "fxb-row-layout-{$row['layout']}";
+                    $row_html_class   = implode( ' ', array_filter( $row_html_class ) );
 
-                    /* Layout */
-                    $row_html_class[] = "fxb-row-layout-{$rows_data[$row_id]['layout']}";
+                    $row_html_height = '';
+                    if ( $row['row_html_height'] !== '' && $row['row_html_height_unit'] !== '' ) {
+                        $row_html_height = 'height: ' . $row['row_html_height'] . $row['row_html_height_unit'] . '; overflow: hidden;';
+                    }
 
-                    $row_html_class = implode( ' ', array_filter( $row_html_class ) );
-
-                    $row_column_align = $rows_data[ $row_id ]['row_column_align'] ? $rows_data[ $row_id ]['row_column_align'] : 'start';
-                    $row_column_gap   = $rows_data[ $row_id ]['row_column_gap'] ? $rows_data[ $row_id ]['row_column_gap'] . $rows_data[ $row_id ]['row_column_gap_unit'] : '2em';
+                    $row_column_align = $row['row_column_align'] ? $row['row_column_align'] : 'start';
+                    $row_column_gap   = $row['row_column_gap'] ? $row['row_column_gap'] . ( $row['row_column_gap_unit'] ? $row['row_column_gap_unit'] : 'px' ) : '2em';
 
                     $row_style_vars = '';
-                    if ( ! empty( $rows_data[ $row_id ]['row_bg_color'] ) ) {
-                        $row_style_vars .= '--fxb-row-bg-color:' . esc_attr( $rows_data[ $row_id ]['row_bg_color'] ) . ';';
+                    if ( $row['row_bg_color'] ) {
+                        $row_style_vars .= '--fxb-row-bg-color:' . esc_attr( $row['row_bg_color'] ) . ';';
                     }
-                    if ( ! empty( $rows_data[ $row_id ]['row_bg_image'] ) ) {
-                        $row_style_vars .= "--fxb-row-bg-image:url('" . esc_url( $rows_data[ $row_id ]['row_bg_image'] ) . "');";
+                    if ( $row['row_bg_image'] ) {
+                        $row_style_vars .= "--fxb-row-bg-image:url('" . esc_url( $row['row_bg_image'] ) . "');";
                     }
-                    if ( ! empty( $rows_data[ $row_id ]['row_col_padding'] ) && ! empty( $rows_data[ $row_id ]['row_col_padding_unit'] ) ) {
-                        $row_style_vars .= '--fxb-row-col-padding:' . esc_attr( $rows_data[ $row_id ]['row_col_padding'] . $rows_data[ $row_id ]['row_col_padding_unit'] ) . ';';
+                    if ( $row['row_col_padding'] && $row['row_col_padding_unit'] ) {
+                        $row_style_vars .= '--fxb-row-col-padding:' . esc_attr( $row['row_col_padding'] . $row['row_col_padding_unit'] ) . ';';
                     }
                     ?>
 
-                    <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $rows_data[ $row_id ]['index'] ); ?>" data-layout="<?php echo esc_attr( $rows_data[ $row_id ]['layout'] ); ?>"<?php echo $row_style_vars ? ' style="' . esc_attr( $row_style_vars ) . '"' : ''; ?>>
+                    <div id="<?php echo esc_attr( $row_html_id ); ?>" class="<?php echo esc_attr( $row_html_class ); ?>" data-index="<?php echo intval( $row['index'] ); ?>" data-layout="<?php echo esc_attr( $row['layout'] ); ?>"<?php echo $row_style_vars ? ' style="' . esc_attr( $row_style_vars ) . '"' : ''; ?>>
 
                         <div class="fxb-wrap fxb-col-align-<?php echo esc_attr( $row_column_align ); ?>" style="gap: var(--fxb-template-gap, <?php echo esc_attr( $row_column_gap ); ?>); <?php echo esc_attr( $row_html_height ); ?>">
 
                             <?php
-                            $cols = range( 1, $rows_data[ $row_id ]['col_num'] );
-                            foreach ( $cols as $k ) {
-                                $items         = $rows_data[ $row_id ][ 'col_' . $k ];
-                                $items         = explode( ',', $items );
-                                $col_bg_key    = 'col_' . $k . '_bg_color';
-                                $col_style_vars = '';
-                                if ( ! empty( $rows_data[ $row_id ][ $col_bg_key ] ) ) {
-                                    $col_style_vars = '--fxb-col-bg-color:' . esc_attr( $rows_data[ $row_id ][ $col_bg_key ] ) . ';';
-                                }
+                            foreach ( range( 1, (int) $row['col_num'] ) as $k ) {
+                                $items          = explode( ',', (string) $row[ 'col_' . $k ] );
+                                $col_style_vars = $row[ 'col_' . $k . '_bg_color' ] ? '--fxb-col-bg-color:' . esc_attr( $row[ 'col_' . $k . '_bg_color' ] ) . ';' : '';
                                 ?>
                                 <div class="fxb-col-<?php echo intval( $k ); ?> fxb-col"<?php echo $col_style_vars ? ' style="' . esc_attr( $col_style_vars ) . '"' : ''; ?>>
                                     <div class="fxb-wrap">
