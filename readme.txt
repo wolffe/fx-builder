@@ -2,11 +2,11 @@
 Contributors: butterflymedia
 Donate link: https://buymeacoffee.com/wolffe
 Tags: page builder, drag, drop, sortable, columns
-Requires at least: 2.0
+Requires at least: 6.2
 Requires CP: 2.5
-Tested up to: 2.7.3
+Tested up to: 2.7.4
 Requires PHP: 7.4
-Stable tag: 1.7.6
+Stable tag: 1.7.7
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,20 @@ A simple page builder plugin. The one you can actually use.
 Find more tools at [ClassicPress Plugins](https://getbutterfly.com/classicpress-plugins/).
 
 == Changelog ==
+
+= 1.7.7 =
+* Confirm compatibility with ClassicPress 2.7.4 and PHP 8.6 (the PHP 7.4 minimum is unchanged)
+* Fix Custom CSS being HTML-escaped on output, which broke child selectors (`.a > .b`) and quoted values
+* Fix wpautop staying disabled for later posts in a loop after an FX Builder post was rendered
+* Fix an active builder post with no rows returning an empty value from the_content instead of the post content
+* Fix column gaps saved without a unit producing invalid CSS (the unit now defaults to px)
+* Fix the line-height TinyMCE plugin URL being hard-coded to the `fx-builder` folder name
+* Fix release archives including `.github` and `.gitignore` (the Git attributes file was misnamed)
+* Remove every plugin option on uninstall (breakpoints, fonts, API key, output cleanup)
+* Skip revision rows in the save handlers and check the user's capability on the Tools import endpoint
+* Load the admin stylesheet and web fonts only on the editor and FX Builder screens instead of every admin page
+* Remove the unused Theme setting, the unused `content_raw()` helper, the legacy font-provider cleanup and the duplicated post-type lookup
+* Fill rows saved by older versions with defaults before rendering
 
 = 1.7.6 =
 * Confirm compatibility with ClassicPress 2.7.3.
